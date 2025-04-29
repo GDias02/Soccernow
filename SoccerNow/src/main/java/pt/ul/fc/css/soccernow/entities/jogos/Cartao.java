@@ -6,10 +6,6 @@ import jakarta.persistence.*;
 import pt.ul.fc.css.soccernow.entities.utilizadores.IArbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.IJogador;
 
-enum Cor {
-    AMARELO, VERMELHO
-}
-
 public class Cartao extends EventoDeJogo {
     @Column(nullable = false)
     private IJogador atribuido;
