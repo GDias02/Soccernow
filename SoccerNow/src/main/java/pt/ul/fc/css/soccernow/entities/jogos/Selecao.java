@@ -53,7 +53,7 @@ public class Selecao {
         jogadores.put(posicoes[4], pivot);
         return jogadores;
     }
-    public void setSelecao(Map<Posicao,IJogador> jogadores){
+    public void setSelecao(Map<Posicao,IJogador> jogadores){    //TODO - trocar o "posicoes[0]" pelo nome real de cada posicao.
         this.guardaRedes = jogadores.get(posicoes[0]);
         this.fixo = jogadores.get(posicoes[1]);
         this.alaEsquerda = jogadores.get(posicoes[2]);
