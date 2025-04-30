@@ -1,31 +1,74 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
+import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
+import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 
 public class ArbitroHandler implements IArbitroHandler {
 
+    @Autowired
+    private ArbitroRepository arbitroRepository;
+
     @Override
     public ArbitroDto registarArbitro(ArbitroDto arbitroDto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'registarArbitro'");
+        if (!validInput(arbitroDto)) return null;
+
+        UtilizadorDto utilizadorDto = arbitroDto.getUtilizador();
+        
+        if (utilizadorDto.getId() != null
+            || !arbitroRepository.findByNif(utilizadorDto.getNif()).isEmpty()) return null;
+
+        Arbitro arbitro = ArbitroMapper.dtoToArbitro(arbitroDto);
+        Arbitro savedArbitro = arbitroRepository.save(arbitro);
+
+        utilizadorDto.setId(savedArbitro.getId());
+        arbitroDto.setUtilizador(utilizadorDto);
+
+        return arbitroDto;
     }
 
     @Override
     public ArbitroDto verificarArbitro(int nif) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'verificarArbitro'");
+        Optional<Arbitro> maybeArbitro = arbitroRepository.findByNif(nif);
+        return maybeArbitro.isEmpty() ? null : ArbitroMapper.arbitroToDto(maybeArbitro.get());
     }
 
     @Override
     public ArbitroDto removerArbitro(int nif) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removerArbitro'");
+        Optional<Arbitro> maybeArbitro = arbitroRepository.findByNifAndDelete(nif);
+        return maybeArbitro.isEmpty() ? null : ArbitroMapper.arbitroToDto(maybeArbitro.get());
     }
 
     @Override
     public ArbitroDto atualizarArbitro(ArbitroDto arbitroDto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'atualizarArbitro'");
+        Long id = arbitroDto.getUtilizador().getId();
+        if (!validInput(arbitroDto) || id == null || arbitroRepository.findById(id).isEmpty()) return null;
+
+        Arbitro arbitro = ArbitroMapper.dtoToArbitro(arbitroDto);
+        arbitroRepository.save(arbitro);
+
+        return arbitroDto;
+    }
+
+    public boolean validInput(ArbitroDto arbitroDto) {
+        if (arbitroDto == null) return false;
+
+        UtilizadorDto utilizadorDto = arbitroDto.getUtilizador();
+        int nif = utilizadorDto.getNif();
+
+        return (100000000 <= nif && nif <= 999999999)
+            && isFilled(utilizadorDto.getNome())
+            && isFilled(utilizadorDto.getContacto());
+    }
+
+    private boolean isFilled(String field) {
+        return field != null && field.length() > 0;
     }
     
 }

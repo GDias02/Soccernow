@@ -29,7 +29,10 @@ public class ArbitroController {
     @ApiOperation(value = "Create arbitro", notes = "Creates a new arbitro and returns the created arbitro DTO.")
     public ResponseEntity<ArbitroDto> registarArbitro(@RequestBody ArbitroDto arbitroDto) {
         ArbitroDto responseDto = arbitroHandler.registarArbitro(arbitroDto);
-        return ResponseEntity.ok(responseDto);
+        if (responseDto != null) {
+            return ResponseEntity.ok(responseDto);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/{nif}")

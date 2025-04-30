@@ -31,7 +31,10 @@ public class JogadorController {
     @ApiOperation(value = "Create jogador", notes = "Creates a new jogador and returns the created jogador DTO.")
     public ResponseEntity<JogadorDto> registarJogador(@RequestBody JogadorDto jogadorDto) {
         JogadorDto responseDto = jogadorHandler.registarJogador(jogadorDto);
-        return ResponseEntity.ok(responseDto);
+        if (responseDto != null) {
+            return ResponseEntity.ok(responseDto);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/{nif}")
@@ -68,9 +71,6 @@ public class JogadorController {
     @ApiOperation(value = "Get all jogadores", notes = "Returns all jogadores.")
     public ResponseEntity<Set<JogadorDto>> buscarJogadores() {
         Set<JogadorDto> jogadorDtos = jogadorHandler.buscarJogadores();
-        if (jogadorDtos != null) {
-            return ResponseEntity.ok(jogadorDtos);
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(jogadorDtos);
     }
 }
