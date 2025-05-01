@@ -8,8 +8,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
-import pt.ul.fc.css.soccernow.entities.equipas.IEquipa;
-import pt.ul.fc.css.soccernow.entities.utilizadores.IJogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 

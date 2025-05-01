@@ -1,6 +1,6 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
@@ -17,7 +17,7 @@ public class Golo extends EventoDeJogo {
     @JoinColumn(nullable = false ,name = "equipa_marcadora", referencedColumnName = "equipaId")
     private Equipa equipa;
 
-    public Golo(Timestamp quando, Jogo jogo, Jogador marcador, Equipa equipa) {
+    public Golo(LocalDateTime quando, Jogo jogo, Jogador marcador, Equipa equipa) {
         super(quando, jogo);
         this.marcador = marcador;
         this.equipa = equipa;

@@ -1,6 +1,6 @@
 package pt.ul.fc.css.soccernow.dto.jogos;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
@@ -13,15 +13,15 @@ import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
  * - - O atributo marcador e equipa requerem apenas os ids respetivos.
  */
 public class GoloDto {
-    private Timestamp quando;
+    private LocalDateTime quando;
     private JogoDto jogo;
     private JogadorDto marcador;
     private EquipaDto equipa;
     
-    public Timestamp getQuando() {
+    public LocalDateTime getQuando() {
         return quando;
     }
-    public void setQuando(Timestamp quando) {
+    public void setQuando(LocalDateTime quando) {
         this.quando = quando;
     }
     public JogoDto getJogo() {

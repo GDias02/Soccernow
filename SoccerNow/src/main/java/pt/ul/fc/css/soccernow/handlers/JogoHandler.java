@@ -67,10 +67,10 @@ public class JogoHandler implements IJogoHandler {
         return JogoMapper.jogoToDto(updatedJogo);
     }
 
-    //PERMITE DEMASIADAS COISAS (nomeadamente atualizacoes apos o jogo ter terminado)
+    //PERMITE DEMASIADAS COISAS
     private boolean updateValido(Jogo updatedJogo, JogoDto jogodto) {
-        return !(jogodto.getEstadoAtual() == EstadoDeJogo.TERMINADO &&
-         updatedJogo.getEstadoAtual() == EstadoDeJogo.TERMINADO);   //permite o registo final de um jogo.
+        return (updatedJogo.getEstadoAtual() != EstadoDeJogo.TERMINADO);
+    //permite o registo final de um jogo.
     }
 
 }

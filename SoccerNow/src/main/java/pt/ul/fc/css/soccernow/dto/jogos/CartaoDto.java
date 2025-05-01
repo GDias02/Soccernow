@@ -1,13 +1,13 @@
 package pt.ul.fc.css.soccernow.dto.jogos;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.entities.jogos.Cor;
 
 public class CartaoDto {
-    private Timestamp quando;
+    private LocalDateTime quando;
     private JogoDto jogo;
     private JogadorDto atribuidoA;
     private ArbitroDto arbitro;
@@ -15,11 +15,11 @@ public class CartaoDto {
     
     public CartaoDto() {}
 
-    public Timestamp getQuando() {
+    public LocalDateTime getQuando() {
         return quando;
     }
 
-    public void setQuando(Timestamp quando) {
+    public void setQuando(LocalDateTime quando) {
         this.quando = quando;
     }
 

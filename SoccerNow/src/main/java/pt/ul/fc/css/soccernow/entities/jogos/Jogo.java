@@ -1,7 +1,6 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
-import java.sql.Date;
-import java.util.EnumMap;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -47,8 +46,8 @@ public abstract class Jogo implements IJogo {
     @JoinColumn(name = "local_id", referencedColumnName = "id")
     private Local local;
 
-    @Column(nullable = false)
-    private Date diaEHora;
+    @Column(name="quando", columnDefinition = "TIMESTAMP")
+    private LocalDateTime diaEHora;
 
     @Column
     private String resultadoFinal; //para acesso mais rapido ao resultado de um jogo, sem necessidade de carregar todas as suas estatisticas
@@ -79,7 +78,7 @@ public abstract class Jogo implements IJogo {
     public Selecao getS2() {return s2;}
     public List<Arbitro> getEquipaDeArbitros() {return equipaDeArbitros;}
     public Local getLocal() {return local;}
-    public Date getDiaEHora() {return diaEHora;}
+    public LocalDateTime getDiaEHora() {return diaEHora;}
     public EstadoDeJogo getEstadoAtual() {return estadoAtual;}
     public String getResultadoFinal(){return resultadoFinal;}
     public EstatisticaJogo getStats() {return this.stats;}
@@ -88,7 +87,7 @@ public abstract class Jogo implements IJogo {
     public void setS2(Selecao s2) {this.s2 = s2;}
     public void setEquipaDeArbitros(List<Arbitro> equipaDeArbitros) {this.equipaDeArbitros = equipaDeArbitros;}
     public void setLocal(Local local) {this.local = local;}
-    public void setDiaEHora(Date diaEHora) {this.diaEHora = diaEHora;}
+    public void setDiaEHora(LocalDateTime diaEHora) {this.diaEHora = diaEHora;}
     public void setEstadoAtual(EstadoDeJogo estadoAtual) {this.estadoAtual = estadoAtual;}
     public void setStats(EstatisticaJogo stats) {this.stats = stats;}
     

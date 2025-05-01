@@ -1,6 +1,6 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
@@ -9,7 +9,10 @@ import jakarta.persistence.*;
 public abstract class EventoDeJogo {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
-    private Timestamp quando;
+    private Long id;
+
+    @Column(name="quando", columnDefinition = "TIMESTAMP")
+    private LocalDateTime quando;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false ,name = "em_jogo", referencedColumnName = "jogoId")
@@ -17,15 +20,15 @@ public abstract class EventoDeJogo {
 
     public EventoDeJogo(){}
 
-    public EventoDeJogo(Timestamp quando, Jogo jogo){
+    public EventoDeJogo(LocalDateTime quando, Jogo jogo){
         this.quando = quando;
         this.jogo = jogo;
     }
 
-    public Timestamp getQuando() {
+    public LocalDateTime getQuando() {
         return quando;
     }
-    public void setQuando(Timestamp quando) {
+    public void setQuando(LocalDateTime quando) {
         this.quando = quando;
     }
     public Jogo getJogo() {

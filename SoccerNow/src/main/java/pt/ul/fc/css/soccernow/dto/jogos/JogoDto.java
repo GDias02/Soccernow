@@ -1,12 +1,11 @@
 package pt.ul.fc.css.soccernow.dto.jogos;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import pt.ul.fc.css.soccernow.dto.campeonatos.CampeonatoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
-import pt.ul.fc.css.soccernow.entities.jogos.Placar;
 
 /**
  * Classe Dto para representar um local usado para jogos.
@@ -37,7 +36,7 @@ public class JogoDto {
 
     private LocalDto local;
 
-    private Date diaEHora;
+    private LocalDateTime diaEHora;
 
     private EstatisticaJogoDto stats;
 
@@ -99,11 +98,11 @@ public class JogoDto {
         this.local = local;
     }
 
-    public Date getDiaEHora() {
+    public LocalDateTime getDiaEHora() {
         return diaEHora;
     }
 
-    public void setDiaEHora(Date diaEHora) {
+    public void setDiaEHora(LocalDateTime diaEHora) {
         this.diaEHora = diaEHora;
     }
 

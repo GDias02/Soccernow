@@ -1,6 +1,6 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public interface IJogo {
 
     Local getLocal();
 
-    Date getDiaEHora();
+    LocalDateTime getDiaEHora();
 
     EstatisticaJogo getStats();
     

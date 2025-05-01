@@ -1,6 +1,6 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
@@ -20,7 +20,7 @@ public class Cartao extends EventoDeJogo {
     @Column(nullable = false)
     private Cor cor;
 
-    public Cartao(Timestamp quando, Jogo jogo, Jogador jogador, Arbitro arbitro, Cor cor) {
+    public Cartao(LocalDateTime quando, Jogo jogo, Jogador jogador, Arbitro arbitro, Cor cor) {
         super(quando, jogo);
         this.atribuido = jogador;
         this.arbitro = arbitro;
