@@ -2,22 +2,13 @@ package pt.ul.fc.css.soccernow.entities.equipas;
 
 import java.util.List;
 
-import pt.ul.fc.css.soccernow.entities.utilizadores.IJogador;
-import pt.ul.fc.css.soccernow.entities.jogos.IJogo;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
+import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 
 /**
  * Interface representing a futsal team.
  */
 public interface IEquipa {
-    
-
-    /**
-     * Sets the ID of the team.
-     * 
-     * 
-     * @param id the new ID of the team, must be valid.
-     */
-    public void setId(long id);
 
     /**
      * Gets the ID of the team.
@@ -38,7 +29,7 @@ public interface IEquipa {
      * 
      * @return a list of games.
      */
-    public List<IJogo> getHistoricoDeJogos();
+    public List<Jogo> getHistoricoDeJogos();
 
     /**
      * Gets a specific game by its ID.
@@ -46,28 +37,28 @@ public interface IEquipa {
      * @param idJogo the ID of the game.
      * @return the game with the specified ID.
      */
-    public IJogo getJogo(long idJogo);
+    public Jogo getJogo(long idJogo);
 
     /**
      * Adds a game to the team's game history.
      * 
      * @param jogo the game to add.
      */
-    public void addJogo(IJogo jogo);
+    public void addJogo(Jogo jogo);
 
     /**
      * Adds multiple games to the team's game history.
      * 
      * @param jogos the list of games to add.
      */
-    public void addJogos(List<IJogo> jogos);
+    public void addJogos(List<Jogo> jogos);
 
     /**
      * Gets the list of the team's players.
      * 
      * @return a list of players.
      */
-    public List<IJogador> getJogadores();
+    public List<Jogador> getJogadores();
 
     /**
      * Gets a specific player by their ID.
@@ -75,28 +66,28 @@ public interface IEquipa {
      * @param id the ID of the player.
      * @return the player with the specified ID.
      */
-    public IJogador getJogador(long id);
+    public Jogador getJogador(long id);
 
     /**
      * Adds a player to the team's roster.
      * 
      * @param jogador the player to add.
      */
-    public void addJogador(IJogador jogador);
+    public void addJogador(Jogador jogador);
 
     /**
      * Adds a list of players to the team's roster.
      * 
      * @param List of jogador the player to add.
      */
-    public void addJogadores(List<IJogador> jogadores);
+    public void addJogadores(List<Jogador> jogadores);
 
     /**
      * Removes a player from the team's roster.
      * 
      * @param jogador the player to remove.
      */
-    public void removeJogador(IJogador jogador);
+    public void removeJogador(Jogador jogador);
 
     /**
      * Removes a game from the team by its ID.
