@@ -4,31 +4,31 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
-import pt.ul.fc.css.soccernow.entities.equipas.IEquipa;
-import pt.ul.fc.css.soccernow.entities.utilizadores.IArbitro;
-import pt.ul.fc.css.soccernow.entities.utilizadores.IJogador;
+import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 
 public interface IJogo {
 
     Long getId();
 
-    IEquipa getEquipa1();
+    Equipa getEquipa1();
 
-    IEquipa getEquipa2();
+    Equipa getEquipa2();
 
-    Map<Posicao,IJogador> getSelecao(IEquipa equipa);
+    Map<Posicao,Jogador> getSelecao(Equipa equipa);
 
     Placar getPlacar();
 
-    IArbitro getArbitroPrincipal();
+    Arbitro getArbitroPrincipal();
 
-    List<IArbitro> getEquipaDeArbitros();
+    List<Arbitro> getEquipaDeArbitros();
 
     Local getLocal();
 
     Date getDiaEHora();
 
-    EstatisticaJogo getEstatisticaJogo();
+    EstatisticaJogo getStats();
     
 }

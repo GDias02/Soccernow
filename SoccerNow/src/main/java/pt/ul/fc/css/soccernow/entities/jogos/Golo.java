@@ -3,37 +3,43 @@ package pt.ul.fc.css.soccernow.entities.jogos;
 import java.sql.Timestamp;
 
 import jakarta.persistence.*;
-import pt.ul.fc.css.soccernow.entities.equipas.IEquipa;
-import pt.ul.fc.css.soccernow.entities.utilizadores.IJogador;
+import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 
 @Entity
 public class Golo extends EventoDeJogo {
 
-    @Column(nullable = false)
-    private IJogador marcador;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false ,name = "marcador", referencedColumnName = "jogadorId")
+    private Jogador marcador;
 
-    @Column(nullable = false)
-    private IEquipa equipa;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false ,name = "equipa_marcadora", referencedColumnName = "equipaId")
+    private Equipa equipa;
 
-    public Golo(Timestamp quando, IJogo jogo, IJogador marcador, IEquipa equipa) {
+    public Golo(Timestamp quando, Jogo jogo, Jogador marcador, Equipa equipa) {
         super(quando, jogo);
         this.marcador = marcador;
         this.equipa = equipa;
     }
 
-    public IJogador getMarcador() {
+    public Golo() {
+        //TODO Auto-generated constructor stub
+    }
+
+    public Jogador getMarcador() {
         return marcador;
     }
 
-    public void setMarcador(IJogador marcador) {
+    public void setMarcador(Jogador marcador) {
         this.marcador = marcador;
     }
     
-    public IEquipa getEquipa() {
+    public Equipa getEquipa() {
         return equipa;
     }
 
-    public void setEquipa(IEquipa equipa) {
+    public void setEquipa(Equipa equipa) {
         this.equipa = equipa;
     }
 

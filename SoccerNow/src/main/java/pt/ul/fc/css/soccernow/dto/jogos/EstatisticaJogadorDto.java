@@ -1,6 +1,6 @@
 package pt.ul.fc.css.soccernow.dto.jogos;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Classe Dto para representar as estatisticas de um jogador.
@@ -9,6 +9,19 @@ import java.util.List;
  * - - os golos e os cartoes devem estar preenchidos.
  */
 public class EstatisticaJogadorDto {
-    List<GoloDto> golos;
-    List<CartaoDto> cartoes;
+    Set<GoloDto> golos;
+    Set<CartaoDto> cartoes;
+    
+    public Set<GoloDto> getGolos() {
+        return golos;
+    }
+    public void setGolos(Set<GoloDto> golos) {
+        this.golos = golos;
+    }
+    public Set<CartaoDto> getCartoes() {
+        return cartoes;
+    }
+    public void setCartoes(Set<CartaoDto> cartoes) {
+        this.cartoes = cartoes;
+    }
 }

@@ -25,6 +25,9 @@ public class Morada {
         this.estado = estado;
         this.pais = pais;
     }
+    public Morada() {
+        //TODO Auto-generated constructor stub
+    }
     public String getCodigoPostal() {
         return codigoPostal;
     }

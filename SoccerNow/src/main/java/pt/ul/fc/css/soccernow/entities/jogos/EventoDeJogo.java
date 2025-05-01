@@ -11,12 +11,13 @@ public abstract class EventoDeJogo {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Timestamp quando;
     
-    @Column(nullable = false)
-    private IJogo jogo;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false ,name = "em_jogo", referencedColumnName = "jogoId")
+    private Jogo jogo;
 
     public EventoDeJogo(){}
 
-    public EventoDeJogo(Timestamp quando, IJogo jogo){
+    public EventoDeJogo(Timestamp quando, Jogo jogo){
         this.quando = quando;
         this.jogo = jogo;
     }
@@ -27,10 +28,10 @@ public abstract class EventoDeJogo {
     public void setQuando(Timestamp quando) {
         this.quando = quando;
     }
-    public IJogo getJogo() {
+    public Jogo getJogo() {
         return jogo;
     }
-    public void setJogo(IJogo jogo) {
+    public void setJogo(Jogo jogo) {
         this.jogo = jogo;
     }
 }

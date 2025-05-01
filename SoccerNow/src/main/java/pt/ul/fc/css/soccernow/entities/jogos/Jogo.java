@@ -18,9 +18,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
-import pt.ul.fc.css.soccernow.entities.equipas.IEquipa;
-import pt.ul.fc.css.soccernow.entities.utilizadores.IArbitro;
-import pt.ul.fc.css.soccernow.entities.utilizadores.IJogador;
+import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 
 @Entity
@@ -38,7 +38,7 @@ public abstract class Jogo implements IJogo {
     private Selecao s2;
 
     @ManyToMany
-    private List<IArbitro> equipaDeArbitros;
+    private List<Arbitro> equipaDeArbitros;
 
     @Column(nullable = false)
     private EstadoDeJogo estadoAtual;
@@ -59,15 +59,15 @@ public abstract class Jogo implements IJogo {
     @Transient
     private EstatisticaJogo stats;
 
-    public IEquipa getEquipa1() {return s1.getEquipa();}
-    public IEquipa getEquipa2() {return s2.getEquipa();}
+    public Equipa getEquipa1() {return s1.getEquipa();}
+    public Equipa getEquipa2() {return s2.getEquipa();}
 
-    public Map<Posicao,IJogador> getSelecao(IEquipa equipa){
+    public Map<Posicao,Jogador> getSelecao(Equipa equipa){
         if (equipa.equals(s1.getEquipa())){return s1.getJogadores();}
         if (equipa.equals(s2.getEquipa())){return s2.getJogadores();}
         else {return null;}
     }
-    public IArbitro getArbitroPrincipal(){
+    public Arbitro getArbitroPrincipal(){
         return equipaDeArbitros.get(0);
     }
 
@@ -77,19 +77,20 @@ public abstract class Jogo implements IJogo {
     public Placar getPlacar(){return this.placar;}
     public Selecao getS1() {return s1;}
     public Selecao getS2() {return s2;}
-    public List<IArbitro> getEquipaDeArbitros() {return equipaDeArbitros;}
+    public List<Arbitro> getEquipaDeArbitros() {return equipaDeArbitros;}
     public Local getLocal() {return local;}
     public Date getDiaEHora() {return diaEHora;}
     public EstadoDeJogo getEstadoAtual() {return estadoAtual;}
     public String getResultadoFinal(){return resultadoFinal;}
-    public EstatisticaJogo getEstatisticaJogo() {return this.stats;}
+    public EstatisticaJogo getStats() {return this.stats;}
     
     public void setS1(Selecao s1) {this.s1 = s1;}
     public void setS2(Selecao s2) {this.s2 = s2;}
-    public void setEquipaDeArbitros(List<IArbitro> equipaDeArbitros) {this.equipaDeArbitros = equipaDeArbitros;}
+    public void setEquipaDeArbitros(List<Arbitro> equipaDeArbitros) {this.equipaDeArbitros = equipaDeArbitros;}
     public void setLocal(Local local) {this.local = local;}
     public void setDiaEHora(Date diaEHora) {this.diaEHora = diaEHora;}
     public void setEstadoAtual(EstadoDeJogo estadoAtual) {this.estadoAtual = estadoAtual;}
+    public void setStats(EstatisticaJogo stats) {this.stats = stats;}
     
     public void updatePlacar(){this.placar = this.stats.getPlacar();}
 }

@@ -7,8 +7,10 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.equipas.IEquipa;
 import pt.ul.fc.css.soccernow.entities.utilizadores.IJogador;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 
 @Embeddable
@@ -17,35 +19,39 @@ public class Selecao {
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "equipaId")
-    private IEquipa equipa;
+    private Equipa equipa;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "jogadorId")
-    private IJogador capitao;
+    private Jogador capitao;
 
     @OneToOne(fetch = FetchType.LAZY)       //de modo a evitar criar uma nova tabela que teria um tamanho fixo (uma vez que as posicoes sao sempre so 5)
     @JoinColumn(name="guarda_redes", referencedColumnName="jogadorId")
-    private IJogador guardaRedes;
+    private Jogador guardaRedes;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fixo", referencedColumnName = "jogadorId")
-    private IJogador fixo;
+    private Jogador fixo;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ala_esquerda", referencedColumnName = "jogadorId")
-    private IJogador alaEsquerda;
+    private Jogador alaEsquerda;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ala_direita", referencedColumnName = "jogadorId")
-    private IJogador alaDireita;
+    private Jogador alaDireita;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pivot", referencedColumnName = "jogadorId")
-    private IJogador pivot;
+    private Jogador pivot;
 
-    public Selecao(IEquipa e, IJogador capitao, Map<Posicao,IJogador> jogadores){
+    public Selecao(Equipa e, Jogador capitao, Map<Posicao,Jogador> jogadores){
         this.equipa = e;
         this.capitao = capitao;
-        setSelecao(jogadores);
+        setJogadores(jogadores);
     }
     
-    public Map<Posicao, IJogador> getJogadores(){
-        Map<Posicao, IJogador> jogadores = new EnumMap<>(Posicao.class);
+    public Selecao() {
+        //TODO Auto-generated constructor stub
+    }
+
+    public Map<Posicao, Jogador> getJogadores(){
+        Map<Posicao, Jogador> jogadores = new EnumMap<>(Posicao.class);
         jogadores.put(posicoes[0], guardaRedes);
         jogadores.put(posicoes[1], fixo);
         jogadores.put(posicoes[2], alaEsquerda);
@@ -53,7 +59,8 @@ public class Selecao {
         jogadores.put(posicoes[4], pivot);
         return jogadores;
     }
-    public void setSelecao(Map<Posicao,IJogador> jogadores){    //TODO - trocar o "posicoes[0]" pelo nome real de cada posicao.
+
+    public void setJogadores(Map<Posicao,Jogador> jogadores){    //TODO - trocar o "posicoes[0]" pelo nome real de cada posicao.
         this.guardaRedes = jogadores.get(posicoes[0]);
         this.fixo = jogadores.get(posicoes[1]);
         this.alaEsquerda = jogadores.get(posicoes[2]);
@@ -61,19 +68,19 @@ public class Selecao {
         this.pivot = jogadores.get(posicoes[4]);
     }
 
-    public IEquipa getEquipa() {
+    public Equipa getEquipa() {
         return equipa;
     }
 
-    public void setEquipa(IEquipa equipa) {
+    public void setEquipa(Equipa equipa) {
         this.equipa = equipa;
     }
 
-    public IJogador getCapitao() {
+    public Jogador getCapitao() {
         return capitao;
     }
 
-    public void setCapitao(IJogador capitao) {
+    public void setCapitao(Jogador capitao) {
         this.capitao = capitao;
     }
 
@@ -81,43 +88,43 @@ public class Selecao {
         return posicoes;
     }
 
-    public IJogador getGuardaRedes() {
+    public Jogador getGuardaRedes() {
         return guardaRedes;
     }
 
-    public void setGuardaRedes(IJogador guardaRedes) {
+    public void setGuardaRedes(Jogador guardaRedes) {
         this.guardaRedes = guardaRedes;
     }
 
-    public IJogador getFixo() {
+    public Jogador getFixo() {
         return fixo;
     }
 
-    public void setFixo(IJogador fixo) {
+    public void setFixo(Jogador fixo) {
         this.fixo = fixo;
     }
 
-    public IJogador getAlaEsquerda() {
+    public Jogador getAlaEsquerda() {
         return alaEsquerda;
     }
 
-    public void setAlaEsquerda(IJogador alaEsquerda) {
+    public void setAlaEsquerda(Jogador alaEsquerda) {
         this.alaEsquerda = alaEsquerda;
     }
 
-    public IJogador getAlaDireita() {
+    public Jogador getAlaDireita() {
         return alaDireita;
     }
 
-    public void setAlaDireita(IJogador alaDireita) {
+    public void setAlaDireita(Jogador alaDireita) {
         this.alaDireita = alaDireita;
     }
 
-    public IJogador getPivot() {
+    public Jogador getPivot() {
         return pivot;
     }
 
-    public void setPivot(IJogador pivot) {
+    public void setPivot(Jogador pivot) {
         this.pivot = pivot;
     }
     

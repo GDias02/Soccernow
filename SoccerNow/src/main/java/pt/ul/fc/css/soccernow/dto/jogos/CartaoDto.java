@@ -2,24 +2,19 @@ package pt.ul.fc.css.soccernow.dto.jogos;
 
 import java.sql.Timestamp;
 
+import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.entities.jogos.Cor;
 
 public class CartaoDto {
     private Timestamp quando;
-    private Long jogo;
-    private Long atribuidoA;
-    private Long arbitro;
+    private JogoDto jogo;
+    private JogadorDto atribuidoA;
+    private ArbitroDto arbitro;
     private Cor cor;
     
     public CartaoDto() {}
-    
-    public CartaoDto(Timestamp quando, Long jogo, Long atribuidoA, Long arbitro, Cor cor) {
-        this.quando = quando;
-        this.jogo = jogo;
-        this.atribuidoA = atribuidoA;
-        this.arbitro = arbitro;
-        this.cor = cor;
-    }
+
     public Timestamp getQuando() {
         return quando;
     }
@@ -28,27 +23,27 @@ public class CartaoDto {
         this.quando = quando;
     }
 
-    public Long getJogo() {
+    public JogoDto getJogo() {
         return jogo;
     }
 
-    public void setJogo(Long jogo) {
+    public void setJogo(JogoDto jogo) {
         this.jogo = jogo;
     }
 
-    public Long getAtribuidoA() {
+    public JogadorDto getAtribuidoA() {
         return atribuidoA;
     }
 
-    public void setAtribuidoA(Long atribuidoA) {
+    public void setAtribuidoA(JogadorDto atribuidoA) {
         this.atribuidoA = atribuidoA;
     }
 
-    public Long getArbitro() {
+    public ArbitroDto getArbitro() {
         return arbitro;
     }
 
-    public void setArbitro(Long arbitro) {
+    public void setArbitro(ArbitroDto arbitro) {
         this.arbitro = arbitro;
     }
 

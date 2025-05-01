@@ -1,21 +1,21 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
-import java.util.List;
+import java.util.Set;
 
 public abstract class Estatistica {
-    List<Golo> golos;
-    List<Cartao> cartoes;
+    Set<Golo> golos;
+    Set<Cartao> cartoes;
 
-    public List<Golo> getGolos() {
+    public Set<Golo> getGolos() {
         return golos;
     }
-    public void setGolos(List<Golo> golos) {
+    public void setGolos(Set<Golo> golos) {
         this.golos = golos;
     }
-    public List<Cartao> getCartoes() {
+    public Set<Cartao> getCartoes() {
         return cartoes;
     }
-    public void setCartoes(List<Cartao> cartoes) {
+    public void setCartoes(Set<Cartao> cartoes) {
         this.cartoes = cartoes;
     }
 }

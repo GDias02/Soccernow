@@ -3,6 +3,7 @@ package pt.ul.fc.css.soccernow.dto.jogos;
 import java.sql.Date;
 import java.util.List;
 
+import pt.ul.fc.css.soccernow.dto.campeonatos.CampeonatoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Placar;
@@ -38,11 +39,17 @@ public class JogoDto {
 
     private Date diaEHora;
 
-    private String resultadoFinal; //TODO - pode nao ser preciso, para acesso mais rapido ao resultado de um jogo, sem necessidade de carregar todas as suas estatisticas
-
-    private Placar placar; //TODO - pode nao ser preciso
-
     private EstatisticaJogoDto stats;
+
+    private CampeonatoDto campeonato;
+
+    public CampeonatoDto getCampeonato() {
+        return campeonato;
+    }
+
+    public void setCampeonato(CampeonatoDto campeonato) {
+        this.campeonato = campeonato;
+    }
 
     public Long getId() {
         return id;
@@ -98,22 +105,6 @@ public class JogoDto {
 
     public void setDiaEHora(Date diaEHora) {
         this.diaEHora = diaEHora;
-    }
-
-    public String getResultadoFinal() {
-        return resultadoFinal;
-    }
-
-    public void setResultadoFinal(String resultadoFinal) {
-        this.resultadoFinal = resultadoFinal;
-    }
-
-    public Placar getPlacar() {
-        return placar;
-    }
-
-    public void setPlacar(Placar placar) {
-        this.placar = placar;
     }
 
     public EstatisticaJogoDto getStats() {
