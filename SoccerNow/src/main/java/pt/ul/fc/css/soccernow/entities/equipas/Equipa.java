@@ -20,7 +20,7 @@ import pt.ul.fc.css.soccernow.entities.jogos.*;
 public class Equipa implements IEquipa {
 
     @Id
-    private long id;
+    private Long id;
     private String nome;
 
     @ManyToMany
@@ -46,7 +46,7 @@ public class Equipa implements IEquipa {
     }
 
     @Override
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -61,9 +61,9 @@ public class Equipa implements IEquipa {
     }
 
     @Override
-    public Jogo getJogo(long idJogo) {
+    public Jogo getJogo(Long idJogo) {
         for (Jogo jogo : historicoDeJogos) {
-            if (jogo.getId() == idJogo) {
+            if (jogo.getId().equals(idJogo)) {
                 return jogo;
             }
         }
@@ -86,9 +86,9 @@ public class Equipa implements IEquipa {
     }
 
     @Override
-    public Jogador getJogador(long idJogador) {
+    public Jogador getJogador(Long idJogador) {
         for (Jogador jogador : jogadores) {
-            if (jogador.getId() == idJogador) {
+            if (jogador.getId().equals(idJogador)) {
                 return jogador;
             }
         }
@@ -111,7 +111,7 @@ public class Equipa implements IEquipa {
     }
 
     @Override
-    public void removeJogo(long idJogo) {
+    public void removeJogo(Long idJogo) {
         Jogo jogo = getJogo(idJogo);
         if (jogo != null) {
             historicoDeJogos.remove(jogo);

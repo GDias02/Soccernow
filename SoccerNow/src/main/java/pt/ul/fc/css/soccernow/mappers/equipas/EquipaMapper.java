@@ -5,9 +5,14 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
-import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
-import pt.ul.fc.css.soccernow.entities.equipas.IEquipa;
+import pt.ul.fc.css.soccernow.entities.equipas.*;
+import pt.ul.fc.css.soccernow.entities.jogos.*;
+import pt.ul.fc.css.soccernow.entities.utilizadores.*;
+import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
+import pt.ul.fc.css.soccernow.repositories.JogoRepository;
 
 /**
  * Mapper class for converting between Equipa entities and DTOs.
@@ -15,6 +20,12 @@ import pt.ul.fc.css.soccernow.entities.equipas.IEquipa;
  */
 public class EquipaMapper {
     
+    @Autowired
+    private JogadorRepository jogadorRepository;
+
+    @Autowired
+    private JogoRepository jogoRepository;
+
     /**
      * Converts an IEquipa entity to an EquipaDto.
      *
@@ -24,8 +35,14 @@ public class EquipaMapper {
     public EquipaDto equipaToDto(IEquipa equipa){
         EquipaDto dto = new EquipaDto();
         dto.setNome(equipa.getNome());
-        dto.setHistoricoDeJogos(equipa.getHistoricoDeJogos());
-        dto.setJogadores(equipa.getJogadores());
+        List<Jogo> historico = equipa.getHistoricoDeJogos();
+        for (IJogo jogo: historico){
+            dto.addJogo(jogo.getId());
+        }
+        List<Jogador> jogadores = equipa.getJogadores();
+        for (IJogador jogador: jogadores){
+            dto.addJogador(jogador.getId());
+        }
         if (equipa.getId() != null) {
             dto.setId(equipa.getId());
         }
@@ -52,11 +69,9 @@ public class EquipaMapper {
      */
     public IEquipa dtoToEquipa(EquipaDto dto){
         IEquipa equipa = new Equipa(dto.getNome());
-        equipa.addJogadores(dto.getJogadores());
-        equipa.addJogos(dto.getJogos());
-        if (dto.getId() != null) {
-            equipa.setId(dto.getId());
-        }
+        equipa.addJogadores(jogadorRepository.findAllById(dto.getJogadores()));
+        equipa.addJogos(jogoRepository.findAllById(dto.getHistoricoDeJogos()));
+        //entities don't have setId()
         return equipa;
     }
 

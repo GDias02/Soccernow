@@ -15,7 +15,7 @@ public interface IEquipa {
      * 
      * @return the ID of the team.
      */
-    public long getId();
+    public Long getId();
 
     /**
      * Gets the name of the team.
@@ -37,7 +37,7 @@ public interface IEquipa {
      * @param idJogo the ID of the game.
      * @return the game with the specified ID.
      */
-    public Jogo getJogo(long idJogo);
+    public Jogo getJogo(Long idJogo);
 
     /**
      * Adds a game to the team's game history.
@@ -66,7 +66,7 @@ public interface IEquipa {
      * @param id the ID of the player.
      * @return the player with the specified ID.
      */
-    public Jogador getJogador(long id);
+    public Jogador getJogador(Long id);
 
     /**
      * Adds a player to the team's roster.
@@ -95,7 +95,7 @@ public interface IEquipa {
      * 
      * @param idJogo the ID of the game to remove.
      */
-    public void removeJogo(long idJogo);
+    public void removeJogo(Long idJogo);
 
     /**
      * Sets the name of the team.

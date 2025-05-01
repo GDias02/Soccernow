@@ -30,7 +30,7 @@ public class EquipaHandler implements IEquipaHandler {
         if (e.isEmpty())
             return null;
         else 
-            return mapToDto(e.get());
+            return equipaMapper.equipaToDto(e.get());
     }
 
     @Override
@@ -47,21 +47,21 @@ public class EquipaHandler implements IEquipaHandler {
         boolean valid = isValid(equipaDto);
         if (e != null && valid){
             //If it exists and it's valid, then save
-            equipaRepository.save(mapToEntity(equipaDto));
+            equipaRepository.save(equipaMapper.dtoToEquipa(equipaDto));
         }
         return valid ? verificarEquipa(id) : null;
     }
 
     @Override
     public List<EquipaDto> verificarEquipas() {
-        return mapManyToDto(equipaRepository.findAll());
+        return equipaMapper.manyEquipasToDtos(equipaRepository.findAll());
     }
 
     @Override
     public EquipaDto registarEquipa(EquipaDto equipaDto) {
         boolean valid = isValid(equipaDto);
-        if (valid)}{
-            IEquipa equipa = mapToEntity(equipaDto);
+        if (valid){
+            IEquipa equipa = equipaMapper.dtoToEquipa(equipaDto);
             IEquipa savedEquipa = equipaRepository.save(equipa);
             equipaDto.setId(savedEquipa.getId());
         }
@@ -69,8 +69,8 @@ public class EquipaHandler implements IEquipaHandler {
     }
 
     private boolean isValid(EquipaDto equipaDto) {
-
-        return false;
+        
+        return true;
     }
 
 }

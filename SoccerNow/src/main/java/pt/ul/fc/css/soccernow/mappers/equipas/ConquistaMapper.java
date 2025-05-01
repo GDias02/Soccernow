@@ -1,6 +1,10 @@
 package pt.ul.fc.css.soccernow.mappers.equipas;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import pt.ul.fc.css.soccernow.dto.equipas.*;
+import pt.ul.fc.css.soccernow.entities.equipas.*;
 
 /**
  * Mapper class for converting between Conquista entities and DTOs.
@@ -16,11 +20,8 @@ public class ConquistaMapper {
     public IConquista dtoToConquista(ConquistaDto dto) {
         IConquista conquista = new Conquista();
         conquista.setDescricao(dto.getDescricao());
-        conquista.setData(dto.getData());
         conquista.setPosicaoDePodio(dto.getPosicaoDePodio());
-        if (dto.getId() != null) {
-            conquista.setId(dto.getId());
-        }
+        //entities don't have setId()
         return conquista;
     }
 
@@ -45,7 +46,6 @@ public class ConquistaMapper {
     public ConquistaDto conquistaToDto(IConquista conquista) {
         ConquistaDto dto = new ConquistaDto();
         dto.setDescricao(conquista.getDescricao());
-        dto.setData(conquista.getData());
         dto.setPosicaoDePodio(conquista.getPosicaoDePodio());
         if (conquista.getId() != null) {
             dto.setId(conquista.getId());
