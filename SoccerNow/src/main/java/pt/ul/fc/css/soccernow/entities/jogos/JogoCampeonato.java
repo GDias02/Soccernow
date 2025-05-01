@@ -10,7 +10,7 @@ import pt.ul.fc.css.soccernow.entities.campeonatos.Campeonato;
 @DiscriminatorValue("1")
 public class JogoCampeonato extends Jogo {
     @ManyToOne
-    @JoinColumn(name = "campeonato_id", referencedColumnName = "id")
+    @JoinColumn(name = "campeonato_id")
     private Campeonato campeonato;
 
     public Campeonato getCampeonato(){

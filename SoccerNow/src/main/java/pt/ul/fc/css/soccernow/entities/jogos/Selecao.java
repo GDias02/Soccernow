@@ -16,26 +16,26 @@ public class Selecao {
     private static final Posicao[] posicoes = Posicao.values();
     
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "equipaId")
+    @JoinColumn(name = "equipa_id", insertable = false, updatable = false)
     private Equipa equipa;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "jogadorId")
+    @JoinColumn(name = "capitao_id", insertable = false, updatable = false)
     private Jogador capitao;
 
-    @OneToOne(fetch = FetchType.LAZY)       //de modo a evitar criar uma nova tabela que teria um tamanho fixo (uma vez que as posicoes sao sempre so 5)
-    @JoinColumn(name="guarda_redes", referencedColumnName="jogadorId")
+    @OneToOne       //de modo a evitar criar uma nova tabela que teria um tamanho fixo (uma vez que as posicoes sao sempre so 5)
+    @JoinColumn(name="guarda_redes", insertable = false, updatable = false)
     private Jogador guardaRedes;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fixo", referencedColumnName = "jogadorId")
+    @OneToOne
+    @JoinColumn(name = "fixo", insertable = false, updatable = false)
     private Jogador fixo;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ala_esquerda", referencedColumnName = "jogadorId")
+    @OneToOne
+    @JoinColumn(name = "ala_esquerda", insertable = false, updatable = false)
     private Jogador alaEsquerda;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ala_direita", referencedColumnName = "jogadorId")
+    @OneToOne
+    @JoinColumn(name = "ala_direita", insertable = false, updatable = false)
     private Jogador alaDireita;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pivot", referencedColumnName = "jogadorId")
+    @OneToOne
+    @JoinColumn(name = "pivot", insertable = false, updatable = false)
     private Jogador pivot;
 
     public Selecao(Equipa e, Jogador capitao, Map<Posicao,Jogador> jogadores){

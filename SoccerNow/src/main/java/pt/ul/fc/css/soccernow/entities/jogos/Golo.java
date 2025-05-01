@@ -2,7 +2,10 @@ package pt.ul.fc.css.soccernow.entities.jogos;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 
@@ -10,11 +13,11 @@ import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 public class Golo extends EventoDeJogo {
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false ,name = "marcador", referencedColumnName = "jogadorId")
+    @JoinColumn(nullable = false ,name = "marcador")
     private Jogador marcador;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false ,name = "equipa_marcadora", referencedColumnName = "equipaId")
+    @JoinColumn(nullable = false ,name = "equipa_marcadora")
     private Equipa equipa;
 
     public Golo(LocalDateTime quando, Jogo jogo, Jogador marcador, Equipa equipa) {

@@ -15,7 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.css.soccernow.handlers.ArbitroHandler;
-import pt.ul.fc.css.soccernow.handlers.IArbitroHandler;
 
 @RestController
 @RequestMapping("/api/arbitros")
@@ -23,7 +22,7 @@ import pt.ul.fc.css.soccernow.handlers.IArbitroHandler;
 public class ArbitroController {
     
     @Autowired
-    private final IArbitroHandler arbitroHandler = new ArbitroHandler();
+    private ArbitroHandler arbitroHandler;
 
     @PostMapping
     @ApiOperation(value = "Create arbitro", notes = "Creates a new arbitro and returns the created arbitro DTO.")

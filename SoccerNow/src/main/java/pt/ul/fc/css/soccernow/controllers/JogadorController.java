@@ -16,7 +16,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
-import pt.ul.fc.css.soccernow.handlers.IJogadorHandler;
 import pt.ul.fc.css.soccernow.handlers.JogadorHandler;
 
 @RestController
@@ -25,7 +24,7 @@ import pt.ul.fc.css.soccernow.handlers.JogadorHandler;
 public class JogadorController {
     
     @Autowired
-    private final IJogadorHandler jogadorHandler = new JogadorHandler();
+    private JogadorHandler jogadorHandler;
 
     @PostMapping
     @ApiOperation(value = "Create jogador", notes = "Creates a new jogador and returns the created jogador DTO.")

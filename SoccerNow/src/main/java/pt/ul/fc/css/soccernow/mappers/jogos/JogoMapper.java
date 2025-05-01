@@ -15,10 +15,8 @@ import pt.ul.fc.css.soccernow.entities.jogos.JogoCampeonato;
 import pt.ul.fc.css.soccernow.entities.jogos.Local;
 import pt.ul.fc.css.soccernow.entities.jogos.Morada;
 import pt.ul.fc.css.soccernow.entities.jogos.Selecao;
-import pt.ul.fc.css.soccernow.entities.utilizadores.IJogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
-import pt.ul.fc.css.soccernow.mappers.campeonatos.CampeonatoMapper;
 import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
@@ -47,7 +45,6 @@ public class JogoMapper {
             jogo = new JogoAmigavel();
         } else {
             jogo = new JogoCampeonato();
-            jogo.setCampeonato(CampeonatoMapper.campeonatoToDto(jogodto.getCampeonato()));
         }
 
         jogo.setS1(dtoToSelecao(jogodto.getS1()));
@@ -111,6 +108,8 @@ public class JogoMapper {
         Map<Posicao, Jogador> jogadores = new EnumMap<>(Posicao.class);
         jogadoresDto.forEach((pos, jog) -> jogadores.put(pos, JogadorMapper.dtoToJogador(jog)));
         selecao.setJogadores(jogadores);
+
+        return selecao;
     }
 
     public static SelecaoDto selecaoToDto(Selecao s) {
@@ -121,7 +120,9 @@ public class JogoMapper {
         Map<Posicao, Jogador> jogadores = s.getJogadores();
         Map<Posicao, JogadorDto> jogadoresDto = new EnumMap<>(Posicao.class);
         jogadores.forEach((pos, jog) -> jogadoresDto.put(pos, JogadorMapper.jogadorToDto(jog)));
-        selecaoDto.setSelecao(jogadoresDto);
+        selecaoDto.setJogadores(jogadoresDto);
+
+        return selecaoDto;
     }
     public static LocalDto localToDto(Local l){
         if(l == null){return null;}

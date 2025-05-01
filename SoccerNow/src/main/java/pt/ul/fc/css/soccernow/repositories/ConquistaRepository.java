@@ -1,9 +1,11 @@
 package pt.ul.fc.css.soccernow.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import pt.ul.fc.css.soccernow.entities.equipas.IConquista;
+import pt.ul.fc.css.soccernow.entities.equipas.Conquista;
 
-public interface ConquistaRepository extends JpaRepository<IConquista, Long> {
+@Repository
+public interface ConquistaRepository extends JpaRepository<Conquista, Long> {
     
 }

@@ -18,7 +18,7 @@ import jakarta.persistence.InheritanceType;
 public abstract class Utilizador implements IUtilizador {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="UTILIZADOR_ID")
     private Long id;
 

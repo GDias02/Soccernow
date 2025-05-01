@@ -1,11 +1,14 @@
 package pt.ul.fc.css.soccernow.mappers.utilizadores;
 
-import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaDto;
+import java.util.stream.Collectors;
+
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogadorDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
 import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaJogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
+import pt.ul.fc.css.soccernow.mappers.jogos.CartaoMapper;
+import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
 
 public class JogadorMapper {
 
@@ -22,10 +25,8 @@ public class JogadorMapper {
         jogadorDto.setPosicaoPreferida(jogador.getPosicaoPreferida());
 
         EstatisticaJogadorDto estatisticasJogador = new EstatisticaJogadorDto();
-        EstatisticaDto estatisticas = new EstatisticaDto();
-        estatisticas.setGolos(jogador.getEstatisticas().getGolos());
-        estatisticas.setCartoes(jogador.getEstatisticas().getCartoes());
-        estatisticasJogador.setEstatisticas(estatisticas);
+        estatisticasJogador.setGolos(jogador.getEstatisticas().getGolos().stream().map(GoloMapper::goloToDto).collect(Collectors.toSet()));
+        estatisticasJogador.setCartoes(jogador.getEstatisticas().getCartoes().stream().map(CartaoMapper::cartaoToDto).collect(Collectors.toSet()));
         jogadorDto.setEstatisticas(estatisticasJogador);
 
         return jogadorDto;
@@ -43,8 +44,8 @@ public class JogadorMapper {
 
         EstatisticaJogador estatisticaJogador = new EstatisticaJogador();
         EstatisticaJogadorDto estatisticaJogadorDto = jogadorDto.getEstatisticas();
-        estatisticaJogador.setGolos(estatisticaJogadorDto.getGolos());
-        estatisticaJogador.setCartoes(estatisticaJogadorDto.getCartoes());
+        estatisticaJogador.setGolos(estatisticaJogadorDto.getGolos().stream().map(GoloMapper::dtoToGolo).collect(Collectors.toSet()));
+        estatisticaJogador.setCartoes(estatisticaJogadorDto.getCartoes().stream().map(CartaoMapper::dtoToCartao).collect(Collectors.toSet()));
         jogador.setEstatisticas(estatisticaJogador);
 
         return jogador;

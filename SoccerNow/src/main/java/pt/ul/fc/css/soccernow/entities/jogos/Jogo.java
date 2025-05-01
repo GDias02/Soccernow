@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,6 +17,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
@@ -31,10 +33,52 @@ public abstract class Jogo implements IJogo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /* @AttributeOverrides({
+        @AttributeOverride(name = "equipa", column = @Column(name = "s1_equipa")),
+        @AttributeOverride(name = "capitao", column = @Column(name = "s1_capitao")),
+        @AttributeOverride(name = "guarda_redes", column = @Column(name = "s1_guarda_redes")),
+        @AttributeOverride(name = "fixo", column = @Column(name = "s1_fixo")),
+        @AttributeOverride(name = "ala_esquerda", column = @Column(name = "s1_ala_esquerda")),
+        @AttributeOverride(name = "ala_direita", column = @Column(name = "s1_ala_direita")),
+        @AttributeOverride(name = "pivot", column = @Column(name = "s1_pivot"))
+    }) */
     @Embedded
     private Selecao s1;
+
+    /* @AttributeOverrides({
+        @AttributeOverride(name = "equipa", column = @Column(name = "s2_equipa")),
+        @AttributeOverride(name = "capitao", column = @Column(name = "s2_capitao")),
+        @AttributeOverride(name = "guarda_redes", column = @Column(name = "s2_guarda_redes")),
+        @AttributeOverride(name = "fixo", column = @Column(name = "s2_fixo")),
+        @AttributeOverride(name = "ala_esquerda", column = @Column(name = "s2_ala_esquerda")),
+        @AttributeOverride(name = "ala_direita", column = @Column(name = "s2_ala_direita")),
+        @AttributeOverride(name = "pivot", column = @Column(name = "s2_pivot"))
+    }) */
     @Embedded
     private Selecao s2;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "equipa_id")
+    private Equipa equipa;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "capitao_id")
+    private Jogador capitao;
+
+    @OneToOne       //de modo a evitar criar uma nova tabela que teria um tamanho fixo (uma vez que as posicoes sao sempre so 5)
+    @JoinColumn(name="guarda_redes")
+    private Jogador guardaRedes;
+    @OneToOne
+    @JoinColumn(name = "fixo")
+    private Jogador fixo;
+    @OneToOne
+    @JoinColumn(name = "ala_esquerda")
+    private Jogador alaEsquerda;
+    @OneToOne
+    @JoinColumn(name = "ala_direita")
+    private Jogador alaDireita;
+    @OneToOne
+    @JoinColumn(name = "pivot")
+    private Jogador pivot;
 
     @ManyToMany
     private List<Arbitro> equipaDeArbitros;
@@ -43,7 +87,7 @@ public abstract class Jogo implements IJogo {
     private EstadoDeJogo estadoAtual;
 
     @ManyToOne
-    @JoinColumn(name = "local_id", referencedColumnName = "id")
+    @JoinColumn(name = "local_id")
     private Local local;
 
     @Column(name="quando", columnDefinition = "TIMESTAMP")

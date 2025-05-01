@@ -11,7 +11,7 @@ public class CartaoMapper {
         CartaoDto cartaoDto = new CartaoDto();
         cartaoDto.setQuando(c.getQuando());
         cartaoDto.setJogo(JogoMapper.jogoToDto(c.getJogo()));
-        cartaoDto.setAtribuidoA(JogadorMapper.jogadorToDto(c.getAtribuido()));
+        cartaoDto.setAtribuidoA(JogadorMapper.jogadorToDto(c.getAtribuidoA()));
         cartaoDto.setArbitro(ArbitroMapper.arbitroToDto(c.getArbitro()));
         cartaoDto.setCor(c.getCor());
         return cartaoDto;

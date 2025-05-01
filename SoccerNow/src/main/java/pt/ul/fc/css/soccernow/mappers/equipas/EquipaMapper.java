@@ -1,16 +1,16 @@
 package pt.ul.fc.css.soccernow.mappers.equipas;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
-import pt.ul.fc.css.soccernow.entities.equipas.*;
-import pt.ul.fc.css.soccernow.entities.jogos.*;
-import pt.ul.fc.css.soccernow.entities.utilizadores.*;
+import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
+import pt.ul.fc.css.soccernow.entities.jogos.IJogo;
+import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
+import pt.ul.fc.css.soccernow.entities.utilizadores.IJogador;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
 import pt.ul.fc.css.soccernow.repositories.JogoRepository;
 
@@ -21,18 +21,18 @@ import pt.ul.fc.css.soccernow.repositories.JogoRepository;
 public class EquipaMapper {
     
     @Autowired
-    private JogadorRepository jogadorRepository;
+    private static JogadorRepository jogadorRepository;
 
     @Autowired
-    private JogoRepository jogoRepository;
+    private static JogoRepository jogoRepository;
 
     /**
-     * Converts an IEquipa entity to an EquipaDto.
+     * Converts an Equipa entity to an EquipaDto.
      *
-     * @param equipa the IEquipa entity to convert
+     * @param equipa the Equipa entity to convert
      * @return the converted EquipaDto
      */
-    public EquipaDto equipaToDto(IEquipa equipa){
+    public static EquipaDto equipaToDto(Equipa equipa){
         EquipaDto dto = new EquipaDto();
         dto.setNome(equipa.getNome());
         List<Jogo> historico = equipa.getHistoricoDeJogos();
@@ -50,25 +50,25 @@ public class EquipaMapper {
     }
 
     /**
-     * Converts a list of IEquipa entities to a list of EquipaDto objects.
+     * Converts a list of Equipa entities to a list of EquipaDto objects.
      *
-     * @param equipas the list of IEquipa entities to convert
+     * @param equipas the list of Equipa entities to convert
      * @return the list of converted EquipaDto objects
      */
-    public List<EquipaDto> manyEquipasToDtos(List<IEquipa> equipas){
+    public static List<EquipaDto> manyEquipasToDtos(List<Equipa> equipas){
         return equipas.stream()
-                    .map(this::equipaToDto)
+                    .map(EquipaMapper::equipaToDto)
                     .collect(Collectors.toList());
     }
 
     /**
-     * Converts an EquipaDto to an IEquipa entity.
+     * Converts an EquipaDto to an Equipa entity.
      *
      * @param dto the EquipaDto to convert
-     * @return the converted IEquipa entity
+     * @return the converted Equipa entity
      */
-    public IEquipa dtoToEquipa(EquipaDto dto){
-        IEquipa equipa = new Equipa(dto.getNome());
+    public static Equipa dtoToEquipa(EquipaDto dto){
+        Equipa equipa = new Equipa(dto.getNome());
         equipa.addJogadores(jogadorRepository.findAllById(dto.getJogadores()));
         equipa.addJogos(jogoRepository.findAllById(dto.getHistoricoDeJogos()));
         //entities don't have setId()
@@ -76,14 +76,14 @@ public class EquipaMapper {
     }
 
     /**
-     * Converts a list of EquipaDto objects to a list of IEquipa entities.
+     * Converts a list of EquipaDto objects to a list of Equipa entities.
      *
      * @param dtos the list of EquipaDto objects to convert
-     * @return the list of converted IEquipa entities
+     * @return the list of converted Equipa entities
      */
-    public List<IEquipa> manyDtosToEquipas(List<EquipaDto> dtos){
+    public static List<Equipa> manyDtosToEquipas(List<EquipaDto> dtos){
         return dtos.stream()
-                .map(this::dtoToEquipa)
+                .map(EquipaMapper::dtoToEquipa)
                 .collect(Collectors.toList());
     }
 }

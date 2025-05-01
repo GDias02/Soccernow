@@ -1,20 +1,15 @@
 package pt.ul.fc.css.soccernow.entities.equipas;
 
-import io.micrometer.observation.annotation.Observed;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-
-import java.util.List;
-
-import org.hibernate.annotations.ManyToAny;
-
-import java.util.ArrayList;
-
-import pt.ul.fc.css.soccernow.entities.utilizadores.*;
-import pt.ul.fc.css.soccernow.entities.jogos.*;
+import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 
 @Entity
 public class Equipa implements IEquipa {

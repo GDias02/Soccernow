@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaJogador;
 
 @Entity
@@ -14,7 +14,7 @@ public class Jogador extends Utilizador implements IJogador {
     @Column(nullable = false)
     private Posicao posicaoPreferida;
 
-    @OneToOne
+    @Transient
     private EstatisticaJogador estatisticas;
 
     public Jogador() {}

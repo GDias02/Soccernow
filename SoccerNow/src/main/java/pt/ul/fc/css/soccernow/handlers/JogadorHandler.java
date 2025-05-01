@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogadorDto;
@@ -16,6 +17,7 @@ import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
 
+@Service
 public class JogadorHandler implements IJogadorHandler {
 
     @Autowired
@@ -27,8 +29,7 @@ public class JogadorHandler implements IJogadorHandler {
 
         UtilizadorDto utilizadorDto = jogadorDto.getUtilizador();
 
-        if (utilizadorDto.getId() != null 
-            || !jogadorRepository.findByNif(utilizadorDto.getNif()).isEmpty()) return null;
+        if (utilizadorDto.getId() != null) return null;
 
         EstatisticaJogadorDto estatisticaJogadorDto = new EstatisticaJogadorDto();
         estatisticaJogadorDto.setGolos(new HashSet<>());
@@ -52,7 +53,7 @@ public class JogadorHandler implements IJogadorHandler {
 
     @Override
     public JogadorDto removerJogador(int nif) {
-        Optional<Jogador> maybeJogador = jogadorRepository.findByNifAndDelete(nif);
+        Optional<Jogador> maybeJogador = jogadorRepository.deleteByNif(nif);
         return maybeJogador.isEmpty() ? null : JogadorMapper.jogadorToDto(maybeJogador.get());
     }
 

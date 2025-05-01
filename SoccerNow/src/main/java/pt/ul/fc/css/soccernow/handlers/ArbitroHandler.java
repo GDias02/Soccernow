@@ -3,6 +3,7 @@ package pt.ul.fc.css.soccernow.handlers;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
@@ -10,6 +11,7 @@ import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 
+@Service
 public class ArbitroHandler implements IArbitroHandler {
 
     @Autowired
@@ -21,8 +23,7 @@ public class ArbitroHandler implements IArbitroHandler {
 
         UtilizadorDto utilizadorDto = arbitroDto.getUtilizador();
         
-        if (utilizadorDto.getId() != null
-            || !arbitroRepository.findByNif(utilizadorDto.getNif()).isEmpty()) return null;
+        if (utilizadorDto.getId() != null) return null;
 
         Arbitro arbitro = ArbitroMapper.dtoToArbitro(arbitroDto);
         Arbitro savedArbitro = arbitroRepository.save(arbitro);
@@ -41,7 +42,7 @@ public class ArbitroHandler implements IArbitroHandler {
 
     @Override
     public ArbitroDto removerArbitro(int nif) {
-        Optional<Arbitro> maybeArbitro = arbitroRepository.findByNifAndDelete(nif);
+        Optional<Arbitro> maybeArbitro = arbitroRepository.deleteByNif(nif);
         return maybeArbitro.isEmpty() ? null : ArbitroMapper.arbitroToDto(maybeArbitro.get());
     }
 

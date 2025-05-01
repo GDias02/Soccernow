@@ -1,7 +1,8 @@
 package pt.ul.fc.css.soccernow.handlers;
 
-import pt.ul.fc.css.soccernow.dto.equipas.ConquistaDto;
 import java.util.List;
+
+import pt.ul.fc.css.soccernow.dto.equipas.ConquistaDto;
 
 /**
  * Interface that defines the operations for managing team achievements (conquistas).
@@ -51,6 +52,6 @@ public interface IConquistaHandler {
      * @param conquistaDto The new details of the achievement encapsulated in a {@link ConquistaDto}.
      * @return The updated {@link ConquistaDto}.
      */
-    public ConquistaDto atualizarConquista(long equipaId, ConquistaDto conquistaDto);
+    public ConquistaDto atualizarConquista(long equipaId, long conquistaId, ConquistaDto conquistaDto);
 
 }
