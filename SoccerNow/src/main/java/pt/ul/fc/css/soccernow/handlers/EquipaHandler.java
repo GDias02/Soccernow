@@ -4,6 +4,7 @@ import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.equipas.IEquipa;
+import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,10 @@ public class EquipaHandler implements IEquipaHandler {
 
     @Autowired
     private EquipaRepository equipaRepository;
+
+    @Autowired
+    private EquipaMapper equipaMapper;
+
 
     @Override
     public EquipaDto verificarEquipa(long id) {
@@ -39,11 +44,12 @@ public class EquipaHandler implements IEquipaHandler {
     @Override
     public EquipaDto atualizarEquipa(long id, EquipaDto equipaDto) {
         EquipaDto e = verificarEquipa(id);
-        if (e != null){
-            //If it exists, then save
+        boolean valid = isValid(equipaDto);
+        if (e != null && valid){
+            //If it exists and it's valid, then save
             equipaRepository.save(mapToEntity(equipaDto));
         }
-        return verificarEquipa(id);
+        return valid ? verificarEquipa(id) : null;
     }
 
     @Override
@@ -53,40 +59,18 @@ public class EquipaHandler implements IEquipaHandler {
 
     @Override
     public EquipaDto registarEquipa(EquipaDto equipaDto) {
-        IEquipa equipa = mapToEntity(equipaDto);
-
-        IEquipa savedEquipa = equipaRepository.save(equipa);
-
-        equipaDto.setId(savedEquipa.getId());
-        
-        return equipaDto;
-    }
-
-    private EquipaDto mapToDto(IEquipa e){
-        EquipaDto = new EquipaDto();
-
-        return null;
-    }
-
-    private IEquipa mapToEntity(EquipaDto e){
-        IEquipa equipa = new Equipa(e.getNome());
-        equipa.addJogos(e.getHistoricoDeJogos());
-        equipa.addJogadores(e.getJogadores());
-        if (e.getId() != null){
-            equipa.setId(e.getId());
+        boolean valid = isValid(equipaDto);
+        if (valid)}{
+            IEquipa equipa = mapToEntity(equipaDto);
+            IEquipa savedEquipa = equipaRepository.save(equipa);
+            equipaDto.setId(savedEquipa.getId());
         }
-        return equipa;
+        return valid ? equipaDto : null;
     }
 
-    private List<IEquipa> mapManyToEntity(List<EquipaDto> dtoList) {
-        return dtoList.stream()
-                .map(this::mapToEntity)
-                .collect(Collectors.toList());
+    private boolean isValid(EquipaDto equipaDto) {
+
+        return false;
     }
 
-    private List<EquipaDto> mapManyToDto(List<IEquipa> entityList){
-        return entityList.stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
-    }
 }

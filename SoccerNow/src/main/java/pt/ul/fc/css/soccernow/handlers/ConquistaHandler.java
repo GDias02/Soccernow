@@ -42,7 +42,7 @@ public class ConquistaHandler implements IConquistaHandler {
     }
 
     @Override
-    public ConquistaDto atualizarConquista(long equipaId, ConquistaDto conquistaDto) {
+    public ConquistaDto atualizarConquista(long equipaId, long conquistaId, ConquistaDto conquistaDto) {
         // Implementation for updating an existing achievement
         // ...existing code...
         return null; // Replace with actual implementation
