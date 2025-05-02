@@ -1,8 +1,5 @@
 package pt.ul.fc.css.soccernow.entities.utilizadores;
 
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,8 +10,6 @@ import jakarta.persistence.InheritanceType;
 
 @Entity
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-@SQLDelete(sql = "UPDATE table_product SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
 public abstract class Utilizador implements IUtilizador {
     
     @Id
@@ -30,13 +25,16 @@ public abstract class Utilizador implements IUtilizador {
 
     private String contacto;
 
-    private boolean deleted = Boolean.FALSE;
-
     public Utilizador() {}
 
     @Override
     public Long getId() {
         return this.id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
@@ -67,13 +65,5 @@ public abstract class Utilizador implements IUtilizador {
     @Override
     public void setContacto(String contacto) {
         this.contacto = contacto;
-    }
-
-    public boolean isDeleted() {
-        return this.deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 }

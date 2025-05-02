@@ -4,6 +4,8 @@ public interface IUtilizador {
     
     public Long getId();
 
+    public void setId(Long id);
+
     public int getNif();
 
     public void setNif(int nif);

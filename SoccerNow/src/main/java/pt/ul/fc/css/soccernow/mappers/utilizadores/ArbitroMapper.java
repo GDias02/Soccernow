@@ -31,6 +31,7 @@ public class ArbitroMapper {
         Arbitro arbitro = new Arbitro();
 
         UtilizadorDto utilizador = arbitroDto.getUtilizador();
+        arbitro.setId(utilizador.getId());
         arbitro.setNif(utilizador.getNif());
         arbitro.setNome(utilizador.getNome());
         arbitro.setContacto(utilizador.getContacto());

@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.css.soccernow.handlers.ArbitroHandler;
 
@@ -47,11 +47,8 @@ public class ArbitroController {
     @DeleteMapping("/{nif}")
     @ApiOperation(value = "Delete arbitro by NIF", notes = "Deletes an arbitro with a given NIF.")
     public ResponseEntity<ArbitroDto> removerArbitro(@PathVariable("nif") int nif) {
-        ArbitroDto arbitroDto = arbitroHandler.removerArbitro(nif);
-        if (arbitroDto != null) {
-            return ResponseEntity.ok(arbitroDto);
-        }
-        return ResponseEntity.notFound().build();
+        arbitroHandler.removerArbitro(nif);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping

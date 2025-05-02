@@ -3,14 +3,15 @@ package pt.ul.fc.css.soccernow.handlers;
 import java.util.Set;
 
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorPostDto;
 
 public interface IJogadorHandler {
     
-    public JogadorDto registarJogador(JogadorDto jogadorDto);
+    public JogadorDto registarJogador(JogadorPostDto jogadorDto);
 
     public JogadorDto verificarJogador(int nif);
 
-    public JogadorDto removerJogador(int nif);
+    public void removerJogador(int nif);
 
     public JogadorDto atualizarJogador(JogadorDto jogadorDto);
 

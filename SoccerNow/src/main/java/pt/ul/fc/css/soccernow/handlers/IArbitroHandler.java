@@ -8,7 +8,7 @@ public interface IArbitroHandler {
 
     public ArbitroDto verificarArbitro(int nif);
 
-    public ArbitroDto removerArbitro(int nif);
+    public void removerArbitro(int nif);
 
     public ArbitroDto atualizarArbitro(ArbitroDto arbitroDto);
 }

@@ -24,10 +24,13 @@ public class JogadorMapper {
 
         jogadorDto.setPosicaoPreferida(jogador.getPosicaoPreferida());
 
-        EstatisticaJogadorDto estatisticasJogador = new EstatisticaJogadorDto();
-        estatisticasJogador.setGolos(jogador.getEstatisticas().getGolos().stream().map(GoloMapper::goloToDto).collect(Collectors.toSet()));
-        estatisticasJogador.setCartoes(jogador.getEstatisticas().getCartoes().stream().map(CartaoMapper::cartaoToDto).collect(Collectors.toSet()));
-        jogadorDto.setEstatisticas(estatisticasJogador);
+        EstatisticaJogadorDto estatisticasDto = new EstatisticaJogadorDto();
+        EstatisticaJogador estatisticas = jogador.getEstatisticas();
+        if (estatisticas != null) {
+            estatisticasDto.setGolos(estatisticas.getGolos().stream().map(GoloMapper::goloToDto).collect(Collectors.toSet()));
+            estatisticasDto.setCartoes(estatisticas.getCartoes().stream().map(CartaoMapper::cartaoToDto).collect(Collectors.toSet()));
+        }
+        jogadorDto.setEstatisticas(estatisticasDto);
 
         return jogadorDto;
     }
@@ -36,17 +39,19 @@ public class JogadorMapper {
         Jogador jogador = new Jogador();
 
         UtilizadorDto utilizador = jogadorDto.getUtilizador();
+        jogador.setId(utilizador.getId());
         jogador.setNif(utilizador.getNif());
         jogador.setNome(utilizador.getNome());
         jogador.setContacto(utilizador.getContacto());
 
         jogador.setPosicaoPreferida(jogadorDto.getPosicaoPreferida());
 
-        EstatisticaJogador estatisticaJogador = new EstatisticaJogador();
-        EstatisticaJogadorDto estatisticaJogadorDto = jogadorDto.getEstatisticas();
-        estatisticaJogador.setGolos(estatisticaJogadorDto.getGolos().stream().map(GoloMapper::dtoToGolo).collect(Collectors.toSet()));
-        estatisticaJogador.setCartoes(estatisticaJogadorDto.getCartoes().stream().map(CartaoMapper::dtoToCartao).collect(Collectors.toSet()));
-        jogador.setEstatisticas(estatisticaJogador);
+        EstatisticaJogadorDto estatisticasDto = jogadorDto.getEstatisticas();
+        EstatisticaJogador estatisticas = jogador.getEstatisticas();
+        if (estatisticas == null) estatisticas = new EstatisticaJogador();
+        estatisticas.setGolos(estatisticasDto.getGolos().stream().map(GoloMapper::dtoToGolo).collect(Collectors.toSet()));
+        estatisticas.setCartoes(estatisticasDto.getCartoes().stream().map(CartaoMapper::dtoToCartao).collect(Collectors.toSet()));
+        jogador.setEstatisticas(estatisticas);
 
         return jogador;
     }

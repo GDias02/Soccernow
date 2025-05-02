@@ -23,9 +23,10 @@ public class ArbitroHandler implements IArbitroHandler {
 
         UtilizadorDto utilizadorDto = arbitroDto.getUtilizador();
         
-        if (utilizadorDto.getId() != null) return null;
+        if (utilizadorDto.getId() != 0) return null;
 
         Arbitro arbitro = ArbitroMapper.dtoToArbitro(arbitroDto);
+
         Arbitro savedArbitro = arbitroRepository.save(arbitro);
 
         utilizadorDto.setId(savedArbitro.getId());
@@ -41,15 +42,17 @@ public class ArbitroHandler implements IArbitroHandler {
     }
 
     @Override
-    public ArbitroDto removerArbitro(int nif) {
-        Optional<Arbitro> maybeArbitro = arbitroRepository.deleteByNif(nif);
-        return maybeArbitro.isEmpty() ? null : ArbitroMapper.arbitroToDto(maybeArbitro.get());
+    public void removerArbitro(int nif) {
+        arbitroRepository.deleteByNif(nif);
     }
 
     @Override
     public ArbitroDto atualizarArbitro(ArbitroDto arbitroDto) {
+        if (!validInput(arbitroDto)) return null;
+
         Long id = arbitroDto.getUtilizador().getId();
-        if (!validInput(arbitroDto) || id == null || arbitroRepository.findById(id).isEmpty()) return null;
+        
+        if (id == 0 || arbitroRepository.findById(id).isEmpty()) return null;
 
         Arbitro arbitro = ArbitroMapper.dtoToArbitro(arbitroDto);
         arbitroRepository.save(arbitro);
@@ -61,6 +64,7 @@ public class ArbitroHandler implements IArbitroHandler {
         if (arbitroDto == null) return false;
 
         UtilizadorDto utilizadorDto = arbitroDto.getUtilizador();
+        if (utilizadorDto == null) return false;
         int nif = utilizadorDto.getNif();
 
         return (100000000 <= nif && nif <= 999999999)
