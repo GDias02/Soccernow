@@ -1,8 +1,12 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
@@ -16,6 +20,7 @@ import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
 import pt.ul.fc.css.soccernow.repositories.CartaoRepository;
 import pt.ul.fc.css.soccernow.repositories.GoloRepository;
 
+@Service
 public class EstatisticasHandler implements IEstatisticasHandler {
 
   @Autowired private GoloRepository goloRepository;
@@ -23,8 +28,15 @@ public class EstatisticasHandler implements IEstatisticasHandler {
 
   public EstatisticaJogo criarEstatisticaJogo(JogoDto jogo) {
     Long id = jogo.getId();
-    Set<Golo> golosMarcados = goloRepository.findByJogo(id);
-    Set<Cartao> cartoesRecebidos = cartaoRepository.findByJogo(id);
+
+    Optional<Set<Golo>> maybeGolos = goloRepository.findByJogo_Id(id);
+    Set<Golo> golosMarcados = null;
+    if (!maybeGolos.isEmpty()) golosMarcados = maybeGolos.get();
+
+    Optional<Set<Cartao>> maybeCartoes = cartaoRepository.findByJogo_Id(id);
+    Set<Cartao> cartoesRecebidos = null;
+    if (!maybeCartoes.isEmpty()) cartoesRecebidos = maybeCartoes.get();
+
     EstatisticaJogo ej = new EstatisticaJogo();
     ej.setCartoes(cartoesRecebidos);
     ej.setGolos(golosMarcados);
@@ -33,8 +45,15 @@ public class EstatisticasHandler implements IEstatisticasHandler {
 
   public EstatisticaJogador criarEstatisticaJogador(JogadorDto jogador) {
     Long id = jogador.getUtilizador().getId();
-    Set<Golo> golosMarcados = goloRepository.findByMarcador(id);
-    Set<Cartao> cartoesRecebidos = cartaoRepository.findByAtribuidoA(id);
+
+    Optional<Set<Golo>> maybeGolos = goloRepository.findByMarcador_Id(id);
+    Set<Golo> golosMarcados = null;
+    if (!maybeGolos.isEmpty()) golosMarcados = maybeGolos.get();
+
+    Optional<Set<Cartao>> maybeCartoes = cartaoRepository.findByAtribuidoA_Id(id);
+    Set<Cartao> cartoesRecebidos = null;
+    if (!maybeCartoes.isEmpty()) cartoesRecebidos = maybeCartoes.get();
+
     EstatisticaJogador ej = new EstatisticaJogador();
     ej.setCartoes(cartoesRecebidos);
     ej.setGolos(golosMarcados);
@@ -43,7 +62,11 @@ public class EstatisticasHandler implements IEstatisticasHandler {
 
   public EstatisticaArbitro criarEstatisticaArbitro(ArbitroDto arbitro) {
     Long id = arbitro.getUtilizador().getId();
-    Set<Cartao> cartoesAtribuidos = cartaoRepository.findByArbitro(id);
+
+    Optional<Set<Cartao>> maybeCartoes = cartaoRepository.findByArbitro_Id(id);
+    Set<Cartao> cartoesAtribuidos = null;
+    if (!maybeCartoes.isEmpty()) cartoesAtribuidos = maybeCartoes.get();
+
     EstatisticaArbitro ej = new EstatisticaArbitro();
     ej.setCartoes(cartoesAtribuidos);
     ej.setGolos(null);

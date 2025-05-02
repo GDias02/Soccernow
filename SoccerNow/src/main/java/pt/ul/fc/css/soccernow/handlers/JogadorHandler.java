@@ -8,12 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
+import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogadorDto;
 import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorPostDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
+import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaJogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
+import pt.ul.fc.css.soccernow.mappers.jogos.CartaoMapper;
+import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
+import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorPostMapper;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
 
 @Service
@@ -21,6 +26,9 @@ public class JogadorHandler implements IJogadorHandler {
 
     @Autowired
     private JogadorRepository jogadorRepository;
+
+    @Autowired
+    private EstatisticasHandler estatisticasHandler;
 
     @Override
     public JogadorDto registarJogador(JogadorPostDto jogadorPostDto) {
@@ -32,7 +40,12 @@ public class JogadorHandler implements IJogadorHandler {
         if (jogadorDto.getUtilizador().getId() != 0) return null;
 
         Jogador jogador = JogadorMapper.dtoToJogador(jogadorDto);
-        Jogador savedJogador = jogadorRepository.save(jogador);
+        Jogador savedJogador = new Jogador();
+        try {
+            savedJogador = jogadorRepository.save(jogador);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
         JogadorDto responseDto = JogadorMapper.jogadorToDto(savedJogador);
 
         return responseDto;
@@ -41,7 +54,19 @@ public class JogadorHandler implements IJogadorHandler {
     @Override
     public JogadorDto verificarJogador(int nif) {
         Optional<Jogador> maybeJogador = jogadorRepository.findByNif(nif);
-        return maybeJogador.isEmpty() ? null : JogadorMapper.jogadorToDto(maybeJogador.get());
+
+        JogadorDto jogadorDto = null;
+        Jogador jogador = null;
+        if (!maybeJogador.isEmpty()) {
+            jogador = maybeJogador.get();
+            jogadorDto = JogadorMapper.jogadorToDto(jogador);
+            EstatisticaJogador estatisticas = estatisticasHandler.criarEstatisticaJogador(jogadorDto);
+            EstatisticaJogadorDto estatisticasDto = new EstatisticaJogadorDto();
+            estatisticasDto.setGolos(estatisticas.getGolos().stream().map(GoloMapper::goloToDto).collect(Collectors.toSet()));
+            estatisticasDto.setCartoes(estatisticas.getCartoes().stream().map(CartaoMapper::cartaoToDto).collect(Collectors.toSet()));
+            jogadorDto.setEstatisticas(estatisticasDto);
+        }
+        return jogadorDto;
     }
 
     @Override
@@ -50,31 +75,49 @@ public class JogadorHandler implements IJogadorHandler {
     }
 
     @Override
-    public JogadorDto atualizarJogador(JogadorDto jogadorDto) {
-        if (!validInput(jogadorDto)) return null;
+    public JogadorPostDto atualizarJogador(JogadorPostDto jogadorDto) {
+        if (!validPostInput(jogadorDto)) return null;
 
         UtilizadorDto utilizador = jogadorDto.getUtilizador();
 
         Long id = utilizador.getId();
         if (id == 0) return null;
 
-        if (jogadorRepository.findById(id).isEmpty() ||
-            !validInputEstatisticas(jogadorDto.getEstatisticas().getGolos(), jogadorDto.getEstatisticas().getCartoes()))
-            return null;
-
-        Jogador jogador = JogadorMapper.dtoToJogador(jogadorDto);
+        Jogador jogador = JogadorPostMapper.dtoToJogador(jogadorDto);
         Jogador updatedJogador = jogadorRepository.save(jogador);
-        JogadorDto responseDto = JogadorMapper.jogadorToDto(updatedJogador);
+        JogadorPostDto responseDto = JogadorPostMapper.jogadorToDto(updatedJogador);
 
         return responseDto;
     }
 
     @Override
     public Set<JogadorDto> buscarJogadores() {
-        return jogadorRepository.findAll().stream().map(JogadorMapper::jogadorToDto).collect(Collectors.toSet());
+        Set<JogadorDto> jogadorDtos = jogadorRepository.findAll().stream().map(JogadorMapper::jogadorToDto).collect(Collectors.toSet());
+        for (JogadorDto jogadorDto : jogadorDtos) {
+            EstatisticaJogador estatisticas = estatisticasHandler.criarEstatisticaJogador(jogadorDto);
+            EstatisticaJogadorDto estatisticasDto = new EstatisticaJogadorDto();
+            estatisticasDto.setGolos(estatisticas.getGolos().stream().map(GoloMapper::goloToDto).collect(Collectors.toSet()));
+            estatisticasDto.setCartoes(estatisticas.getCartoes().stream().map(CartaoMapper::cartaoToDto).collect(Collectors.toSet()));
+            jogadorDto.setEstatisticas(estatisticasDto);
+        }
+        return jogadorDtos;
     }
 
     private boolean validInput(JogadorDto jogadorDto) {
+        if (jogadorDto == null) return false;
+
+        UtilizadorDto utilizador = jogadorDto.getUtilizador();
+        if (utilizador == null) return false;
+
+        int nif = utilizador.getNif();
+
+        return (100000000 <= nif && nif <= 999999999)
+            && isFilled(utilizador.getNome())
+            && isFilled(utilizador.getContacto())
+            && jogadorDto.getPosicaoPreferida() != null;
+    }
+
+    private boolean validPostInput(JogadorPostDto jogadorDto) {
         if (jogadorDto == null) return false;
 
         UtilizadorDto utilizador = jogadorDto.getUtilizador();

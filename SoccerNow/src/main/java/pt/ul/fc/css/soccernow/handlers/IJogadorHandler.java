@@ -13,7 +13,7 @@ public interface IJogadorHandler {
 
     public void removerJogador(int nif);
 
-    public JogadorDto atualizarJogador(JogadorDto jogadorDto);
+    public JogadorPostDto atualizarJogador(JogadorPostDto jogadorDto);
 
     public Set<JogadorDto> buscarJogadores();
 }

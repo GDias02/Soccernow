@@ -56,8 +56,8 @@ public class JogadorController {
 
     @PutMapping("/update")
     @ApiOperation(value = "Update jogador", notes = "Updates the given jogador.")
-    public ResponseEntity<JogadorDto> atualizarJogador(@RequestBody JogadorDto jogadorDto) {
-        JogadorDto responseDto = jogadorHandler.atualizarJogador(jogadorDto);
+    public ResponseEntity<JogadorPostDto> atualizarJogador(@RequestBody JogadorPostDto jogadorDto) {
+        JogadorPostDto responseDto = jogadorHandler.atualizarJogador(jogadorDto);
         if (responseDto != null) {
             return ResponseEntity.ok(responseDto);
         }
