@@ -17,7 +17,7 @@ public interface IEquipaHandler {
      * @param id The unique identifier of the team.
      * @return The corresponding {@link EquipaDto} if the team exists.
      */
-    public EquipaDto verificarEquipa(long id);
+    public EquipaDto verificarEquipa(Long id);
 
     /**
      * Removes a team by its ID.
@@ -25,7 +25,7 @@ public interface IEquipaHandler {
      * @param id The unique identifier of the team to be removed.
      * @return The {@link EquipaDto} of the removed team.
      */
-    public EquipaDto removerEquipa(long id);
+    public EquipaDto removerEquipa(Long id);
 
     /**
      * Updates the details of an existing team.
@@ -34,7 +34,7 @@ public interface IEquipaHandler {
      * @param equipaDto The new details of the team encapsulated in a {@link EquipaDto}.
      * @return The updated {@link EquipaDto}.
      */
-    public EquipaDto atualizarEquipa(long id, EquipaDto equipaDto);
+    public EquipaDto atualizarEquipa(Long id, EquipaDto equipaDto);
 
     /**
      * Retrieves a list of all registered teams.

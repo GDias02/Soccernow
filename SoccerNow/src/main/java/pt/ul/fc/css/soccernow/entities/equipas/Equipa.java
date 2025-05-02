@@ -132,4 +132,10 @@ public class Equipa implements IEquipa {
   public void setNome(String nome) {
     this.nome = nome;
   }
+
+  @Override
+  public String toString() {
+    return "Equipa [id=" + id + ", nome=" + nome + ", historicoDeJogos=" + historicoDeJogos + ", jogadores=" + jogadores
+        + "]";
+  }
 }

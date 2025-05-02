@@ -1,13 +1,12 @@
 package pt.ul.fc.css.soccernow.dto.equipas;
 
 import java.util.List;
-import pt.ul.fc.css.soccernow.dto.Dto;
 
 /**
  * Data Transfer Object (DTO) representing a team. This class is used to transfer data related to a
  * team between layers.
  */
-public class EquipaDto implements Dto {
+public class EquipaDto {
   private Long id;
   private String nome;
   private List<Long> historicoDeJogos;

@@ -29,19 +29,23 @@ public class EquipaMapper {
    * @return the converted EquipaDto
    */
   public static EquipaDto equipaToDto(Equipa equipa) {
+    if (equipa == null) return null;
     EquipaDto dto = new EquipaDto();
     dto.setNome(equipa.getNome());
-    List<Jogo> historico = equipa.getHistoricoDeJogos();
-    for (IJogo jogo : historico) {
-      dto.addJogo(jogo.getId());
-    }
-    List<Jogador> jogadores = equipa.getJogadores();
-    for (IJogador jogador : jogadores) {
-      dto.addJogador(jogador.getId());
-    }
+    dto.setHistoricoDeJogos(
+        equipa.getHistoricoDeJogos().stream()
+            .map(Jogo::getId)
+            .collect(Collectors.toList())
+    );
+    dto.setJogadores(
+        equipa.getJogadores().stream()
+            .map(Jogador::getId) 
+            .collect(Collectors.toList())
+    );
     if (equipa.getId() != null) {
       dto.setId(equipa.getId());
     }
+
     return dto;
   }
 
@@ -64,11 +68,10 @@ public class EquipaMapper {
   public static Equipa dtoToEquipa(EquipaDto dto) {
     Equipa equipa = new Equipa(dto.getNome());
     equipa.setId(dto.getId());
-    if (!dto.getJogadores().isEmpty() && dto.getJogadores() != null)
+    if (dto.getJogadores() != null && !dto.getJogadores().isEmpty())
       equipa.addJogadores(jogadorRepository.findAllById(dto.getJogadores()));
-    if (!dto.getHistoricoDeJogos().isEmpty() && dto.getHistoricoDeJogos() != null)
+    if (dto.getHistoricoDeJogos() != null && !dto.getHistoricoDeJogos().isEmpty())
       equipa.addJogos(jogoRepository.findAllById(dto.getHistoricoDeJogos()));
-    // entities don't have setId()
     return equipa;
   }
 
