@@ -1,70 +1,73 @@
 package pt.ul.fc.css.soccernow.entities.equipas;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
 import pt.ul.fc.css.soccernow.entities.campeonatos.Campeonato;
 
 @Entity
 public class Conquista implements IConquista {
-    
-    @Id
-    private Long id;
-    private String descricao;
 
-    private int posicaoDePodio;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "equipa_id", nullable = false)
-    private Equipa equipa;
+  private String descricao;
 
-    @ManyToOne
-    @JoinColumn(name = "campeonato_id", nullable = false)
-    private Campeonato campeonato;
-    
-    public Long getId(){
-        return id;
-    }
+  private int posicaoDePodio;
 
-    @Override
-    public String getDescricao() {
-        return descricao;
-    }
+  @ManyToOne
+  @JoinColumn(name = "equipa_id", nullable = false)
+  private Equipa equipa;
 
-    @Override
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+  @ManyToOne
+  @JoinColumn(name = "campeonato_id", nullable = false)
+  private Campeonato campeonato;
 
-    @Override
-    public Integer getPosicaoDePodio() {
-        return posicaoDePodio;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    @Override
-    public void setPosicaoDePodio(Integer posicaoDePodio) {
-        this.posicaoDePodio = posicaoDePodio;
-    }
+  @Override
+  public String getDescricao() {
+    return descricao;
+  }
 
-    @Override
-    public Equipa getEquipa() {
-        return equipa;
-    }
+  @Override
+  public void setDescricao(String descricao) {
+    this.descricao = descricao;
+  }
 
-    @Override
-    public void setEquipa(Equipa equipa) {
-        this.equipa = equipa;
-    }
+  @Override
+  public Integer getPosicaoDePodio() {
+    return posicaoDePodio;
+  }
 
-    @Override
-    public Campeonato getCampeonato() {
-        return campeonato;
-    }
+  @Override
+  public void setPosicaoDePodio(Integer posicaoDePodio) {
+    this.posicaoDePodio = posicaoDePodio;
+  }
 
-    @Override
-    public void setCampeonato(Campeonato campeonato) {
-        this.campeonato = campeonato;
-    }
+  @Override
+  public Equipa getEquipa() {
+    return equipa;
+  }
+
+  @Override
+  public void setEquipa(Equipa equipa) {
+    this.equipa = equipa;
+  }
+
+  @Override
+  public Campeonato getCampeonato() {
+    return campeonato;
+  }
+
+  @Override
+  public void setCampeonato(Campeonato campeonato) {
+    this.campeonato = campeonato;
+  }
 }

@@ -1,13 +1,11 @@
 package pt.ul.fc.css.soccernow.dto.equipas;
 
-import pt.ul.fc.css.soccernow.dto.Dto;
-
 /**
  * Data Transfer Object (DTO) representing a conquest.
  * This class is used to transfer data related to a conquest between layers.
  * The date field should follow the format: dd/mm/yyyy.
  */
-public class ConquistaDto implements Dto{
+public class ConquistaDto{
     private Long id;
     private String descricao;
     private String data; 

@@ -16,7 +16,7 @@ public interface IConquistaHandler {
      * @param equipaId The unique identifier of the team.
      * @return A list of {@link ConquistaDto} representing all achievements of the team.
      */
-    public List<ConquistaDto> verificarConquistas(long equipaId);
+    public List<ConquistaDto> verificarConquistas(Long equipaId);
 
     /**
      * Retrieves an achievement by its ID from a specific team.
@@ -25,7 +25,7 @@ public interface IConquistaHandler {
      * @param conquistaId The unique identifier of the achievement.
      * @return The corresponding {@link ConquistaDto} if the achievement exists.
      */
-    public ConquistaDto verificarConquista(long equipaId, long conquistaId);
+    public ConquistaDto verificarConquista(Long equipaId, Long conquistaId);
 
     /**
      * Registers a new achievement for a specific team.
@@ -34,7 +34,7 @@ public interface IConquistaHandler {
      * @param conquistaDto The details of the achievement to be registered encapsulated in a {@link ConquistaDto}.
      * @return The registered {@link ConquistaDto}.
      */
-    public ConquistaDto registarConquista(long equipaId, ConquistaDto conquistaDto);
+    public ConquistaDto registarConquista(Long equipaId, ConquistaDto conquistaDto);
 
     /**
      * Removes an achievement by its ID belonging to a specific team.
@@ -43,7 +43,7 @@ public interface IConquistaHandler {
      * @param conquistaId The unique identifier of the achievement to be removed.
      * @return The {@link ConquistaDto} of the removed achievement.
      */
-    public ConquistaDto removerConquista(long equipaId, long conquistaId);
+    public ConquistaDto removerConquista(Long equipaId, Long conquistaId);
 
     /**
      * Updates the details of an existing achievement from a specific team.
@@ -52,6 +52,6 @@ public interface IConquistaHandler {
      * @param conquistaDto The new details of the achievement encapsulated in a {@link ConquistaDto}.
      * @return The updated {@link ConquistaDto}.
      */
-    public ConquistaDto atualizarConquista(long equipaId, long conquistaId, ConquistaDto conquistaDto);
+    public ConquistaDto atualizarConquista(Long equipaId, Long conquistaId, ConquistaDto conquistaDto);
 
 }

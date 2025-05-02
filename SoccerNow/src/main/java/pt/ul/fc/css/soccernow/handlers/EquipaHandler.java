@@ -1,70 +1,108 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
+import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
 import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
-
 
 @Service
 public class EquipaHandler implements IEquipaHandler {
 
-    @Autowired
-    private EquipaRepository equipaRepository;
+  @Autowired private EquipaRepository equipaRepository;
 
-    @Override
-    public EquipaDto verificarEquipa(long id) {
-        Optional<Equipa> e = equipaRepository.findById(id);
-        if (e.isEmpty())
-            return null;
-        else 
-            return EquipaMapper.equipaToDto(e.get());
+  @Override
+  public EquipaDto verificarEquipa(Long id) {
+    Optional<Equipa> e = equipaRepository.findById(id);
+    if (e.isEmpty()) return null;
+    else return EquipaMapper.equipaToDto(e.get());
+  }
+
+  @Override
+  public EquipaDto removerEquipa(Long id) {
+    EquipaDto e = verificarEquipa(id);
+    
+    if (e == null ) return null;
+    
+    boolean valid = validatorRemoverEquipa(EquipaMapper.dtoToEquipa(e));
+    if (valid) {
+      equipaRepository.deleteById(id); //delete
+    } else {
+      e.setId(-1L); //send error
     }
 
-    @Override
-    public EquipaDto removerEquipa(long id) {
-        EquipaDto e = verificarEquipa(id);
-        if (e != null)
-            equipaRepository.deleteById(id);
-        return e;
-    }
+    return e;
+  }
 
-    @Override
-    public EquipaDto atualizarEquipa(long id, EquipaDto equipaDto) {
-        EquipaDto e = verificarEquipa(id);
-        boolean valid = isValid(equipaDto);
-        if (e != null && valid){
-            //If it exists and it's valid, then save
-            equipaRepository.save(EquipaMapper.dtoToEquipa(equipaDto));
-        }
-        return valid ? verificarEquipa(id) : null;
-    }
+  private boolean validatorRemoverEquipa(Equipa e) {
+    //There is only one validation at the moment,
+    //If there is a jogo that is after today, then equipa can't be deleted
+    List<Jogo> jogos = e.getHistoricoDeJogos();
+    jogos.sort(Comparator.comparing(Jogo::getDiaEHora));
+    if (!jogos.isEmpty() && jogos.get(jogos.size()-1).getDiaEHora().isAfter(LocalDateTime.now())) return false;
+    //future validations...
+    return true;
+  }
 
-    @Override
-    public List<EquipaDto> verificarEquipas() {
-        return EquipaMapper.manyEquipasToDtos(equipaRepository.findAll());
-    }
+  @Override
+  public EquipaDto atualizarEquipa(Long id, EquipaDto equipaDto) {
+    EquipaDto e = verificarEquipa(equipaDto.getId());
+    int valid = validatorAtualizarEquipa(id, equipaDto);
+    if (e != null && valid == 1) {
+      // If it exists and it's valid, then save
+      equipaRepository.save(EquipaMapper.dtoToEquipa(equipaDto));
+    } else if (e!= null && valid == -1) {
+      e.setId(-1L);
+      return e;
+    } 
+    //GetEquipa(Id) para obter a versão mais atualizada de equipa
+    return valid == 1 ? verificarEquipa(id) : null;
+  }
 
-    @Override
-    public EquipaDto registarEquipa(EquipaDto equipaDto) {
-        boolean valid = isValid(equipaDto);
-        if (valid){
-            Equipa equipa = EquipaMapper.dtoToEquipa(equipaDto);
-            Equipa savedEquipa = equipaRepository.save(equipa);
-            equipaDto.setId(savedEquipa.getId());
-        }
-        return valid ? equipaDto : null;
-    }
+  private int validatorAtualizarEquipa(Long id, EquipaDto equipaDto) {
+    //Make sure id == equipaDto.getId()
+    if (!id.equals(equipaDto.getId())) return -1;
 
-    private boolean isValid(EquipaDto equipaDto) {
-        
-        return true;
+    //Make sure that every previous game is in historico
+    List<Jogo> historicoOriginal = 
+            equipaRepository.findById(equipaDto.getId()).get()
+                            .getHistoricoDeJogos();
+    for (Jogo jogo : historicoOriginal) {
+      if (!equipaDto.getHistoricoDeJogos().contains(jogo.getId())) {
+        return -1;
+      }
     }
+    //future validations...
+    return 1;
+  }
 
+  @Override
+  public List<EquipaDto> verificarEquipas() {
+    return EquipaMapper.manyEquipasToDtos(equipaRepository.findAll());
+  }
+
+  @Override
+  public EquipaDto registarEquipa(EquipaDto equipaDto) {
+    boolean valid = validatorRegistarEquipa(equipaDto);
+    Equipa savedEquipa = null;
+    if (valid) {
+      Equipa equipa = EquipaMapper.dtoToEquipa(equipaDto);
+      savedEquipa = equipaRepository.save(equipa);
+    }
+    return EquipaMapper.equipaToDto(savedEquipa);
+  }
+
+  private boolean validatorRegistarEquipa(EquipaDto equipaDto) {
+    //Future validations might be added, for now there none
+    return true;
+  }
+
+  
 }
