@@ -2,116 +2,114 @@ package pt.ul.fc.css.soccernow.dto.jogos;
 
 import java.util.EnumMap;
 import java.util.Map;
-
-import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
-import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
-import pt.ul.fc.css.soccernow.entities.jogos.Selecao;
-import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 
 /**
- * Classe Dto para representar uma selecao de uma equipa para determinado jogo.
- * Para:
- * - Criar um novo jogo:
- * - - O atributo de tipo EquipaDto requer apenas com o id e o nome preenchido
- * (para efeitos do placar).
- * - - O parametro de capitao e opcional
- * - - Os atributos de tipo JogadorDto requerem apenas o id
- * - - Os atributos das posicoes dos jogadores podem ser colocados recorrendo a
+ * Classe Dto para representar uma selecao de uma equipa para determinado jogo. Para: - Criar um
+ * novo jogo: - - O atributo de tipo EquipaDto requer apenas com o id e o nome preenchido (para
+ * efeitos do placar). - - O parametro de capitao e opcional - - Os atributos de tipo JogadorDto
+ * requerem apenas o id - - Os atributos das posicoes dos jogadores podem ser colocados recorrendo a
  * setSelecao(Map<Posicao,JogadorDto>).
  */
 public class SelecaoDto {
-    private static final Posicao[] posicoes = Posicao.values();
-    private EquipaDto equipa;
+  private Long equipa;
+  private Long capitao;
+  private Long guardaRedes;
+  private Long fixo;
+  private Long alaEsquerda;
+  private Long alaDireita;
+  private Long pivot;
 
-    private JogadorDto capitao;
+  public Long getEquipa() {
+    return equipa;
+  }
 
-    private JogadorDto guardaRedes;
+  public void setEquipa(Long equipa) {
+    this.equipa = equipa;
+  }
 
-    private JogadorDto fixo;
+  public Long getCapitao() {
+    return capitao;
+  }
 
-    private JogadorDto alaEsquerda;
+  public void setCapitao(Long capitao) {
+    this.capitao = capitao;
+  }
 
-    private JogadorDto alaDireita;
+  public Long getGuardaRedes() {
+    return guardaRedes;
+  }
 
-    private JogadorDto pivot;
+  public void setGuardaRedes(Long guardaRedes) {
+    this.guardaRedes = guardaRedes;
+  }
 
-    public void setJogadores(Map<Posicao, JogadorDto> jogadores) {
-        this.guardaRedes = jogadores.get(posicoes[0]);
-        this.fixo = jogadores.get(posicoes[1]);
-        this.alaEsquerda = jogadores.get(posicoes[2]);
-        this.alaDireita = jogadores.get(posicoes[3]);
-        this.pivot = jogadores.get(posicoes[4]);
-    }
+  public Long getFixo() {
+    return fixo;
+  }
 
-    public Map<Posicao, JogadorDto> getJogadores() {
-        Map<Posicao, JogadorDto> jogadores = new EnumMap<>(Posicao.class);
-        jogadores.put(posicoes[0], guardaRedes);
-        jogadores.put(posicoes[1], fixo);
-        jogadores.put(posicoes[2], alaEsquerda);
-        jogadores.put(posicoes[3], alaDireita);
-        jogadores.put(posicoes[4], pivot);
-        return jogadores;
-    }
+  public void setFixo(Long fixo) {
+    this.fixo = fixo;
+  }
 
-    public static Posicao[] getPosicoes() {
-        return posicoes;
-    }
+  public Long getAlaEsquerda() {
+    return alaEsquerda;
+  }
 
-    public EquipaDto getEquipa() {
-        return equipa;
-    }
+  public void setAlaEsquerda(Long alaEsquerda) {
+    this.alaEsquerda = alaEsquerda;
+  }
 
-    public void setEquipa(EquipaDto equipa) {
-        this.equipa = equipa;
-    }
+  public Long getAlaDireita() {
+    return alaDireita;
+  }
 
-    public JogadorDto getCapitao() {
-        return capitao;
-    }
+  public void setAlaDireita(Long alaDireita) {
+    this.alaDireita = alaDireita;
+  }
 
-    public void setCapitao(JogadorDto capitao) {
-        this.capitao = capitao;
-    }
+  public Long getPivot() {
+    return pivot;
+  }
 
-    public JogadorDto getGuardaRedes() {
-        return guardaRedes;
-    }
+  public void setPivot(Long pivot) {
+    this.pivot = pivot;
+  }
 
-    public void setGuardaRedes(JogadorDto guardaRedes) {
-        this.guardaRedes = guardaRedes;
-    }
+  public void setJogadores(Map<Posicao, Long> jogadores) {
+    this.guardaRedes = jogadores.get(Posicao.GUARDA_REDES);
+    this.fixo = jogadores.get(Posicao.FIXO);
+    this.alaEsquerda = jogadores.get(Posicao.ALA_ESQUERDA);
+    this.alaDireita = jogadores.get(Posicao.ALA_DIREITA);
+    this.pivot = jogadores.get(Posicao.PIVO);
+  }
 
-    public JogadorDto getFixo() {
-        return fixo;
-    }
+  public Map<Posicao, Long> getJogadores() {
+    Map<Posicao, Long> jogadores = new EnumMap<>(Posicao.class);
+    jogadores.put(Posicao.GUARDA_REDES, guardaRedes);
+    jogadores.put(Posicao.FIXO, fixo);
+    jogadores.put(Posicao.ALA_ESQUERDA, alaEsquerda);
+    jogadores.put(Posicao.ALA_DIREITA, alaDireita);
+    jogadores.put(Posicao.PIVO, pivot);
+    return jogadores;
+  }
 
-    public void setFixo(JogadorDto fixo) {
-        this.fixo = fixo;
-    }
-
-    public JogadorDto getAlaEsquerda() {
-        return alaEsquerda;
-    }
-
-    public void setAlaEsquerda(JogadorDto alaEsquerda) {
-        this.alaEsquerda = alaEsquerda;
-    }
-
-    public JogadorDto getAlaDireita() {
-        return alaDireita;
-    }
-
-    public void setAlaDireita(JogadorDto alaDireita) {
-        this.alaDireita = alaDireita;
-    }
-
-    public JogadorDto getPivot() {
-        return pivot;
-    }
-
-    public void setPivot(JogadorDto pivot) {
-        this.pivot = pivot;
-    }
-
+  @Override
+  public String toString() {
+    return "SelecaoDto [equipa="
+        + equipa
+        + ", capitao="
+        + capitao
+        + ", guardaRedes="
+        + guardaRedes
+        + ", fixo="
+        + fixo
+        + ", alaEsquerda="
+        + alaEsquerda
+        + ", alaDireita="
+        + alaDireita
+        + ", pivot="
+        + pivot
+        + "]";
+  }
 }
