@@ -26,13 +26,10 @@ public class ArbitroHandler implements IArbitroHandler {
         if (utilizadorDto.getId() != 0) return null;
 
         Arbitro arbitro = ArbitroMapper.dtoToArbitro(arbitroDto);
-
         Arbitro savedArbitro = arbitroRepository.save(arbitro);
+        ArbitroDto responseDto = ArbitroMapper.arbitroToDto(savedArbitro);
 
-        utilizadorDto.setId(savedArbitro.getId());
-        arbitroDto.setUtilizador(utilizadorDto);
-
-        return arbitroDto;
+        return responseDto;
     }
 
     @Override
@@ -55,9 +52,10 @@ public class ArbitroHandler implements IArbitroHandler {
         if (id == 0 || arbitroRepository.findById(id).isEmpty()) return null;
 
         Arbitro arbitro = ArbitroMapper.dtoToArbitro(arbitroDto);
-        arbitroRepository.save(arbitro);
+        Arbitro updatedArbitro = arbitroRepository.save(arbitro);
+        ArbitroDto responseDto = ArbitroMapper.arbitroToDto(updatedArbitro);
 
-        return arbitroDto;
+        return responseDto;
     }
 
     public boolean validInput(ArbitroDto arbitroDto) {

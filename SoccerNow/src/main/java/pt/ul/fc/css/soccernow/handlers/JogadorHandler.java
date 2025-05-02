@@ -33,10 +33,9 @@ public class JogadorHandler implements IJogadorHandler {
 
         Jogador jogador = JogadorMapper.dtoToJogador(jogadorDto);
         Jogador savedJogador = jogadorRepository.save(jogador);
+        JogadorDto responseDto = JogadorMapper.jogadorToDto(savedJogador);
 
-        jogadorDto.getUtilizador().setId(savedJogador.getId());
-
-        return jogadorDto;
+        return responseDto;
     }
 
     @Override
@@ -64,9 +63,10 @@ public class JogadorHandler implements IJogadorHandler {
             return null;
 
         Jogador jogador = JogadorMapper.dtoToJogador(jogadorDto);
-        jogadorRepository.save(jogador);
+        Jogador updatedJogador = jogadorRepository.save(jogador);
+        JogadorDto responseDto = JogadorMapper.jogadorToDto(updatedJogador);
 
-        return jogadorDto;
+        return responseDto;
     }
 
     @Override
