@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Version;
 
 @Entity
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
@@ -25,7 +26,17 @@ public abstract class Utilizador implements IUtilizador {
 
     private String contacto;
 
+    @Version
+    private long version;
+
     public Utilizador() {}
+
+    public Utilizador(Long id, int nif, String nome, String contacto) {
+        this.id = id;
+        this.nif = nif;
+        this.nome = nome;
+        this.contacto = contacto;
+    }
 
     @Override
     public Long getId() {

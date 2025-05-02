@@ -10,6 +10,11 @@ public class JogadorPostDto {
 
     public JogadorPostDto() {}
 
+    public JogadorPostDto(UtilizadorDto utilizador, Posicao posicaoPreferida) {
+        this.utilizador = utilizador;
+        this.posicaoPreferida = posicaoPreferida;
+    }
+
     public UtilizadorDto getUtilizador() {
         return utilizador;
     }

@@ -19,6 +19,12 @@ public class Jogador extends Utilizador implements IJogador {
 
     public Jogador() {}
 
+    public Jogador(Long id, int nif, String nome, String contacto, Posicao posicaoPreferida, EstatisticaJogador estatisticas) {
+        super(id, nif, nome, contacto);
+        this.posicaoPreferida = posicaoPreferida;
+        this.estatisticas = estatisticas;
+    }
+
     @Override
     public Posicao getPosicaoPreferida() {
         return this.posicaoPreferida;

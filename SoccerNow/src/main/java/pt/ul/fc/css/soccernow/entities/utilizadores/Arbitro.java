@@ -11,6 +11,11 @@ public class Arbitro extends Utilizador implements IArbitro {
 
     public Arbitro() {}
 
+    public Arbitro(Long id, int nif, String nome, String contacto, Certificado certificado) {
+        super(id, nif, nome, contacto);
+        this.certificado =  certificado;
+    }
+
     @Override
     public Certificado getCertificado() {
         return this.certificado;

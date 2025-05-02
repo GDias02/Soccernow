@@ -27,7 +27,7 @@ public class JogadorController {
     @Autowired
     private JogadorHandler jogadorHandler;
 
-    @PostMapping(produces="application/json")
+    @PostMapping("/create")
     @ApiOperation(value = "Create jogador", notes = "Creates a new jogador and returns the created jogador DTO.")
     public ResponseEntity<JogadorDto> registarJogador(@RequestBody JogadorPostDto jogadorDto) {
         JogadorDto responseDto = jogadorHandler.registarJogador(jogadorDto);
@@ -54,7 +54,7 @@ public class JogadorController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping
+    @PutMapping("/update")
     @ApiOperation(value = "Update jogador", notes = "Updates the given jogador.")
     public ResponseEntity<JogadorDto> atualizarJogador(@RequestBody JogadorDto jogadorDto) {
         JogadorDto responseDto = jogadorHandler.atualizarJogador(jogadorDto);

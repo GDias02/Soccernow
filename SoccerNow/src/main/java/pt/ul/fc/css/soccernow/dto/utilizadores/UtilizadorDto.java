@@ -9,6 +9,13 @@ public class UtilizadorDto {
 
     public UtilizadorDto() {}
 
+    public UtilizadorDto(Long id, int nif, String nome, String contacto) {
+        this.id = id;
+        this.nif = nif;
+        this.nome = nome;
+        this.contacto = contacto;
+    }
+
     public Long getId() {
         return id;
     }

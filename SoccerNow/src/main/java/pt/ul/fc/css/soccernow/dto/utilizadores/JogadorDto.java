@@ -15,6 +15,12 @@ public class JogadorDto {
 
     public JogadorDto() {}
 
+    public JogadorDto(UtilizadorDto utilizador, Posicao posicaoPreferida, EstatisticaJogadorDto estatisticas) {
+        this.utilizador = utilizador;
+        this.posicaoPreferida = posicaoPreferida;
+        this.estatisticas = estatisticas;
+    }
+
     public JogadorDto(JogadorPostDto jogadorPostDto) {
         this.utilizador = jogadorPostDto.getUtilizador();
         this.posicaoPreferida = jogadorPostDto.getPosicaoPreferida();

@@ -7,6 +7,11 @@ public class ArbitroDto {
 
     public ArbitroDto() {}
 
+    public ArbitroDto(UtilizadorDto utilizador, CertificadoDto certificado) {
+        this.utilizador = utilizador;
+        this.certificado = certificado;
+    }
+
     public UtilizadorDto getUtilizador() {
         return utilizador;
     }

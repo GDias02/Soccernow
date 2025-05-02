@@ -7,6 +7,12 @@ public class Certificado {
     
     private boolean existsCertificado;
 
+    public Certificado() {}
+
+    public Certificado(boolean existsCertificado) {
+        this.existsCertificado = existsCertificado;
+    }
+
     public boolean isExistsCertificado() {
         return existsCertificado;
     }

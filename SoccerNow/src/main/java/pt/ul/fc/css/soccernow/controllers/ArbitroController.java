@@ -24,7 +24,7 @@ public class ArbitroController {
     @Autowired
     private ArbitroHandler arbitroHandler;
 
-    @PostMapping
+    @PostMapping("/create")
     @ApiOperation(value = "Create arbitro", notes = "Creates a new arbitro and returns the created arbitro DTO.")
     public ResponseEntity<ArbitroDto> registarArbitro(@RequestBody ArbitroDto arbitroDto) {
         ArbitroDto responseDto = arbitroHandler.registarArbitro(arbitroDto);
@@ -51,7 +51,7 @@ public class ArbitroController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping
+    @PutMapping("/update")
     @ApiOperation(value = "Update arbitro", notes = "Updates the given arbitro.")
     public ResponseEntity<ArbitroDto> atualizarArbitro(@RequestBody ArbitroDto arbitroDto) {
         ArbitroDto responseDto = arbitroHandler.atualizarArbitro(arbitroDto);

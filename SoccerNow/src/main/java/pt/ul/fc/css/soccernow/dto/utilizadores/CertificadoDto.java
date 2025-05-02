@@ -4,6 +4,12 @@ public class CertificadoDto {
     
     private boolean existsCertificado;
 
+    public CertificadoDto() {}
+
+    public CertificadoDto(boolean existsCertificado) {
+        this.existsCertificado = existsCertificado;
+    }
+
     public boolean isExistsCertificado() {
         return existsCertificado;
     }
