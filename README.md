@@ -37,13 +37,8 @@ Recomenda-se que a leitura deste relatório seja feita tendo em mente os documen
   - Equipa contém o seu Histórico de Jogos fazendo a ponte entre a tabela das Equipas e dos Jogos com um @ManyToMany (um jogo tem duas equipas associadas). Como uma equipa não necessita de ter participado em jogos, este atributo pode ser nulo.
   
   - Equipa também tem uma lista de jogadores que representa o seu plantel. Sendo que os jogadores podem estar em várias equipas, segue-se a mesma lógica @ManyToMany entre Equipa e Jogador como anteriormente. Uma Equipa pode também não ter nenhum Jogador associado à mesma.
-
-  - Foi colocado um @Version para garantir que numa eventual operação de escrita a informação sobre a Equipa se possa manter íntegra.
   
   - **Conquista** tem uma relação _obrigatória_ (nullable = false) tanto com Equipa como com Campeonato. Trata-se em ambos os casos de uma relação @ManyToOne, uma equipa pode ter várias conquistas, tal como um campeonato (tem pelo menos três conquistas (pódio)).
-  
-  - Foi dado também um int version com uma anotação @Version para evitar eventuais conflitos desnecessários.
- 
 
 ### C3 (Jogos)
   - TODO
