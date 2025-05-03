@@ -95,12 +95,19 @@ public class JogadorHandler implements IJogadorHandler {
         UtilizadorDto utilizador = jogadorDto.getUtilizador();
 
         Long id = utilizador.getId();
-        if (id == 0 || jogadorRepository.findById(id).isEmpty()) return null;
+        if (id == 0) return null;
 
         int nif = utilizador.getNif();
-        if (!jogadorRepository.findByNif(nif).isEmpty() || !arbitroRepository.findByNif(nif).isEmpty()) return null;
+        if (!arbitroRepository.findByNif(nif).isEmpty()) return null;
 
-        Jogador jogador = JogadorPostMapper.dtoToJogador(jogadorDto);
+        Optional<Jogador> maybeJogador = jogadorRepository.findById(id);
+        if (maybeJogador.isEmpty()) return null;
+        Jogador jogador = maybeJogador.get();
+        jogador.setNif(utilizador.getNif());
+        jogador.setNome(utilizador.getNome());
+        jogador.setContacto(utilizador.getContacto());
+        jogador.setPosicaoPreferida(jogadorDto.getPosicaoPreferida());
+
         Jogador updatedJogador = jogadorRepository.save(jogador);
         JogadorPostDto responseDto = JogadorPostMapper.jogadorToDto(updatedJogador);
 

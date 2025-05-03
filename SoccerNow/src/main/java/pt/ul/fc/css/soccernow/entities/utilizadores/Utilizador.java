@@ -27,7 +27,7 @@ public abstract class Utilizador implements IUtilizador {
     private String contacto;
 
     @Version
-    private long version;
+    private Long version;
 
     public Utilizador() {}
 
