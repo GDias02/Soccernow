@@ -2,6 +2,9 @@ package pt.ul.fc.css.soccernow.controllers;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,5 +68,12 @@ public class JogoController {
     JogoDto jogoDto = jogoHandler.updateJogo(jogoId, jogo);
     if (jogoDto != null) return ResponseEntity.ok(jogoDto);
     else return ResponseEntity.badRequest().build();
+  }
+
+  @GetMapping
+  @ApiOperation(value = "Get all jogos", notes = "Returns all jogos.")
+  public ResponseEntity<Set<JogoDto>> buscarJogos() {
+      Set<JogoDto> jogosDtos = jogoHandler.buscarJogos();
+      return ResponseEntity.ok(jogosDtos);
   }
 }
