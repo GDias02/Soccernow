@@ -66,15 +66,45 @@ Recomenda-se que a leitura deste relatório seja feita tendo em mente os documen
 ## Funcionalidades Esperadas
 
 ### Quais as equipas que possuem menos de 5 jogadores?
+  - Executar GET /api/equipas para receber todas as equipas da BD;
+  - Filtrar as equipas recebidas em que o número de elementos da sua lista jogadores é menor que 5.
 
 ### Em média, quantos golos os jogadores com o nome “X” marcam por jogo?
+  - Executar GET /api/jogadores para receber todos os jogadores da BD;
+  - Filtrar os jogadores pelo nome para termos apenas os que têm nome "X";
+  - Sejam contador, golosMarcados e jogos 3 inteiros e jogosUnicos um Set de inteiros;
+  - Para cada jogador recebido, percorrer a lista de golos em estatisticas;
+  - Para cada um desses golos, incrementar golosMarcados e adicionar o id do jogo a jogosUnicos;
+  - No final de um jogador, somar golosMarcados/jogosUnicos.size() a contador e reinicializar golosMarcados e jogosUnicos;
+  - Após percorrer todos os jogadores, a média pretendida é contador/número de jogadores recebidos.
 
 ### Quais as equipas que recebem mais cartões (amarelos e vermelhos)?
+  - Executar GET /api/jogos para obter todos os jogos da BD;
+  - Seja equipasCartoes um mapa de chaves id de Equipa e valores correspondentes ao número de cartões que obtiveram;
+  - Para cada jogo recebido, percorrer a lista de cartões em stats;
+  - Para cada cartão, colocar o id da equipa em equipasCartoes a 1 se não existir ou incrementar o valor já existiente se já existir;
+  - Após terminar, ordenar equipasCartoes por ordem decrescente do valor e escolher os primeiros ids de equipa;
+  - Se for necessário mais informação sobre as equipas, executar GET /api/equipas/{id}, onde id é um dos ids de equipa obtidos.
 
 ### Quais as equipas com o maior número de vitórias?
+  - Executar GET /api/jogos para obter todos os jogos da BD;
+  - Seja equipasVitorias um mapa de chaves id de Equipa e valores correspondentes ao número de vitórias que obtiveram;
+  - Para cada jogo recebido, percorrer a lista de golos em stats;
+  - Contar o número de golos em que equipa é um dado id e contar em que equipa é o outro id do jogo;
+  - Colocar o id da equipa que teve a maior contagem em equipasVitorias a 1 se não existir ou incrementar o valor já existiente se já existir;
+  - Após terminar, ordenar equipasVitorias por ordem decrescente do valor e escolher os primeiros ids de equipa;
+  - Se for necessário mais informação sobre as equipas, executar GET /api/equipas/{id}, onde id é um dos ids de equipa obtidos.
 
 ### Qual o árbitro que oficiou o maior número de jogos?
+  - Executar GET /api/jogos para receber todos os jogos da BD;
+  - Seja arbJogos um mapa de chaves Arbitro e valores correspondentes ao número de jogos que oficiaram;
+  - Para cada jogo, buscar o primeiro elemento da lista equipaDeArbitros (que corresponde ao árbitro que oficiou) e colocar em arbJogos com valor a 1 se não existir ou colocar em arbJogos com o valor já lá existente incrementado caso contrário;
+  - Obter o Arbitro com maior valor em arbJogos;
 
 ### Quais os jogadores que receberam mais cartões vermelhos?
+  - Executar GET /api/jogadores para receber todos os jogadores da BD;
+  - Para cada jogador, filtrar a lista de cartões (dentro das suas estatisticas) para termos apenas os cartões com Cor vermelha;
+  - Implementar um Comparator que considera que um jogador é maior que outro se, dentro das estatisticas, o número de cartões (já filtrados) é maior;
+  - Ordenar todos os jogadores de acordo com esse Comparator e escolher os maiores.
 
 ## Dificuldades e Limitações do Projeto
