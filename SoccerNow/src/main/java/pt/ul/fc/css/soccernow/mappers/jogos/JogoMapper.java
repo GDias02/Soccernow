@@ -81,12 +81,12 @@ public class JogoMapper {
     return jogo;
   }
 
-  private static Local dtoToLocal(LocalDto l) {
+  public static Local dtoToLocal(LocalDto l) {
     if (l == null) {
       return null;
     }
     Local local = new Local();
-
+    local.setId(l.getId());
     local.setNome(l.getNome());
     local.setCapacidade(l.getCapacidade());
     local.setProprietario(l.getProprietario());

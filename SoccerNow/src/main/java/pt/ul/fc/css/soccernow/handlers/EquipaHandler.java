@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
@@ -25,6 +27,7 @@ public class EquipaHandler implements IEquipaHandler {
   @Autowired private JogoRepository jogoRepository;
 
   @Override
+  @Transactional(readOnly = true)
   public EquipaDto verificarEquipa(Long id) {
     Optional<Equipa> e = equipaRepository.findById(id);
     if (e.isEmpty()) return null;
@@ -32,6 +35,7 @@ public class EquipaHandler implements IEquipaHandler {
   }
 
   @Override
+  @Transactional
   public EquipaDto removerEquipa(Long id) {
     EquipaDto e = verificarEquipa(id);
     
@@ -58,6 +62,7 @@ public class EquipaHandler implements IEquipaHandler {
   }
 
   @Override
+  @Transactional
   public EquipaDto atualizarEquipa(Long id, EquipaDto equipaDto) {
     EquipaDto e = verificarEquipa(equipaDto.getId());
     int valid = validatorAtualizarEquipa(id, equipaDto);
@@ -90,11 +95,13 @@ public class EquipaHandler implements IEquipaHandler {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<EquipaDto> verificarEquipas() {
     return EquipaMapper.manyEquipasToDtos(equipaRepository.findAll());
   }
 
   @Override
+  @Transactional
   public EquipaDto registarEquipa(EquipaDto equipaDto) {
     boolean valid = validatorRegistarEquipa(equipaDto);
     Equipa savedEquipa = null;

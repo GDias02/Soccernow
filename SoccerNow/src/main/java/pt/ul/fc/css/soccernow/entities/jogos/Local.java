@@ -18,6 +18,10 @@ public class Local {
   int capacidade;
   @Embedded Morada morada;
 
+  public void setId(Long id) {
+    this.id = id;
+  }
+
   public Long getId() {
     return id;
   }
