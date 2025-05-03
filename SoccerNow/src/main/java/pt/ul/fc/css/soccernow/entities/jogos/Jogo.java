@@ -1,7 +1,5 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Embedded;
@@ -32,53 +30,9 @@ public abstract class Jogo implements IJogo {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @Embedded
-  @AttributeOverrides({
-    @AttributeOverride(name = "equipa", column = @Column(name = "s1_equipa")),
-    @AttributeOverride(name = "capitao", column = @Column(name = "s1_capitao")),
-    @AttributeOverride(name = "guarda_redes", column = @Column(name = "s1_guarda_redes")),
-    @AttributeOverride(name = "fixo", column = @Column(name = "s1_fixo")),
-    @AttributeOverride(name = "ala_esquerda", column = @Column(name = "s1_ala_esquerda")),
-    @AttributeOverride(name = "ala_direita", column = @Column(name = "s1_ala_direita")),
-    @AttributeOverride(name = "pivot", column = @Column(name = "s1_pivot"))
-  })
-  private Selecao s1;
+  @Embedded private Selecao s1;
 
-  @Embedded
-  @AttributeOverrides({
-    @AttributeOverride(name = "equipa", column = @Column(name = "s2_equipa")),
-    @AttributeOverride(name = "capitao", column = @Column(name = "s2_capitao")),
-    @AttributeOverride(name = "guarda_redes", column = @Column(name = "s2_guarda_redes")),
-    @AttributeOverride(name = "fixo", column = @Column(name = "s2_fixo")),
-    @AttributeOverride(name = "ala_esquerda", column = @Column(name = "s2_ala_esquerda")),
-    @AttributeOverride(name = "ala_direita", column = @Column(name = "s2_ala_direita")),
-    @AttributeOverride(name = "pivot", column = @Column(name = "s2_pivot"))
-  })
-  private Selecao s2;
-
-  /*@OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "equipa_id")
-  private Equipa equipa;
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "capitao_id")
-  private Jogador capitao;
-
-  @OneToOne       //de modo a evitar criar uma nova tabela que teria um tamanho fixo (uma vez que as posicoes sao sempre so 5)
-  @JoinColumn(name="guarda_redes")
-  private Jogador guardaRedes;
-  @OneToOne
-  @JoinColumn(name = "fixo")
-  private Jogador fixo;
-  @OneToOne
-  @JoinColumn(name = "ala_esquerda")
-  private Jogador alaEsquerda;
-  @OneToOne
-  @JoinColumn(name = "ala_direita")
-  private Jogador alaDireita;
-  @OneToOne
-  @JoinColumn(name = "pivot")
-  private Jogador pivot;
-  */
+  @Embedded private SelecaoDois s2;
 
   @ManyToMany private List<Arbitro> equipaDeArbitros;
 
@@ -140,7 +94,7 @@ public abstract class Jogo implements IJogo {
     return s1;
   }
 
-  public Selecao getS2() {
+  public SelecaoDois getS2() {
     return s2;
   }
 
@@ -172,7 +126,7 @@ public abstract class Jogo implements IJogo {
     this.s1 = s1;
   }
 
-  public void setS2(Selecao s2) {
+  public void setS2(SelecaoDois s2) {
     this.s2 = s2;
   }
 

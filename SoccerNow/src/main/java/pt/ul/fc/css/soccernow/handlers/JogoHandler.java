@@ -1,20 +1,28 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import jakarta.transaction.Transactional;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
+import pt.ul.fc.css.soccernow.entities.jogos.Cartao;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
-import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaJogo;
+import pt.ul.fc.css.soccernow.entities.jogos.Golo;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Local;
 import pt.ul.fc.css.soccernow.entities.jogos.Selecao;
+import pt.ul.fc.css.soccernow.entities.jogos.SelecaoDois;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
+import pt.ul.fc.css.soccernow.mappers.jogos.CartaoMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.EstatisticaMapper;
+import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.JogoMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.CartaoRepository;
@@ -41,32 +49,41 @@ public class JogoHandler implements IJogoHandler {
 
   @Autowired private ArbitroRepository arbitroRepository;
 
+  @Autowired private EstatisticasHandler estatisticasHandler;
+
+  @Transactional
   public JogoDto getJogo(long id) {
     Optional<Jogo> jogoOptional = jogoRepository.findById(id);
     if (jogoOptional.isEmpty()) {
       return null;
     }
-    return JogoMapper.jogoToDto(jogoOptional.get());
+    JogoDto res = JogoMapper.jogoToDto(jogoOptional.get());
+    EstatisticaJogoDto stat =
+        EstatisticaMapper.estatisticaJogoToDto(estatisticasHandler.criarEstatisticaJogo(res));
+    res.setStats(stat);
+    return res;
   }
 
+  @Transactional
   public JogoDto saveJogo(Jogo jogo) {
     return JogoMapper.jogoToDto(jogoRepository.save(jogo));
   }
 
+  @Transactional
   public JogoDto createJogo(JogoDto jogodto) {
-    Equipa e1 = equipaRepository.findById(jogodto.getS1().getEquipa()).get();
-    Jogador cap1 = jogadorRepository.findById(jogodto.getS1().getCapitao()).get();
+    Equipa e1 = equipaRepository.getReferenceById(jogodto.getS1().getEquipa());
+    Jogador cap1 = jogadorRepository.getReferenceById(jogodto.getS1().getCapitao());
     Map<Posicao, Long> jogsS1 = jogodto.getS1().getJogadores();
     Map<Posicao, Jogador> jogadoresS1 = new EnumMap<>(Posicao.class);
-    jogsS1.forEach((k, v) -> jogadoresS1.put(k, jogadorRepository.findById(v).get()));
+    jogsS1.forEach((k, v) -> jogadoresS1.put(k, jogadorRepository.getReferenceById(v)));
     Selecao s1 = new Selecao(e1, cap1, jogadoresS1);
 
-    Equipa e2 = equipaRepository.findById(jogodto.getS2().getEquipa()).get();
-    Jogador cap2 = jogadorRepository.findById(jogodto.getS2().getCapitao()).get();
+    Equipa e2 = equipaRepository.getReferenceById(jogodto.getS2().getEquipa());
+    Jogador cap2 = jogadorRepository.getReferenceById(jogodto.getS2().getCapitao());
     Map<Posicao, Long> jogsS2 = jogodto.getS2().getJogadores();
     Map<Posicao, Jogador> jogadoresS2 = new EnumMap<>(Posicao.class);
-    jogsS2.forEach((k, v) -> jogadoresS2.put(k, jogadorRepository.findById(v).get()));
-    Selecao s2 = new Selecao(e2, cap2, jogadoresS2);
+    jogsS2.forEach((k, v) -> jogadoresS2.put(k, jogadorRepository.getReferenceById(v)));
+    SelecaoDois s2 = new SelecaoDois(e2, cap2, jogadoresS1);
 
     Jogo jogo = JogoMapper.dtoToJogo(jogodto);
     jogo.setS1(s1);
@@ -78,22 +95,58 @@ public class JogoHandler implements IJogoHandler {
     return jogodto;
   }
 
+  @Transactional
   public JogoDto updateJogo(long jogoId, JogoDto jogodto) {
-    Optional<Jogo> jogoOpt = jogoRepository.findById(jogoId);
-    Jogo updatedJogo;
-    if (jogoOpt.isEmpty()) {
+    Optional<Jogo> jogoOptional = jogoRepository.findById(jogoId);
+    if (jogoOptional.isEmpty()) {
       return null;
-    } else {
-      updatedJogo = jogoOpt.get();
     }
-    if (updateValido(updatedJogo, jogodto)) {
-      EstatisticaJogo updatedStats = EstatisticaMapper.dtoToEstatisticaJogo(jogodto.getStats());
-      JogoMapper.dtoToJogo(jogodto, updatedJogo);
-      goloRepository.saveAll(updatedStats.getGolos());
-      cartaoRepository.saveAll(updatedStats.getCartoes());
-      jogoRepository.save(updatedJogo);
+    Jogo jogoGuardado = jogoOptional.get();
+    Jogo updatedJogo;
+    JogoDto res;
+    if (!updateValido(jogoGuardado, jogodto)) {
+      return null;
     }
-    return JogoMapper.jogoToDto(updatedJogo);
+    Jogo jogo = JogoMapper.dtoToJogo(jogodto);
+    updatedJogo = jogoRepository.save(jogo);
+    res = JogoMapper.jogoToDto(updatedJogo);
+
+    EstatisticaJogoDto stat = jogodto.getStats();
+    if (stat != null) {
+      if (stat.getCartoes() != null && !stat.getCartoes().isEmpty()) {
+        Set<Cartao> cartoes =
+            stat.getCartoes().stream()
+                .map(
+                    c -> {
+                      Cartao cartao = CartaoMapper.dtoToCartao(c);
+                      cartao.setArbitro(arbitroRepository.getReferenceById(c.getArbitro()));
+                      cartao.setAtribuidoA(jogadorRepository.getReferenceById(c.getAtribuidoA()));
+                      cartao.setEquipa(equipaRepository.getReferenceById(c.getEquipa()));
+                      cartao.setJogo(jogo);
+                      return cartao;
+                    })
+                .collect(Collectors.toSet());
+        cartaoRepository.saveAll(cartoes);
+      }
+      if (stat.getGolos() != null && !stat.getGolos().isEmpty()) {
+        Set<Golo> golos =
+            stat.getGolos().stream()
+                .map(
+                    g -> {
+                      Golo golo = GoloMapper.dtoToGolo(g);
+                      golo.setMarcador(jogadorRepository.getReferenceById(g.getMarcador()));
+                      golo.setEquipa(equipaRepository.getReferenceById(g.getEquipa()));
+                      golo.setJogo(jogo);
+                      return golo;
+                    })
+                .collect(Collectors.toSet());
+        goloRepository.saveAll(golos);
+      }
+      EstatisticaJogoDto updatedStats =
+          EstatisticaMapper.estatisticaJogoToDto(estatisticasHandler.criarEstatisticaJogo(res));
+      res.setStats(updatedStats);
+    }
+    return res;
   }
 
   // PERMITE DEMASIADAS COISAS

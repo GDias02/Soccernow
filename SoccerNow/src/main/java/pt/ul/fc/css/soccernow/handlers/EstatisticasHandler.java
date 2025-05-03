@@ -1,12 +1,11 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
@@ -17,14 +16,18 @@ import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Golo;
 import pt.ul.fc.css.soccernow.mappers.jogos.CartaoMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
+import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.CartaoRepository;
 import pt.ul.fc.css.soccernow.repositories.GoloRepository;
+import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
 
 @Service
 public class EstatisticasHandler implements IEstatisticasHandler {
 
   @Autowired private GoloRepository goloRepository;
   @Autowired private CartaoRepository cartaoRepository;
+  @Autowired private ArbitroRepository jogadorRepository;
+  @Autowired private JogadorRepository arbitroRepository;
 
   public EstatisticaJogo criarEstatisticaJogo(JogoDto jogo) {
     Long id = jogo.getId();
@@ -43,6 +46,7 @@ public class EstatisticasHandler implements IEstatisticasHandler {
     return ej;
   }
 
+  @Transactional
   public EstatisticaJogador criarEstatisticaJogador(JogadorDto jogador) {
     Long id = jogador.getUtilizador().getId();
 
@@ -60,6 +64,7 @@ public class EstatisticasHandler implements IEstatisticasHandler {
     return ej;
   }
 
+  @Transactional
   public EstatisticaArbitro criarEstatisticaArbitro(ArbitroDto arbitro) {
     Long id = arbitro.getUtilizador().getId();
 
@@ -73,6 +78,7 @@ public class EstatisticasHandler implements IEstatisticasHandler {
     return ej;
   }
 
+  @Transactional
   public void updateEstatisticaJogo(JogoDto jogo) {
     Set<Golo> golosMarcados =
         jogo.getStats().getGolos().stream().map(GoloMapper::dtoToGolo).collect(Collectors.toSet());

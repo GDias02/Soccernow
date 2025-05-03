@@ -8,28 +8,35 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
+import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 
 @Entity
 public class Cartao extends EventoDeJogo {
 
-  @OneToOne(fetch = FetchType.EAGER)
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   private Jogador atribuidoA;
 
-  @OneToOne(fetch = FetchType.EAGER)
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
   private Arbitro arbitro;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(nullable = false)
+  private Equipa equipa;
 
   @Enumerated(EnumType.ORDINAL)
   @Column(nullable = false)
   private Cor cor;
 
-  public Cartao(LocalDateTime quando, Jogo jogo, Jogador jogador, Arbitro arbitro, Cor cor) {
+  public Cartao(
+      LocalDateTime quando, Jogo jogo, Jogador jogador, Arbitro arbitro, Equipa equipa, Cor cor) {
     super(quando, jogo);
     this.atribuidoA = jogador;
     this.arbitro = arbitro;
+    this.equipa = equipa;
     this.cor = cor;
   }
 
@@ -59,5 +66,13 @@ public class Cartao extends EventoDeJogo {
 
   public void setCor(Cor cor) {
     this.cor = cor;
+  }
+
+  public Equipa getEquipa() {
+    return equipa;
+  }
+
+  public void setEquipa(Equipa equipa) {
+    this.equipa = equipa;
   }
 }

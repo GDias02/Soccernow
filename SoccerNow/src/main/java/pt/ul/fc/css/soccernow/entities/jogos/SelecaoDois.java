@@ -1,6 +1,5 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -10,46 +9,42 @@ import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 
-@Embeddable
-public class Selecao {
-
+public class SelecaoDois {
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "equipa1", insertable = false, updatable = false)
+  @JoinColumn(name = "equipa2", insertable = false, updatable = false)
   private Equipa equipa;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "capitao1", insertable = false, updatable = false)
+  @JoinColumn(name = "capitao2", insertable = false, updatable = false)
   private Jogador capitao;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "guardaRedes1", insertable = false, updatable = false)
+  @JoinColumn(name = "guardaRedes2", insertable = false, updatable = false)
   private Jogador guardaRedes;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "fixo1", insertable = false, updatable = false)
+  @JoinColumn(name = "fixo2", insertable = false, updatable = false)
   private Jogador fixo;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "alaEsquerda1", insertable = false, updatable = false)
+  @JoinColumn(name = "alaEsquerda2", insertable = false, updatable = false)
   private Jogador alaEsquerda;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "alaDireita1", insertable = false, updatable = false)
+  @JoinColumn(name = "alaDireita2", insertable = false, updatable = false)
   private Jogador alaDireita;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "pivot1", insertable = false, updatable = false)
+  @JoinColumn(name = "pivot2", insertable = false, updatable = false)
   private Jogador pivot;
 
-  public Selecao(Equipa e, Jogador capitao, Map<Posicao, Jogador> jogadores) {
+  public SelecaoDois(Equipa e, Jogador capitao, Map<Posicao, Jogador> jogadores) {
     this.equipa = e;
     this.capitao = capitao;
     setJogadores(jogadores);
   }
 
-  public Selecao() {
-    // TODO Auto-generated constructor stub
-  }
+  public SelecaoDois() {}
 
   public Map<Posicao, Jogador> getJogadores() {
     Map<Posicao, Jogador> jogadores = new EnumMap<>(Posicao.class);

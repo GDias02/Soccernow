@@ -1,58 +1,63 @@
 package pt.ul.fc.css.soccernow.dto.jogos;
 
 import java.time.LocalDateTime;
-
-import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
-import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.entities.jogos.Cor;
 
 public class CartaoDto {
-    private LocalDateTime quando;
-    private JogoDto jogo;
-    private JogadorDto atribuidoA;
-    private ArbitroDto arbitro;
-    private Cor cor;
-    
-    public CartaoDto() {}
+  private LocalDateTime quando;
+  private Long jogo;
+  private Long atribuidoA;
+  private Long arbitro;
+  private Long equipa;
+  private Cor cor;
 
-    public LocalDateTime getQuando() {
-        return quando;
-    }
+  public CartaoDto() {}
 
-    public void setQuando(LocalDateTime quando) {
-        this.quando = quando;
-    }
+  public LocalDateTime getQuando() {
+    return quando;
+  }
 
-    public JogoDto getJogo() {
-        return jogo;
-    }
+  public void setQuando(LocalDateTime quando) {
+    this.quando = quando;
+  }
 
-    public void setJogo(JogoDto jogo) {
-        this.jogo = jogo;
-    }
+  public Cor getCor() {
+    return cor;
+  }
 
-    public JogadorDto getAtribuidoA() {
-        return atribuidoA;
-    }
+  public void setCor(Cor cor) {
+    this.cor = cor;
+  }
 
-    public void setAtribuidoA(JogadorDto atribuidoA) {
-        this.atribuidoA = atribuidoA;
-    }
+  public Long getJogo() {
+    return jogo;
+  }
 
-    public ArbitroDto getArbitro() {
-        return arbitro;
-    }
+  public void setJogo(Long jogo) {
+    this.jogo = jogo;
+  }
 
-    public void setArbitro(ArbitroDto arbitro) {
-        this.arbitro = arbitro;
-    }
+  public Long getAtribuidoA() {
+    return atribuidoA;
+  }
 
-    public Cor getCor() {
-        return cor;
-    }
+  public void setAtribuidoA(Long atribuidoA) {
+    this.atribuidoA = atribuidoA;
+  }
 
-    public void setCor(Cor cor) {
-        this.cor = cor;
-    }
+  public Long getArbitro() {
+    return arbitro;
+  }
 
+  public void setArbitro(Long arbitro) {
+    this.arbitro = arbitro;
+  }
+
+  public Long getEquipa() {
+    return equipa;
+  }
+
+  public void setEquipa(Long equipa) {
+    this.equipa = equipa;
+  }
 }

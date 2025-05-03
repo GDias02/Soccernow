@@ -23,6 +23,7 @@ public class JogoDto {
   private SelecaoDto s1;
   private SelecaoDto s2;
   private List<ArbitroDto> equipaDeArbitros;
+  private EstatisticaJogoDto stats;
 
   public JogoDto() {}
 
@@ -43,20 +44,8 @@ public class JogoDto {
     this.equipaDeArbitros = equipaDeArbitros;
   }
 
-  public String toString() {
-    StringBuilder sb = new StringBuilder("");
-    sb.append("Jogo Dto:\n");
-    sb.append("id: " + this.id.toString() + "\n");
-    sb.append("estado de jogo: " + this.estadoDeJogo + "\n");
-    sb.append("local e morada: " + this.localDto + "\n");
-    sb.append("selecao s1: " + this.s1 + "\n");
-    sb.append("selecao s2: " + this.s2 + "\n");
-    sb.append("==== END ====\n");
-    return sb.toString();
-  }
-
   public EstatisticaJogoDto getStats() {
-    return null;
+    return this.stats;
   }
 
   public Long getId() {
@@ -115,80 +104,28 @@ public class JogoDto {
     this.diaEHora = diaEHora;
   }
 
-  /*
-
-
-  private EstatisticaJogoDto stats;
-
-  private CampeonatoDto campeonato;
-
-  public CampeonatoDto getCampeonato() {
-      return campeonato;
-  }
-
-  public void setCampeonato(CampeonatoDto campeonato) {
-      this.campeonato = campeonato;
-  }
-
-  public Long getId() {
-      return id;
-  }
-
-  public void setId(Long id) {
-      this.id = id;
-  }
-
-  public SelecaoDto getS1() {
-      return s1;
-  }
-
-  public void setS1(SelecaoDto s1) {
-      this.s1 = s1;
-  }
-
-  public SelecaoDto getS2() {
-      return s2;
-  }
-
-  public void setS2(SelecaoDto s2) {
-      this.s2 = s2;
-  }
-
-  public List<ArbitroDto> getEquipaDeArbitros() {
-      return equipaDeArbitros;
-  }
-
-  public void setEquipaDeArbitros(List<ArbitroDto> equipaDeArbitros) {
-      this.equipaDeArbitros = equipaDeArbitros;
-  }
-
-  public EstadoDeJogo getEstadoAtual() {
-      return estadoAtual;
-  }
-
-  public void setEstadoAtual(EstadoDeJogo estadoAtual) {
-      this.estadoAtual = estadoAtual;
-  }
-
-  public LocalDto getLocal() {
-      return local;
-  }
-
-  public void setLocal(LocalDto local) {
-      this.local = local;
-  }
-
-  public LocalDateTime getDiaEHora() {
-      return diaEHora;
-  }
-
-  public void setDiaEHora(LocalDateTime diaEHora) {
-      this.diaEHora = diaEHora;
-  }
-
-
   public void setStats(EstatisticaJogoDto stats) {
-      this.stats = stats;
+    this.stats = stats;
   }
-      */
+
+  @Override
+  public String toString() {
+    return "JogoDto [id="
+        + id
+        + ", estadoDeJogo="
+        + estadoDeJogo
+        + ", localDto="
+        + localDto
+        + ", diaEHora="
+        + diaEHora
+        + ", s1="
+        + s1
+        + ", s2="
+        + s2
+        + ", equipaDeArbitros="
+        + equipaDeArbitros
+        + ", stats="
+        + stats
+        + "]";
+  }
 }

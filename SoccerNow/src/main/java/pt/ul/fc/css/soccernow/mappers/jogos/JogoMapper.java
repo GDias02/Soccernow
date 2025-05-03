@@ -10,6 +10,7 @@ import pt.ul.fc.css.soccernow.entities.jogos.JogoAmigavel;
 import pt.ul.fc.css.soccernow.entities.jogos.Local;
 import pt.ul.fc.css.soccernow.entities.jogos.Morada;
 import pt.ul.fc.css.soccernow.entities.jogos.Selecao;
+import pt.ul.fc.css.soccernow.entities.jogos.SelecaoDois;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
 
 public class JogoMapper {
@@ -55,7 +56,6 @@ public class JogoMapper {
     jogo.setLocal(dtoToLocal(jogodto.getLocalDto()));
 
     // jogo nao conhece as suas proprias estatisticas.
-
     return jogo;
   }
 
@@ -68,8 +68,6 @@ public class JogoMapper {
     }
     JogoDto jogodto = from;
     Jogo jogo = into;
-    jogo.setS1(dtoToSelecao(jogodto.getS1()));
-    jogo.setS2(dtoToSelecao(jogodto.getS2()));
     jogo.setEquipaDeArbitros(
         jogodto.getEquipaDeArbitros().stream()
             .map(ArbitroMapper::dtoToArbitro)
@@ -116,14 +114,6 @@ public class JogoMapper {
       return null;
     }
     Selecao selecao = new Selecao();
-    /*
-    selecao.setEquipa(s.getEquipa());
-
-    Map<Posicao, JogadorDto> jogadoresDto = s.getJogadores();
-    Map<Posicao, Jogador> jogadores = new EnumMap<>(Posicao.class);
-    jogadoresDto.forEach((pos, jog) -> jogadores.put(pos, JogadorMapper.dtoToJogador(jog)));
-    selecao.setJogadores(jogadores);
-    */
     return selecao;
   }
 
@@ -132,14 +122,14 @@ public class JogoMapper {
       return null;
     }
     SelecaoDto selecaoDto = new SelecaoDto();
-    /*
-    selecaoDto.setEquipa(EquipaMapper.equipaToDto(s.getEquipa()));
+    return selecaoDto;
+  }
 
-    Map<Posicao, Jogador> jogadores = s.getJogadores();
-    Map<Posicao, JogadorDto> jogadoresDto = new EnumMap<>(Posicao.class);
-    jogadores.forEach((pos, jog) -> jogadoresDto.put(pos, JogadorMapper.jogadorToDto(jog)));
-    selecaoDto.setJogadores(jogadoresDto);
-    */
+  public static SelecaoDto selecaoToDto(SelecaoDois s) {
+    if (s == null) {
+      return null;
+    }
+    SelecaoDto selecaoDto = new SelecaoDto();
     return selecaoDto;
   }
 

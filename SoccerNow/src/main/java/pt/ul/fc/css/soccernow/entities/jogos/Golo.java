@@ -11,11 +11,11 @@ import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 @Entity
 public class Golo extends EventoDeJogo {
 
-  @OneToOne(fetch = FetchType.EAGER)
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false, name = "marcador")
   private Jogador marcador;
 
-  @OneToOne(fetch = FetchType.EAGER)
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false, name = "equipa")
   private Equipa equipa;
 
