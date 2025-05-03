@@ -1,11 +1,13 @@
 package pt.ul.fc.css.soccernow.handlers;
 
-import jakarta.transaction.Transactional;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
@@ -16,18 +18,14 @@ import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Golo;
 import pt.ul.fc.css.soccernow.mappers.jogos.CartaoMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
-import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.CartaoRepository;
 import pt.ul.fc.css.soccernow.repositories.GoloRepository;
-import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
 
 @Service
 public class EstatisticasHandler implements IEstatisticasHandler {
 
   @Autowired private GoloRepository goloRepository;
   @Autowired private CartaoRepository cartaoRepository;
-  @Autowired private ArbitroRepository jogadorRepository;
-  @Autowired private JogadorRepository arbitroRepository;
 
   public EstatisticaJogo criarEstatisticaJogo(JogoDto jogo) {
     Long id = jogo.getId();
@@ -62,6 +60,25 @@ public class EstatisticasHandler implements IEstatisticasHandler {
     ej.setCartoes(cartoesRecebidos);
     ej.setGolos(golosMarcados);
     return ej;
+  }
+
+  @Transactional
+  public void removerEstatisticaJogador(JogadorDto jogador) {
+    Long id = jogador.getUtilizador().getId();
+
+    Optional<Set<Golo>> maybeGolos = goloRepository.findByMarcador_Id(id);
+    Set<Golo> golosMarcados;
+    if (!maybeGolos.isEmpty()) {
+      golosMarcados = maybeGolos.get();
+      goloRepository.deleteAll(golosMarcados);
+    }
+
+    Optional<Set<Cartao>> maybeCartoes = cartaoRepository.findByAtribuidoA_Id(id);
+    Set<Cartao> cartoesRecebidos;
+    if (!maybeCartoes.isEmpty()) {
+      cartoesRecebidos = maybeCartoes.get();
+      cartaoRepository.deleteAll(cartoesRecebidos);
+    }
   }
 
   @Transactional

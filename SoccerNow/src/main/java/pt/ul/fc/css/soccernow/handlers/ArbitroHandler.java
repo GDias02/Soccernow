@@ -97,8 +97,7 @@ public class ArbitroHandler implements IArbitroHandler {
         int nif = utilizadorDto.getNif();
 
         return (100000000 <= nif && nif <= 999999999)
-            && isFilled(utilizadorDto.getNome())
-            && isFilled(utilizadorDto.getContacto());
+            && isFilled(utilizadorDto.getNome());
     }
 
     private boolean isFilled(String field) {

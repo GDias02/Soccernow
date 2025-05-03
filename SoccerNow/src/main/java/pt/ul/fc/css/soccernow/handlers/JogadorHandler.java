@@ -1,5 +1,6 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -8,16 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogadorDto;
-import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorPostDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
 import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaJogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
-import pt.ul.fc.css.soccernow.mappers.jogos.CartaoMapper;
-import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
+import pt.ul.fc.css.soccernow.mappers.jogos.EstatisticaJogadorMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorPostMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
@@ -58,6 +56,7 @@ public class JogadorHandler implements IJogadorHandler {
             System.out.println(e.getMessage());
         }
         JogadorDto responseDto = JogadorMapper.jogadorToDto(savedJogador);
+        responseDto.setEstatisticas(new EstatisticaJogadorDto(new HashSet<>(), new HashSet<>()));
 
         return responseDto;
     }
@@ -73,10 +72,7 @@ public class JogadorHandler implements IJogadorHandler {
             jogador = maybeJogador.get();
             jogadorDto = JogadorMapper.jogadorToDto(jogador);
             EstatisticaJogador estatisticas = estatisticasHandler.criarEstatisticaJogador(jogadorDto);
-            EstatisticaJogadorDto estatisticasDto = new EstatisticaJogadorDto();
-            estatisticasDto.setGolos(estatisticas.getGolos().stream().map(GoloMapper::goloToDto).collect(Collectors.toSet()));
-            estatisticasDto.setCartoes(estatisticas.getCartoes().stream().map(CartaoMapper::cartaoToDto).collect(Collectors.toSet()));
-            jogadorDto.setEstatisticas(estatisticasDto);
+            jogadorDto.setEstatisticas(EstatisticaJogadorMapper.estatisticaJogadorToDto(estatisticas));
         }
         return jogadorDto;
     }
@@ -84,7 +80,10 @@ public class JogadorHandler implements IJogadorHandler {
     @Override
     @Transactional
     public void removerJogador(int nif) {
+        Optional<Jogador> maybeJogador = jogadorRepository.findByNif(nif);
         jogadorRepository.deleteByNif(nif);
+        if (!maybeJogador.isEmpty()) 
+            estatisticasHandler.removerEstatisticaJogador(JogadorMapper.jogadorToDto(maybeJogador.get()));
     }
 
     @Override
@@ -120,10 +119,7 @@ public class JogadorHandler implements IJogadorHandler {
         Set<JogadorDto> jogadorDtos = jogadorRepository.findAll().stream().map(JogadorMapper::jogadorToDto).collect(Collectors.toSet());
         for (JogadorDto jogadorDto : jogadorDtos) {
             EstatisticaJogador estatisticas = estatisticasHandler.criarEstatisticaJogador(jogadorDto);
-            EstatisticaJogadorDto estatisticasDto = new EstatisticaJogadorDto();
-            estatisticasDto.setGolos(estatisticas.getGolos().stream().map(GoloMapper::goloToDto).collect(Collectors.toSet()));
-            estatisticasDto.setCartoes(estatisticas.getCartoes().stream().map(CartaoMapper::cartaoToDto).collect(Collectors.toSet()));
-            jogadorDto.setEstatisticas(estatisticasDto);
+            jogadorDto.setEstatisticas(EstatisticaJogadorMapper.estatisticaJogadorToDto(estatisticas));
         }
         return jogadorDtos;
     }
@@ -138,7 +134,6 @@ public class JogadorHandler implements IJogadorHandler {
 
         return (100000000 <= nif && nif <= 999999999)
             && isFilled(utilizador.getNome())
-            && isFilled(utilizador.getContacto())
             && jogadorDto.getPosicaoPreferida() != null;
     }
 
@@ -158,20 +153,6 @@ public class JogadorHandler implements IJogadorHandler {
 
     private boolean isFilled(String field) {
         return field != null && field.length() > 0;
-    }
-
-    private boolean validInputEstatisticas(Set<GoloDto> golos, Set<CartaoDto> cartoes) {
-        if (golos != null)
-            for (GoloDto golo : golos)
-                if (golo.getQuando() == null)
-                    return false;
-
-        if (cartoes != null)
-            for (CartaoDto cartao : cartoes)
-                if (cartao.getQuando() == null || cartao.getCor() == null)
-                    return false;
-        
-        return true;
     }
     
 }
