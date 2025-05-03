@@ -89,4 +89,16 @@ public class EstatisticasHandler implements IEstatisticasHandler {
     goloRepository.saveAll(golosMarcados);
     cartaoRepository.saveAll(cartoesAtribuidos);
   }
+
+  @Transactional
+  public void updateEstatisticaJogador(JogadorDto jogador) {
+    Set<Golo> golosMarcados =
+        jogador.getEstatisticas().getGolos().stream().map(GoloMapper::dtoToGolo).collect(Collectors.toSet());
+    Set<Cartao> cartoesAtribuidos =
+        jogador.getEstatisticas().getCartoes().stream()
+            .map(CartaoMapper::dtoToCartao)
+            .collect(Collectors.toSet());
+    goloRepository.saveAll(golosMarcados);
+    cartaoRepository.saveAll(cartoesAtribuidos);
+  }
 }
