@@ -18,9 +18,9 @@ import pt.ul.fc.css.soccernow.repositories.JogoRepository;
  */
 public class EquipaMapper {
 
-  @Autowired private static JogadorRepository jogadorRepository;
+  //@Autowired private static JogadorRepository jogadorRepository;
 
-  @Autowired private static JogoRepository jogoRepository;
+  //@Autowired private static JogoRepository jogoRepository;
 
   /**
    * Converts an Equipa entity to an EquipaDto.
@@ -65,7 +65,7 @@ public class EquipaMapper {
    * @param dto the EquipaDto to convert
    * @return the converted Equipa entity
    */
-  public static Equipa dtoToEquipa(EquipaDto dto) {
+  public static Equipa dtoToEquipa(EquipaDto dto, JogadorRepository jogadorRepository, JogoRepository jogoRepository) {
     Equipa equipa = new Equipa(dto.getNome());
     equipa.setId(dto.getId());
     if (dto.getJogadores() != null && !dto.getJogadores().isEmpty())
@@ -81,7 +81,10 @@ public class EquipaMapper {
    * @param dtos the list of EquipaDto objects to convert
    * @return the list of converted Equipa entities
    */
-  public static List<Equipa> manyDtosToEquipas(List<EquipaDto> dtos) {
-    return dtos.stream().map(EquipaMapper::dtoToEquipa).collect(Collectors.toList());
+  public static List<Equipa> manyDtosToEquipas(List<EquipaDto> dtos, JogadorRepository jogadorRepository, JogoRepository jogoRepository) {
+    return dtos.stream().map(equipa -> {
+        return dtoToEquipa(equipa, jogadorRepository, jogoRepository);
+      }
+    ).collect(Collectors.toList());
   }
 }
