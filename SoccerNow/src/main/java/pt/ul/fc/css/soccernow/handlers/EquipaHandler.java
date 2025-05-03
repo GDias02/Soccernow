@@ -12,11 +12,17 @@ import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
 import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
+import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
+import pt.ul.fc.css.soccernow.repositories.JogoRepository;
 
 @Service
 public class EquipaHandler implements IEquipaHandler {
 
   @Autowired private EquipaRepository equipaRepository;
+
+  @Autowired private JogadorRepository jogadorRepository;
+
+  @Autowired private JogoRepository jogoRepository;
 
   @Override
   public EquipaDto verificarEquipa(Long id) {
@@ -31,7 +37,7 @@ public class EquipaHandler implements IEquipaHandler {
     
     if (e == null ) return null;
     
-    boolean valid = validatorRemoverEquipa(EquipaMapper.dtoToEquipa(e));
+    boolean valid = validatorRemoverEquipa(EquipaMapper.dtoToEquipa(e, this.jogadorRepository, this.jogoRepository));
     if (valid) {
       equipaRepository.deleteById(id); //delete
     } else {
@@ -57,7 +63,7 @@ public class EquipaHandler implements IEquipaHandler {
     int valid = validatorAtualizarEquipa(id, equipaDto);
     if (e != null && valid == 1) {
       // If it exists and it's valid, then save
-      equipaRepository.save(EquipaMapper.dtoToEquipa(equipaDto));
+      equipaRepository.save(EquipaMapper.dtoToEquipa(equipaDto, this.jogadorRepository, this.jogoRepository));
     } else if (e!= null && valid == -1) {
       e.setId(-1L);
       return e;
@@ -93,7 +99,7 @@ public class EquipaHandler implements IEquipaHandler {
     boolean valid = validatorRegistarEquipa(equipaDto);
     Equipa savedEquipa = null;
     if (valid) {
-      Equipa equipa = EquipaMapper.dtoToEquipa(equipaDto);
+      Equipa equipa = EquipaMapper.dtoToEquipa(equipaDto, this.jogadorRepository, this.jogoRepository);
       savedEquipa = equipaRepository.save(equipa);
     }
     return EquipaMapper.equipaToDto(savedEquipa);
