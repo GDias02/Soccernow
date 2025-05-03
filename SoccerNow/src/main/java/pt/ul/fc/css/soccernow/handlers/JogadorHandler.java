@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogadorDto;
 import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
@@ -19,6 +20,7 @@ import pt.ul.fc.css.soccernow.mappers.jogos.CartaoMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorPostMapper;
+import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
 
 @Service
@@ -28,16 +30,25 @@ public class JogadorHandler implements IJogadorHandler {
     private JogadorRepository jogadorRepository;
 
     @Autowired
+    private ArbitroRepository arbitroRepository;
+
+    @Autowired
     private EstatisticasHandler estatisticasHandler;
 
     @Override
+    @Transactional
     public JogadorDto registarJogador(JogadorPostDto jogadorPostDto) {
         if (jogadorPostDto == null) return null;
 
         JogadorDto jogadorDto = new JogadorDto(jogadorPostDto);
         if (!validInput(jogadorDto)) return null;
 
-        if (jogadorDto.getUtilizador().getId() != 0) return null;
+        UtilizadorDto utilizadorDto = jogadorDto.getUtilizador();
+
+        if (utilizadorDto.getId() != 0) return null;
+
+        int nif = utilizadorDto.getNif();
+        if (!jogadorRepository.findByNif(nif).isEmpty() || !arbitroRepository.findByNif(nif).isEmpty()) return null;
 
         Jogador jogador = JogadorMapper.dtoToJogador(jogadorDto);
         Jogador savedJogador = new Jogador();
@@ -52,6 +63,7 @@ public class JogadorHandler implements IJogadorHandler {
     }
 
     @Override
+    @Transactional
     public JogadorDto verificarJogador(int nif) {
         Optional<Jogador> maybeJogador = jogadorRepository.findByNif(nif);
 
@@ -70,18 +82,23 @@ public class JogadorHandler implements IJogadorHandler {
     }
 
     @Override
+    @Transactional
     public void removerJogador(int nif) {
         jogadorRepository.deleteByNif(nif);
     }
 
     @Override
+    @Transactional
     public JogadorPostDto atualizarJogador(JogadorPostDto jogadorDto) {
         if (!validPostInput(jogadorDto)) return null;
 
         UtilizadorDto utilizador = jogadorDto.getUtilizador();
 
         Long id = utilizador.getId();
-        if (id == 0) return null;
+        if (id == 0 || jogadorRepository.findById(id).isEmpty()) return null;
+
+        int nif = utilizador.getNif();
+        if (!jogadorRepository.findByNif(nif).isEmpty() || !arbitroRepository.findByNif(nif).isEmpty()) return null;
 
         Jogador jogador = JogadorPostMapper.dtoToJogador(jogadorDto);
         Jogador updatedJogador = jogadorRepository.save(jogador);
@@ -91,6 +108,7 @@ public class JogadorHandler implements IJogadorHandler {
     }
 
     @Override
+    @Transactional
     public Set<JogadorDto> buscarJogadores() {
         Set<JogadorDto> jogadorDtos = jogadorRepository.findAll().stream().map(JogadorMapper::jogadorToDto).collect(Collectors.toSet());
         for (JogadorDto jogadorDto : jogadorDtos) {
