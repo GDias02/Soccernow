@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
 import pt.ul.fc.css.soccernow.entities.campeonatos.Campeonato;
 
 @Entity
@@ -26,6 +27,9 @@ public class Conquista implements IConquista {
   @ManyToOne
   @JoinColumn(name = "campeonato_id", nullable = false)
   private Campeonato campeonato;
+
+  @Version
+  private int version;
 
   public Long getId() {
     return id;

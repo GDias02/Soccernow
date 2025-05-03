@@ -8,18 +8,17 @@
 <a href="http://localhost:8080/swagger-ui/index.html#">http://localhost:8080/swagger-ui/index.html# </a>
 
 ## Contexto
-Apresentamos este relatório para efeitos de análise do raciocínio por detrás do desenvolvimento da aplicação SoccerNow para gestao de jogos e equipas de futsal.
-Pretende-se que esta aplicação cumpra os requisitos apresentados no setup do projeto (enunciado) e também permita a sua futura evolução (planeando para a mudança).
+Apresentamos este relatório para efeitos de análise do raciocínio por detrás do desenvolvimento da aplicação SoccerNow para gestão de jogos e equipas de futsal.
+Pretende-se que esta aplicação cumpra os requisitos apresentados no enunciado do projeto e também permita a sua futura evolução (planeando para a mudança). 
 Recomenda-se que a leitura deste relatório seja feita tendo em mente os documentos apresentados em conjunto, nomeadamente o modelo de domínio e o diagrama de classes.
 
 ## Arquitetura em Camadas
-  - controllers -> mapeiam os endpoints REST, recebidos do Swagger, necessários para satisfazer os casos de uso, para o handler adequado para tratar dele;
-  - handlers -> realizam a verificação do input e usam um objeto Mapper para traduzir entre DTO e entidade de forma a comunicar entre o controller e o repositório;
-  - repositories -> herdam os métodos de um JpaRepository (e mais alguns obtidos por query derivation) para aceder à BD;
-  - entities -> contêm os nossos models com a lógica da aplicação, que são mapeados
-  pelo Hibernate para a BD;
-  - dtos -> encapsulam os atributos necessários das entidades para troca de informação entre a camada de apresentação e da lógica de negócio;
-  - mappers -> responsáveis pelo mapeamento entre uma dada entidade e um DTO, usados pelos handlers.
+  - Controllers -> Mapeiam os endpoints REST, recebidos da interface Swagger, necessários para satisfazer os casos de uso. Sabem o handler que satisfará melhor cada pedido.
+  - Handlers -> Efetuam a validação do input e usam um objeto Mapper para traduzir entre DTO e Entidade comunicando entre o controller e os repositórios. 
+  - Repositories -> Herdam os métodos de um JpaRepository (e mais alguns obtidos por query derivation) para aceder à Base de Dados.
+  - Entities -> Contêm os Models com a lógica da aplicação. São mapeados pelo Hibernate para a Base de Dados.
+  - DTOs -> Encapsulam os atributos necessários das Entidades para troca de informação entre a camada de apresentação e da lógica de negócio.
+  - Mappers -> Responsáveis pelo mapeamento entre uma dada Entidade e um DTO, usados pelos handlers.
 
 ## Decisões de Mapeamento
 
@@ -35,7 +34,16 @@ Recomenda-se que a leitura deste relatório seja feita tendo em mente os documen
   - Como referido, o certificado do Arbitro está embedded, pois é uma entidade fraca, só tem significado dentro da entidade a que está associada. Se um Arbitro é removido, então o seu certificado também deveria ser removido.
 
 ### C2 (Equipas)
-  - TODO
+  - Equipa contém o seu Histórico de Jogos fazendo a ponte entre a tabela das Equipas e dos Jogos com um @ManyToMany (um jogo tem duas equipas associadas). Como uma equipa não necessita de ter participado em jogos, este atributo pode ser nulo.
+  
+  - Equipa também tem uma lista de jogadores que representa o seu plantel. Sendo que os jogadores podem estar em várias equipas, segue-se a mesma lógica @ManyToMany entre Equipa e Jogador como anteriormente. Uma Equipa pode também não ter nenhum Jogador associado à mesma.
+
+  - Foi colocado um @Version para garantir que numa eventual operação de escrita a informação sobre a Equipa se possa manter íntegra.
+  
+  - **Conquista** tem uma relação _obrigatória_ (nullable = false) tanto com Equipa como com Campeonato. Trata-se em ambos os casos de uma relação @ManyToOne, uma equipa pode ter várias conquistas, tal como um campeonato (tem pelo menos três conquistas (pódio)).
+  
+  - Foi dado também um int version com uma anotação @Version para evitar eventuais conflitos desnecessários.
+ 
 
 ### C3 (Jogos)
   - TODO
@@ -58,7 +66,15 @@ Recomenda-se que a leitura deste relatório seja feita tendo em mente os documen
   - Como não parece ser possível ter uma entidade embedded a null, a entidade Certificado tem um atributo booleano que distingue os Arbitros com e sem Certificado.
 
 ### C2 (Equipas)
-  - TODO
+  - Todas as equipas têm funções de validação do EquipaHandler que falam diretamente com EquipaController têm validadores associados.  Estes validadores são facilmente extensíveis para futuras restrições que possam a vir ser necessárias.
+  
+  - Garante-se que uma Equipa não possa ser removida se tem no seu Histórico-de-Jogos jogos com Data depois do dia em que se está a tentar apagar a mesma. 
+  
+  - Garante-se que numa atualização (Put Equipa) todos os jogos pré-existentes que são enviados pelo Cliente através do Dto contenham tanto os jogos existentes assim como os jogos a adicionar. No que toca à remoção de jogos, apenas é permitida remoção de jogos agendados.
+  
+  - Para **Conquista** decidiu-se que apenas Conquista tem relação direta tanto com Campeonato assim como para com Equipa e _não vice versa_. Ainda assim, não há endpoints diretos para a mesma, é preciso passar primeiro por EquipaController ou pêlo CampeonatoController. Esta decisão advém do facto de se se verificar desnecessário um endpoint específico para conquista, para além de que a ideia de uma conquista está fortemente ligada tanto a uma equipa específica e ao campeonato no qual essa equipa ganhou a conquista. Ainda assim, esta decisão é facilmente revertível. Neste momento quem chama o ConquistaHandler é tanto o EquipaController e futuramente quando implementado, CampeonatoController.
+  
+  - Conquista não foi totalmente implementada. São criadas tabelas, a sua entidade e handler existem, porém o handler não foi implementado e não se faz nenhuma operação com repositórios ou mappers.
 
 ### C3 (Jogos)
   - TODO
