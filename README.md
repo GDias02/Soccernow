@@ -38,12 +38,7 @@ Recomenda-se que a leitura deste relatório seja feita tendo em mente os documen
 
   - Equipa também tem uma lista de jogadores que representa o seu plantel. Sendo que os jogadores podem estar em várias equipas, segue-se a mesma lógica @ManyToMany entre Equipa e Jogador como anteriormente. Uma Equipa pode também não ter nenhum Jogador associado à mesma.
 
-  - Foi colocado um @Version para garantir que numa eventual operação de escrita a informação sobre a Equipa se possa manter íntegra.
-
   - **Conquista** tem uma relação _obrigatória_ (nullable = false) tanto com Equipa como com Campeonato. Trata-se em ambos os casos de uma relação @ManyToOne, uma equipa pode ter várias conquistas, tal como um campeonato (tem pelo menos três conquistas (pódio)).
-
-  - Foi dado também um int version com uma anotação @Version para evitar eventuais conflitos desnecessários.
-
 
 ### C3 (Jogos)
   - Estatistica: A filosofia que tomámos no mapeamento dos Jogos e das Estatísticas foi de minimizar o espaço ocupado na base de dados. Por isso, evitámos ter informação repetida em várias tabelas, o que não só minimiza o espaço ocupado, como reduz o número de comunicações com a base de dados para fazer as operações mais simples de adicionar, alterar e remover entidades. Após refletir sobre o modelo de domínio tendo isto em mente, concluímos por isso que o indicado seria que a entidade de Estatísticas (e todos os seus derivados) fosse efémera, gerada apenas mediante pedidos (queries) específicos. Desse modo, a única coisa que teria persistência seriam golos e cartões (e possivelmente outros eventos de jogo futuros, como faltas ou fora-de-jogo por exemplo). Para gerar a estatística de um jogador (por exemplo), questionam-se os repositories de golos e cartões sobre todos os golos e cartoes que envolvem esse jogador.

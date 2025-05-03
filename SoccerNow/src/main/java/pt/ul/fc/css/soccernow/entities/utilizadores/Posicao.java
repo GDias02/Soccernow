@@ -5,5 +5,5 @@ public enum Posicao {
     FIXO,
     ALA_ESQUERDA,
     ALA_DIREITA,
-    PIVO
+    PIVOT
 }
