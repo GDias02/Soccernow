@@ -88,6 +88,8 @@ Recomenda-se que a leitura deste relatório seja feita tendo em mente os documen
 
   - São feitas poucas verificações ao corpo de um pedido que pretenda fazer POST ou PUT de um jogo.
 
+  - Efetivamente, o metodo de finalizar Jogo (registar um resultado) nao está funcional.
+
 ## Funcionalidades Esperadas
 
 ### Quais as equipas que possuem menos de 5 jogadores?
@@ -133,4 +135,5 @@ Recomenda-se que a leitura deste relatório seja feita tendo em mente os documen
 
 ## Dificuldades e Limitações do Projeto
   - Não conseguimos implementar o controller para iniciar a BD com alguns exemplos a tempo da data de entrega o que dificultou o nosso debug do projeto;
+  - Devido a esta dificuldade, não houve tempo para fazer debug do endpoint de finalizar jogo, pelo que essa parte ficou incompleta.
   - Existem vários detalhes onde gostaríamos de ter tido mais tempo para refletir como o estado de outras entidades após o delete de uma dada entidade, a implementação de vários testes e a gestão da concorrência.

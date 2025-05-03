@@ -23,10 +23,7 @@ public class JogoMapper {
     jogoDto.setId(jogo.getId());
     jogoDto.setS1(selecaoToDto(jogo.getS1()));
     jogoDto.setS2(selecaoToDto(jogo.getS2()));
-    jogoDto.setEquipaDeArbitros(
-        jogo.getEquipaDeArbitros().stream()
-            .map(ArbitroMapper::arbitroToDto)
-            .collect(Collectors.toList()));
+
     jogoDto.setDiaEHora(jogo.getDiaEHora());
     jogoDto.setEstadoDeJogo(jogo.getEstadoDeJogo());
     jogoDto.setLocalDto(localToDto(jogo.getLocal()));
@@ -47,10 +44,6 @@ public class JogoMapper {
 
     jogo = new JogoAmigavel();
 
-    jogo.setEquipaDeArbitros(
-        jogodto.getEquipaDeArbitros().stream()
-            .map(ArbitroMapper::dtoToArbitro)
-            .collect(Collectors.toList()));
     jogo.setDiaEHora(jogodto.getDiaEHora());
     jogo.setEstadoAtual(jogodto.getEstadoDeJogo());
     jogo.setLocal(dtoToLocal(jogodto.getLocalDto()));
@@ -122,6 +115,7 @@ public class JogoMapper {
       return null;
     }
     SelecaoDto selecaoDto = new SelecaoDto();
+    selecaoDto.setEquipa(s.getEquipa().getId());
     return selecaoDto;
   }
 
@@ -130,6 +124,7 @@ public class JogoMapper {
       return null;
     }
     SelecaoDto selecaoDto = new SelecaoDto();
+    selecaoDto.setEquipa(s.getEquipa().getId());
     return selecaoDto;
   }
 

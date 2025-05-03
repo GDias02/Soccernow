@@ -2,6 +2,7 @@ package pt.ul.fc.css.soccernow.handlers;
 
 import jakarta.transaction.Transactional;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -19,6 +20,7 @@ import pt.ul.fc.css.soccernow.entities.jogos.Local;
 import pt.ul.fc.css.soccernow.entities.jogos.Placar;
 import pt.ul.fc.css.soccernow.entities.jogos.Selecao;
 import pt.ul.fc.css.soccernow.entities.jogos.SelecaoDois;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 import pt.ul.fc.css.soccernow.mappers.jogos.CartaoMapper;
@@ -86,11 +88,24 @@ public class JogoHandler implements IJogoHandler {
     jogsS2.forEach((k, v) -> jogadoresS2.put(k, jogadorRepository.getReferenceById(v)));
     SelecaoDois s2 = new SelecaoDois(e2, cap2, jogadoresS1);
 
+    List<Arbitro> arbitros =
+        jogodto.getEquipaDeArbitros().stream()
+            .map(
+                a -> {
+                  return arbitroRepository.getReferenceById(a.getUtilizador().getId());
+                })
+            .collect(Collectors.toList());
+
     Jogo jogo = JogoMapper.dtoToJogo(jogodto);
     jogo.setS1(s1);
     jogo.setS2(s2);
+    jogo.setEquipaDeArbitros(arbitros);
+    Placar p = new Placar();
+    p.setScore(0, 0);
+    jogo.setPlacar(p);
     Local local = jogo.getLocal();
     Local savedLocal = localRepository.save(local);
+    jogo.setLocal(savedLocal);
     Jogo savedJogo = jogoRepository.save(jogo);
     jogodto.setId(savedJogo.getId());
     return jogodto;
@@ -139,7 +154,7 @@ public class JogoHandler implements IJogoHandler {
                       Golo golo = GoloMapper.dtoToGolo(g);
                       golo.setMarcador(jogadorRepository.getReferenceById(g.getMarcador()));
                       golo.setEquipa(equipaRepository.getReferenceById(g.getEquipa()));
-                      golo.setJogo(jogo);
+                      golo.setJogo(jogoRepository.getReferenceById(jogoId));
                       return golo;
                     })
                 .collect(Collectors.toSet());
@@ -155,11 +170,13 @@ public class JogoHandler implements IJogoHandler {
         jogo.setPlacar(p);
       }
       updatedJogo = jogoRepository.save(jogo);
+      /*
       res = JogoMapper.jogoToDto(updatedJogo);
       EstatisticaJogoDto updatedStats =
           EstatisticaMapper.estatisticaJogoToDto(estatisticasHandler.criarEstatisticaJogo(res));
       res.setStats(updatedStats);
       res.setEquipaVencedora(updatedJogo.getEquipaVencedora().getId());
+      */
     }
     return res;
   }
