@@ -13,6 +13,16 @@ public class LocalDto {
   int capacidade;
   MoradaDto morada;
 
+  public LocalDto() {}
+
+  public LocalDto(Long id, String nome, String proprietario, int capacidade, MoradaDto morada) {
+    this.id = id;
+    this.nome = nome;
+    this.proprietario = proprietario;
+    this.capacidade = capacidade;
+    this.morada = morada;
+  }
+
   public Long getId() {
     return id;
   }

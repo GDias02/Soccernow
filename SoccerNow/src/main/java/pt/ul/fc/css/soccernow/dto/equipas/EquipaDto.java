@@ -12,6 +12,14 @@ public class EquipaDto {
   private List<Long> historicoDeJogos;
   private List<Long> jogadores;
 
+  public EquipaDto() {}
+
+  public EquipaDto(Long id, String nome, List<Long> jogadores) {
+    this.id = id;
+    this.nome = nome;
+    this.jogadores = jogadores;
+  }
+
   /**
    * Gets the ID of the team.
    *
