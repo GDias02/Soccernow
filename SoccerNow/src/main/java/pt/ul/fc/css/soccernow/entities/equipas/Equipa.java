@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Version;
+
 import java.util.ArrayList;
 import java.util.List;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
@@ -27,6 +29,10 @@ public class Equipa implements IEquipa {
       joinColumns = @JoinColumn(name = "equipa_id"),
       inverseJoinColumns = @JoinColumn(name = "jogo_id"))
   private List<Jogo> historicoDeJogos;
+  
+  @Version
+  private int version;
+
 
   @ManyToMany
   @JoinTable(

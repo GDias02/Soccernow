@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
+import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
 import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
@@ -86,9 +87,11 @@ public class EquipaHandler implements IEquipaHandler {
             equipaRepository.findById(equipaDto.getId()).get()
                             .getHistoricoDeJogos();
     for (Jogo jogo : historicoOriginal) {
-      if (!equipaDto.getHistoricoDeJogos().contains(jogo.getId())) {
-        return -1;
-      }
+      //If the jogo was cancelado ou agendado it may be removed
+      if (jogo.getEstadoDeJogo() == EstadoDeJogo.CANCELADO ) continue;
+      //If the jogo is not in histórico de jogos, this is not a valid request
+      if (!equipaDto.getHistoricoDeJogos().contains(jogo.getId())) return -1;
+      
     }
     //future validations...
     return 1;
