@@ -1,15 +1,13 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import jakarta.transaction.Transactional;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
@@ -18,6 +16,7 @@ import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Golo;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Local;
+import pt.ul.fc.css.soccernow.entities.jogos.Placar;
 import pt.ul.fc.css.soccernow.entities.jogos.Selecao;
 import pt.ul.fc.css.soccernow.entities.jogos.SelecaoDois;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
@@ -105,13 +104,11 @@ public class JogoHandler implements IJogoHandler {
     }
     Jogo jogoGuardado = jogoOptional.get();
     Jogo updatedJogo;
-    JogoDto res;
+    JogoDto res = null;
     if (!updateValido(jogoGuardado, jogodto)) {
       return null;
     }
     Jogo jogo = JogoMapper.dtoToJogo(jogodto);
-    updatedJogo = jogoRepository.save(jogo);
-    res = JogoMapper.jogoToDto(updatedJogo);
 
     EstatisticaJogoDto stat = jogodto.getStats();
     if (stat != null) {
@@ -130,6 +127,10 @@ public class JogoHandler implements IJogoHandler {
                 .collect(Collectors.toSet());
         cartaoRepository.saveAll(cartoes);
       }
+      Placar p = new Placar();
+      Long e1 = jogodto.getS1().getEquipa();
+      int golosE1 = 0;
+      int golosE2 = 0;
       if (stat.getGolos() != null && !stat.getGolos().isEmpty()) {
         Set<Golo> golos =
             stat.getGolos().stream()
@@ -142,11 +143,23 @@ public class JogoHandler implements IJogoHandler {
                       return golo;
                     })
                 .collect(Collectors.toSet());
+        for (Golo g : golos) {
+          if (g.getEquipa().getId().equals(e1)) {
+            golosE1++;
+          } else {
+            golosE2++;
+          }
+        }
         goloRepository.saveAll(golos);
+        p.setScore(golosE1, golosE2);
+        jogo.setPlacar(p);
       }
+      updatedJogo = jogoRepository.save(jogo);
+      res = JogoMapper.jogoToDto(updatedJogo);
       EstatisticaJogoDto updatedStats =
           EstatisticaMapper.estatisticaJogoToDto(estatisticasHandler.criarEstatisticaJogo(res));
       res.setStats(updatedStats);
+      res.setEquipaVencedora(updatedJogo.getEquipaVencedora().getId());
     }
     return res;
   }
@@ -159,11 +172,16 @@ public class JogoHandler implements IJogoHandler {
 
   @Transactional
   public Set<JogoDto> buscarJogos() {
-    return jogoRepository.findAll().stream().map(jogo -> {
-      JogoDto jogoDto = JogoMapper.jogoToDto(jogo);
-      EstatisticaJogoDto stat = EstatisticaMapper.estatisticaJogoToDto(estatisticasHandler.criarEstatisticaJogo(jogoDto));
-      jogoDto.setStats(stat);
-      return jogoDto;
-    }).collect(Collectors.toSet());
+    return jogoRepository.findAll().stream()
+        .map(
+            jogo -> {
+              JogoDto jogoDto = JogoMapper.jogoToDto(jogo);
+              EstatisticaJogoDto stat =
+                  EstatisticaMapper.estatisticaJogoToDto(
+                      estatisticasHandler.criarEstatisticaJogo(jogoDto));
+              jogoDto.setStats(stat);
+              return jogoDto;
+            })
+        .collect(Collectors.toSet());
   }
 }

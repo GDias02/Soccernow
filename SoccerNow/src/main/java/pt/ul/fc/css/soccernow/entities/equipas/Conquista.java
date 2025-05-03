@@ -28,9 +28,6 @@ public class Conquista implements IConquista {
   @JoinColumn(name = "campeonato_id", nullable = false)
   private Campeonato campeonato;
 
-  @Version
-  private int version;
-
   public Long getId() {
     return id;
   }

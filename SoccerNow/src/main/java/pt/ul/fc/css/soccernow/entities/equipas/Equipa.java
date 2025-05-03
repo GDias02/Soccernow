@@ -29,9 +29,6 @@ public class Equipa implements IEquipa {
       joinColumns = @JoinColumn(name = "equipa_id"),
       inverseJoinColumns = @JoinColumn(name = "jogo_id"))
   private List<Jogo> historicoDeJogos;
-  
-  @Version
-  private int version;
 
 
   @ManyToMany

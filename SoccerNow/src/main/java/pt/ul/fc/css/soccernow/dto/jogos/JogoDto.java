@@ -24,6 +24,7 @@ public class JogoDto {
   private SelecaoDto s2;
   private List<ArbitroDto> equipaDeArbitros;
   private EstatisticaJogoDto stats;
+  private Long equipaVencedora;
 
   public JogoDto() {}
 
@@ -127,5 +128,13 @@ public class JogoDto {
         + ", stats="
         + stats
         + "]";
+  }
+
+  public Long getEquipaVencedora() {
+    return equipaVencedora;
+  }
+
+  public void setEquipaVencedora(Long equipaVencedora) {
+    this.equipaVencedora = equipaVencedora;
   }
 }

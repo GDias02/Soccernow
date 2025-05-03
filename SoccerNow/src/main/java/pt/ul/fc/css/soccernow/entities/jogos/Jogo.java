@@ -47,12 +47,9 @@ public abstract class Jogo implements IJogo {
   private LocalDateTime diaEHora;
 
   @Column
-  private String
-      resultadoFinal; // para acesso mais rapido ao resultado de um jogo, sem necessidade de
+  private Placar placar; // para acesso mais rapido ao resultado de um jogo, sem necessidade de
 
   // carregar todas as suas estatisticas
-
-  @Transient private Placar placar;
 
   @Transient private EstatisticaJogo stats;
 
@@ -114,10 +111,6 @@ public abstract class Jogo implements IJogo {
     return estadoDeJogo;
   }
 
-  public String getResultadoFinal() {
-    return resultadoFinal;
-  }
-
   public EstatisticaJogo getStats() {
     return this.stats;
   }
@@ -150,7 +143,21 @@ public abstract class Jogo implements IJogo {
     this.stats = stats;
   }
 
-  public void updatePlacar() {
-    this.placar = this.stats.getPlacar();
+  public void setPlacar(Placar p) {
+    this.placar = p;
+  }
+
+  public Equipa getEquipaVencedora() {
+    Equipa e = null;
+    if (this.estadoDeJogo == EstadoDeJogo.TERMINADO) {
+      int score1 = this.placar.getPontuacao1();
+      int score2 = this.placar.getPontuacao2();
+      if (score1 > score2) {
+        e = s1.getEquipa();
+      } else if (score2 > score1) {
+        e = s2.getEquipa();
+      }
+    }
+    return e;
   }
 }
