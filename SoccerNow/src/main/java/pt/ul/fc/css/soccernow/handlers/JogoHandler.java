@@ -1,13 +1,15 @@
 package pt.ul.fc.css.soccernow.handlers;
 
-import jakarta.transaction.Transactional;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
@@ -153,5 +155,15 @@ public class JogoHandler implements IJogoHandler {
   private boolean updateValido(Jogo updatedJogo, JogoDto jogodto) {
     return (updatedJogo.getEstadoDeJogo() != EstadoDeJogo.TERMINADO);
     // permite o registo final de um jogo.
+  }
+
+  @Transactional
+  public Set<JogoDto> buscarJogos() {
+    return jogoRepository.findAll().stream().map(jogo -> {
+      JogoDto jogoDto = JogoMapper.jogoToDto(jogo);
+      EstatisticaJogoDto stat = EstatisticaMapper.estatisticaJogoToDto(estatisticasHandler.criarEstatisticaJogo(jogoDto));
+      jogoDto.setStats(stat);
+      return jogoDto;
+    }).collect(Collectors.toSet());
   }
 }
