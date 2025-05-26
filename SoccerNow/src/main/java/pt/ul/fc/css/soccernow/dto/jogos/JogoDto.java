@@ -25,6 +25,7 @@ public class JogoDto {
   private List<ArbitroDto> equipaDeArbitros;
   private EstatisticaJogoDto stats;
   private Long equipaVencedora;
+  private Long campeonato;
 
   public JogoDto() {}
 
@@ -43,6 +44,25 @@ public class JogoDto {
     this.s1 = s1;
     this.s2 = s2;
     this.equipaDeArbitros = equipaDeArbitros;
+  }
+
+  public JogoDto(
+      Long id,
+      EstadoDeJogo estadoDeJogo,
+      LocalDto localDto,
+      LocalDateTime diaEHora,
+      SelecaoDto s1,
+      SelecaoDto s2,
+      List<ArbitroDto> equipaDeArbitros,
+      Long campeonato) {
+    this.id = id;
+    this.estadoDeJogo = estadoDeJogo;
+    this.localDto = localDto;
+    this.diaEHora = diaEHora;
+    this.s1 = s1;
+    this.s2 = s2;
+    this.equipaDeArbitros = equipaDeArbitros;
+    this.campeonato = campeonato;
   }
 
   public EstatisticaJogoDto getStats() {
@@ -136,5 +156,13 @@ public class JogoDto {
 
   public void setEquipaVencedora(Long equipaVencedora) {
     this.equipaVencedora = equipaVencedora;
+  }
+
+  public Long getCampeonato() {
+    return campeonato;
+  }
+
+  public void setCampeonato(Long campeonato) {
+    this.campeonato = campeonato;
   }
 }

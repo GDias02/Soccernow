@@ -10,8 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,7 +34,7 @@ public abstract class Jogo implements IJogo {
 
   @Embedded private SelecaoDois s2;
 
-  @ManyToMany private List<Arbitro> equipaDeArbitros;
+  @OneToMany private List<Arbitro> equipaDeArbitros;
 
   @Column(nullable = false)
   private EstadoDeJogo estadoDeJogo;
@@ -159,5 +159,28 @@ public abstract class Jogo implements IJogo {
       }
     }
     return e;
+  }
+
+  @Override
+  public String toString() {
+    return "Jogo [id="
+        + id
+        + ", s1="
+        + s1
+        + ", s2="
+        + s2
+        + ", equipaDeArbitros="
+        + equipaDeArbitros
+        + ", estadoDeJogo="
+        + estadoDeJogo
+        + ", local="
+        + local
+        + ", diaEHora="
+        + diaEHora
+        + ", placar="
+        + placar
+        + ", stats="
+        + stats
+        + "]";
   }
 }

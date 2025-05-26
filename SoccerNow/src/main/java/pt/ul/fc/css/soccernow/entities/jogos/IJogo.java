@@ -3,7 +3,7 @@ package pt.ul.fc.css.soccernow.entities.jogos;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-
+import pt.ul.fc.css.soccernow.entities.campeonatos.Campeonato;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
@@ -11,24 +11,45 @@ import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 
 public interface IJogo {
 
-    Long getId();
+  Long getId();
 
-    Equipa getEquipa1();
+  EstadoDeJogo getEstadoDeJogo();
 
-    Equipa getEquipa2();
+  Equipa getEquipa1();
 
-    Map<Posicao,Jogador> getSelecao(Equipa equipa);
+  Equipa getEquipa2();
 
-    Placar getPlacar();
+  Map<Posicao, Jogador> getSelecao(Equipa equipa);
 
-    Arbitro getArbitroPrincipal();
+  Placar getPlacar();
 
-    List<Arbitro> getEquipaDeArbitros();
+  Arbitro getArbitroPrincipal();
 
-    Local getLocal();
+  List<Arbitro> getEquipaDeArbitros();
 
-    LocalDateTime getDiaEHora();
+  Local getLocal();
 
-    EstatisticaJogo getStats();
-    
+  LocalDateTime getDiaEHora();
+
+  EstatisticaJogo getStats();
+
+  Campeonato getCampeonato();
+
+  void setEstadoAtual(EstadoDeJogo ej);
+
+  void setS1(Selecao s1);
+
+  void setS2(SelecaoDois s2);
+
+  void setPlacar(Placar p);
+
+  void setEquipaDeArbitros(List<Arbitro> la);
+
+  void setLocal(Local l);
+
+  void setDiaEHora(LocalDateTime ldt);
+
+  void setStats(EstatisticaJogo sj);
+
+  void setCampeonato(Campeonato c);
 }

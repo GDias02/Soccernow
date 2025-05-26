@@ -1,0 +1,7 @@
+Faltam regras lógicas (validação de conflitos de agendamento e data futura em JogoHandler.createJogo).
+Estrutura de entidades Jogo, Selecao e SelecaoDois é bastante problemática: Selecao/SelecaoDois não deveriam ser @Embeddable na sua situação atual, poderiam ser @OneToOne.
+O fato de terem com insertable/updatable=false, dificultando a persistência JPA direta das seleções dentro do jogo;
+a lógica de montagem manual no JogoHandler é complexa.
+Relações @ManyToMany (Equipa-Jogo, Equipa-Jogador) precisam de definição @JoinTable lado inverso mappedBy para evitar problemas JPA (É bastante confuso acompanhar o que se passa agora).
+Tratamento de erro na remoção de Arbitro/Jogador poderia retornar 404 se NIF não existir.
+Ausência de soft-delete.

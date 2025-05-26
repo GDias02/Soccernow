@@ -1,9 +1,6 @@
 package pt.ul.fc.css.soccernow.handlers;
 
 import jakarta.transaction.Transactional;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,23 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
-import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.Cartao;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
+import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Golo;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Local;
 import pt.ul.fc.css.soccernow.entities.jogos.Placar;
-import pt.ul.fc.css.soccernow.entities.jogos.Selecao;
-import pt.ul.fc.css.soccernow.entities.jogos.SelecaoDois;
-import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
-import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
-import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 import pt.ul.fc.css.soccernow.mappers.jogos.CartaoMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.EstatisticaMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.JogoMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
+import pt.ul.fc.css.soccernow.repositories.CampeonatoRepository;
 import pt.ul.fc.css.soccernow.repositories.CartaoRepository;
 import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
 import pt.ul.fc.css.soccernow.repositories.GoloRepository;
@@ -52,6 +45,8 @@ public class JogoHandler implements IJogoHandler {
 
   @Autowired private ArbitroRepository arbitroRepository;
 
+  @Autowired private CampeonatoRepository campeonatoRepository;
+
   @Autowired private EstatisticasHandler estatisticasHandler;
 
   @Transactional
@@ -74,41 +69,68 @@ public class JogoHandler implements IJogoHandler {
 
   @Transactional
   public JogoDto createJogo(JogoDto jogodto) {
-    Equipa e1 = equipaRepository.getReferenceById(jogodto.getS1().getEquipa());
-    Jogador cap1 = jogadorRepository.getReferenceById(jogodto.getS1().getCapitao());
-    Map<Posicao, Long> jogsS1 = jogodto.getS1().getJogadores();
-    Map<Posicao, Jogador> jogadoresS1 = new EnumMap<>(Posicao.class);
-    jogsS1.forEach((k, v) -> jogadoresS1.put(k, jogadorRepository.getReferenceById(v)));
-    Selecao s1 = new Selecao(e1, cap1, jogadoresS1);
+    Jogo jogo =
+        JogoMapper.createDtoToJogo(
+            jogodto, equipaRepository, jogadorRepository, arbitroRepository, campeonatoRepository);
 
-    Equipa e2 = equipaRepository.getReferenceById(jogodto.getS2().getEquipa());
-    Jogador cap2 = jogadorRepository.getReferenceById(jogodto.getS2().getCapitao());
-    Map<Posicao, Long> jogsS2 = jogodto.getS2().getJogadores();
-    Map<Posicao, Jogador> jogadoresS2 = new EnumMap<>(Posicao.class);
-    jogsS2.forEach((k, v) -> jogadoresS2.put(k, jogadorRepository.getReferenceById(v)));
-    SelecaoDois s2 = new SelecaoDois(e2, cap2, jogadoresS1);
-
-    List<Arbitro> arbitros =
-        jogodto.getEquipaDeArbitros().stream()
-            .map(
-                a -> {
-                  return arbitroRepository.getReferenceById(a.getUtilizador().getId());
-                })
-            .collect(Collectors.toList());
-
-    Jogo jogo = JogoMapper.dtoToJogo(jogodto);
-    jogo.setS1(s1);
-    jogo.setS2(s2);
-    jogo.setEquipaDeArbitros(arbitros);
-    Placar p = new Placar();
-    p.setScore(0, 0);
-    jogo.setPlacar(p);
     Local local = jogo.getLocal();
     Local savedLocal = localRepository.save(local);
     jogo.setLocal(savedLocal);
     Jogo savedJogo = jogoRepository.save(jogo);
     jogodto.setId(savedJogo.getId());
     return jogodto;
+  }
+
+  @Transactional
+  public JogoDto registarResultadoDeJogo(JogoDto jogodto) {
+    if (jogodto == null) {
+      return null;
+    }
+    if (jogodto.getId() == null) {
+      return null;
+    }
+    if (jogodto.getStats() == null) {
+      return null;
+    }
+
+    Optional<Jogo> jogoOptional = jogoRepository.findById(jogodto.getId());
+    if (jogoOptional.isEmpty()) {
+      return null;
+    }
+    Jogo jogo = jogoOptional.get();
+
+    if (jogo.getEstadoDeJogo() == EstadoDeJogo.TERMINADO) {
+      return null;
+    } // Nao se pode registar resultados após o jogo ter terminado
+    if (jogodto.getEstadoDeJogo() != EstadoDeJogo.TERMINADO) {
+      return null;
+    } // Pressupoe que este metodo só regista golos e cartoes após ter terminado
+
+    EstatisticaJogoDto ej = jogodto.getStats();
+    Set<Golo> golosMarcados =
+        ej.getGolos().stream()
+            .map(
+                g ->
+                    GoloMapper.createDtoToGolo(
+                        g, jogadorRepository, equipaRepository, jogoRepository))
+            .collect(Collectors.toSet());
+    Set<Cartao> cartoesMarcados =
+        ej.getCartoes().stream()
+            .map(
+                g ->
+                    CartaoMapper.createDtoToCartao(
+                        g, jogadorRepository, equipaRepository, jogoRepository, arbitroRepository))
+            .collect(Collectors.toSet());
+    goloRepository.saveAll(golosMarcados);
+    cartaoRepository.saveAll(cartoesMarcados);
+    EstatisticaJogo stat = new EstatisticaJogo();
+    stat.setCartoes(cartoesMarcados);
+    stat.setGolos(golosMarcados);
+
+    stat.setJogo(jogo);
+    jogo.setPlacar(stat.getPlacar());
+    Jogo savedJogo = jogoRepository.save(jogo);
+    return JogoMapper.jogoToDto(savedJogo);
   }
 
   @Transactional
