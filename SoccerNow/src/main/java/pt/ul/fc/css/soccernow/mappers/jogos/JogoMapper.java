@@ -102,7 +102,7 @@ public class JogoMapper {
     Map<Posicao, Long> jogsS2 = jogodto.getS2().getJogadores();
     Map<Posicao, Jogador> jogadoresS2 = new EnumMap<>(Posicao.class);
     jogsS2.forEach((k, v) -> jogadoresS2.put(k, jRep.getReferenceById(v)));
-    SelecaoDois s2 = new SelecaoDois(e2, cap2, jogadoresS1);
+    Selecao s2 = new Selecao(e2, cap2, jogadoresS1);
 
     List<Arbitro> arbitros =
         jogodto.getEquipaDeArbitros().stream()

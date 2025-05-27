@@ -39,7 +39,7 @@ public interface IJogo {
 
   void setS1(Selecao s1);
 
-  void setS2(SelecaoDois s2);
+  void setS2(Selecao s2);
 
   void setPlacar(Placar p);
 

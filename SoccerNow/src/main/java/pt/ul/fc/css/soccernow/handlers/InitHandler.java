@@ -260,9 +260,6 @@ public class InitHandler {
     s2.setJogadores(s2j);
     s2.setEquipa(e2id);
     s2.setCapitao(j6id);
-    System.out.println("\n ........ \n Selecao 1 \n" + s1);
-    System.out.println("\n ........ \n Selecao 2 \n" + s2);
-    System.out.println("\n.........\n");
 
     // To make sure abitros have been saved
     JogoDto j1 =
@@ -302,10 +299,6 @@ public class InitHandler {
             s2,
             savedArbitrosDto); // Usa o mesmo local que o jogo 1
 
-    System.out.println("\n.........\n");
-    System.out.println(j1);
-    System.out.println("\n.........\n");
-
     /** Saving Jogos with their respective Equipas and Arbitros */
     List<JogoDto> jogosDto = new ArrayList<>();
     jogosDto.add(j1);
@@ -316,9 +309,6 @@ public class InitHandler {
     Jogo teste1 =
         JogoMapper.createDtoToJogo(
             j1, equipaRepository, jogadorRepository, arbitroRepository, campeonatoRepository);
-    System.out.println("\n.........\n");
-    System.out.println(teste1);
-    System.out.println("\n.........\n");
 
     List<Jogo> jogos =
         jogosDto.stream()

@@ -1,44 +1,55 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import java.util.EnumMap;
 import java.util.Map;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 
-@Embeddable
+@Entity
 public class Selecao {
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "equipa1", insertable = false, updatable = false)
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
+
+  @ManyToOne
+  @JoinColumn(name = "jogo_id", nullable = false)
+  private Jogo jogo;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "equipa1")
   private Equipa equipa;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "capitao1", insertable = false, updatable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "capitao1")
   private Jogador capitao;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "guardaRedes1", insertable = false, updatable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "guardaRedes1")
   private Jogador guardaRedes;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "fixo1", insertable = false, updatable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "fixo1")
   private Jogador fixo;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "alaEsquerda1", insertable = false, updatable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "alaEsquerda1")
   private Jogador alaEsquerda;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "alaDireita1", insertable = false, updatable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "alaDireita1")
   private Jogador alaDireita;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "pivot1", insertable = false, updatable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "pivot1")
   private Jogador pivot;
 
   public Selecao(Equipa e, Jogador capitao, Map<Posicao, Jogador> jogadores) {
@@ -49,6 +60,14 @@ public class Selecao {
 
   public Selecao() {
     // TODO Auto-generated constructor stub
+  }
+
+  public Jogo getJogo() {
+    return jogo;
+  }
+
+  public void setJogo(Jogo jogo) {
+    this.jogo = jogo;
   }
 
   public Map<Posicao, Jogador> getJogadores() {

@@ -1,19 +1,23 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
@@ -30,11 +34,15 @@ public abstract class Jogo implements IJogo {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @Embedded private Selecao s1;
+  @OneToMany(mappedBy = "jogo", cascade = CascadeType.ALL)
+  private List<Selecao> selecoes;
 
-  @Embedded private SelecaoDois s2;
-
-  @OneToMany private List<Arbitro> equipaDeArbitros;
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "lista_arbitros",
+      joinColumns = @JoinColumn(name = "jogo_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "arbitro_id", referencedColumnName = "UTILIZADOR_ID"))
+  private List<Arbitro> equipaDeArbitros;
 
   @Column(nullable = false)
   private EstadoDeJogo estadoDeJogo;
@@ -53,22 +61,24 @@ public abstract class Jogo implements IJogo {
 
   @Transient private EstatisticaJogo stats;
 
-  Jogo() {}
+  Jogo() {
+    this.selecoes = new ArrayList<>();
+  }
 
   public Equipa getEquipa1() {
-    return s1.getEquipa();
+    return selecoes.get(0).getEquipa();
   }
 
   public Equipa getEquipa2() {
-    return s2.getEquipa();
+    return selecoes.get(1).getEquipa();
   }
 
   public Map<Posicao, Jogador> getSelecao(Equipa equipa) {
-    if (equipa.equals(s1.getEquipa())) {
-      return s1.getJogadores();
+    if (equipa.equals(this.getEquipa1())) {
+      return selecoes.get(0).getJogadores();
     }
-    if (equipa.equals(s2.getEquipa())) {
-      return s2.getJogadores();
+    if (equipa.equals(this.getEquipa2())) {
+      return selecoes.get(1).getJogadores();
     } else {
       return null;
     }
@@ -88,11 +98,11 @@ public abstract class Jogo implements IJogo {
   }
 
   public Selecao getS1() {
-    return s1;
+    return selecoes.get(0);
   }
 
-  public SelecaoDois getS2() {
-    return s2;
+  public Selecao getS2() {
+    return selecoes.get(1);
   }
 
   public List<Arbitro> getEquipaDeArbitros() {
@@ -116,11 +126,22 @@ public abstract class Jogo implements IJogo {
   }
 
   public void setS1(Selecao s1) {
-    this.s1 = s1;
+    s1.setJogo(this);
+    if (this.selecoes.size() < 2) {
+      this.selecoes.add(0, s1);
+    }
+    this.selecoes.set(0, s1);
   }
 
-  public void setS2(SelecaoDois s2) {
-    this.s2 = s2;
+  public void setS2(Selecao s2) {
+    s2.setJogo(this);
+    if (this.selecoes.size() < 1) {
+      this.selecoes.add(new Selecao());
+    }
+    if (this.selecoes.size() < 2) {
+      this.selecoes.add(1, s2);
+    }
+    this.selecoes.set(1, s2);
   }
 
   public void setEquipaDeArbitros(List<Arbitro> equipaDeArbitros) {
@@ -153,9 +174,9 @@ public abstract class Jogo implements IJogo {
       int score1 = this.placar.getPontuacao1();
       int score2 = this.placar.getPontuacao2();
       if (score1 > score2) {
-        e = s1.getEquipa();
+        e = this.getEquipa1();
       } else if (score2 > score1) {
-        e = s2.getEquipa();
+        e = this.getEquipa2();
       }
     }
     return e;
@@ -165,10 +186,8 @@ public abstract class Jogo implements IJogo {
   public String toString() {
     return "Jogo [id="
         + id
-        + ", s1="
-        + s1
-        + ", s2="
-        + s2
+        + ", selecoes="
+        + selecoes
         + ", equipaDeArbitros="
         + equipaDeArbitros
         + ", estadoDeJogo="

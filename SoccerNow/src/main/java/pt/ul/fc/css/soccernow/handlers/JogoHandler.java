@@ -6,7 +6,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
+import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.entities.jogos.Cartao;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
@@ -27,6 +29,7 @@ import pt.ul.fc.css.soccernow.repositories.GoloRepository;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
 import pt.ul.fc.css.soccernow.repositories.JogoRepository;
 import pt.ul.fc.css.soccernow.repositories.LocalRepository;
+import pt.ul.fc.css.soccernow.repositories.SelecaoRepository;
 
 @Service
 public class JogoHandler implements IJogoHandler {
@@ -40,6 +43,8 @@ public class JogoHandler implements IJogoHandler {
   @Autowired private CartaoRepository cartaoRepository;
 
   @Autowired private EquipaRepository equipaRepository;
+
+  @Autowired private SelecaoRepository selecaoRepository;
 
   @Autowired private JogadorRepository jogadorRepository;
 
@@ -108,19 +113,10 @@ public class JogoHandler implements IJogoHandler {
 
     EstatisticaJogoDto ej = jogodto.getStats();
     Set<Golo> golosMarcados =
-        ej.getGolos().stream()
-            .map(
-                g ->
-                    GoloMapper.createDtoToGolo(
-                        g, jogadorRepository, equipaRepository, jogoRepository))
-            .collect(Collectors.toSet());
+        ej.getGolos().stream().map(g -> scoreGoloFromDto(g, jogo)).collect(Collectors.toSet());
     Set<Cartao> cartoesMarcados =
-        ej.getCartoes().stream()
-            .map(
-                g ->
-                    CartaoMapper.createDtoToCartao(
-                        g, jogadorRepository, equipaRepository, jogoRepository, arbitroRepository))
-            .collect(Collectors.toSet());
+        ej.getCartoes().stream().map(c -> markCartaoFromDto(c, jogo)).collect(Collectors.toSet());
+
     goloRepository.saveAll(golosMarcados);
     cartaoRepository.saveAll(cartoesMarcados);
     EstatisticaJogo stat = new EstatisticaJogo();
@@ -129,8 +125,24 @@ public class JogoHandler implements IJogoHandler {
 
     stat.setJogo(jogo);
     jogo.setPlacar(stat.getPlacar());
+    jogo.setEstadoAtual(EstadoDeJogo.TERMINADO);
     Jogo savedJogo = jogoRepository.save(jogo);
     return JogoMapper.jogoToDto(savedJogo);
+  }
+
+  private Golo scoreGoloFromDto(GoloDto golodto, Jogo j) {
+    golodto.setJogo(j.getId());
+    Golo g =
+        GoloMapper.createDtoToGolo(golodto, jogadorRepository, equipaRepository, jogoRepository);
+    return g;
+  }
+
+  private Cartao markCartaoFromDto(CartaoDto cartaodto, Jogo j) {
+    cartaodto.setJogo(j.getId());
+    Cartao c =
+        CartaoMapper.createDtoToCartao(
+            cartaodto, jogadorRepository, equipaRepository, jogoRepository, arbitroRepository);
+    return c;
   }
 
   @Transactional
