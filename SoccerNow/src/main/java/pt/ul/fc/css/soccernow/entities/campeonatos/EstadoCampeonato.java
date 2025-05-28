@@ -1,5 +1,5 @@
 package pt.ul.fc.css.soccernow.entities.campeonatos;
 
 public enum EstadoCampeonato {
-    //TODO
+    AGENDADO, A_DECORRER, TERMINADO, CANCELADO
 }

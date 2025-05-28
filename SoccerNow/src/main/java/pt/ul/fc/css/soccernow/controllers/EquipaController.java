@@ -83,6 +83,34 @@ public class EquipaController {
         return ResponseEntity.ok(equipa);
     }
 
+
+    /** FILTROS - FILTROS - FILTROS - FILTROS */
+
+    @GetMapping("equipas")
+    @ApiOperation(value="Get equipas by filter", notes="Gets a list of equipas with the given that respect the given filters")
+    public ResponseEntity<List<EquipaDto>> getEquipasByFilter(
+        @RequestParam(required = false) String nome, 
+        @RequestParam(required = false) Long numDeJogadores,
+        @RequestParam(required = false) Long numDeGolos,
+        @RequestParam(required = false) Long numCartores,
+        @RequestParam(required = false) Long numDeJogos
+    ) {
+        
+        return null;
+    }
+/**
+ 
+-  Filtro por nome.
+– Filtro por n ́umero de jogadores.
+– Filtro por n ́umero de vit ́orias, empates ou derrotas.
+– Filtro por conquistas.
+– Filtro por ausˆencia de jogadores numa posi ̧c ̃ao espec ́ıfica
+ */
+
+
+
+
+
     /** IN REFERENCE TO CONQUISTA */ 
 
     @GetMapping("{id}/conquistas")
@@ -142,3 +170,5 @@ public class EquipaController {
     }
 
 }
+
+
