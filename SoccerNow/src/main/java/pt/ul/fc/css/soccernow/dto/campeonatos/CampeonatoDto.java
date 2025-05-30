@@ -2,123 +2,126 @@ package pt.ul.fc.css.soccernow.dto.campeonatos;
 
 import java.util.Date;
 import java.util.List;
-
 import pt.ul.fc.css.soccernow.entities.campeonatos.EstadoCampeonato;
 
 public class CampeonatoDto {
-    
-    private Long id;
-    private String nome;
-    private EstadoCampeonato estado;
-    private List<Long> jogos;
-    private List<Long> equipas;
-    private Date dataInicio;
 
-    private String tipo;
-    private CampeonatoEliminatoriaDto eliminatoriaDto;
-    private CampeonatoPontosDto pontosDto;
+  private Long id;
+  private String nome;
+  private EstadoCampeonato estado;
+  private List<Long> jogos;
+  private List<Long> equipas;
+  private Date dataInicio;
 
-    CampeonatoDto(){}
+  private String tipo;
+  private CampeonatoEliminatoriaDto eliminatoriaDto;
+  private CampeonatoPontosDto pontosDto;
 
-    CampeonatoDto(
-        Long id, 
-        String nome, 
-        EstadoCampeonato estado, 
-        List<Long> jogos,
-        List<Long> equipas,
-        Date dataInicio,
-        String tipo, 
-        CampeonatoEliminatoriaDto eliminatoria, 
-        CampeonatoPontosDto pontos){
-        this.id = id;
-        this.nome = nome;
-        this.estado = estado;
-        this.jogos = jogos;
-        this.equipas = equipas;
-        this.dataInicio = dataInicio;
-        this.tipo = tipo;
-        this.eliminatoriaDto = eliminatoria;
-        this.pontosDto = pontos;
-    }
+  CampeonatoDto() {}
 
-    public Long getId() {
-        return id;
-    }
+  CampeonatoDto(
+      Long id,
+      String nome,
+      EstadoCampeonato estado,
+      List<Long> jogos,
+      List<Long> equipas,
+      Date dataInicio,
+      String tipo) {
+    this.id = id;
+    this.nome = nome;
+    this.estado = estado;
+    this.jogos = jogos;
+    this.equipas = equipas;
+    this.dataInicio = dataInicio;
+    this.tipo = tipo;
+    this.eliminatoriaDto = null;
+    this.pontosDto = null;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getNome() {
-        return nome;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+  public String getNome() {
+    return nome;
+  }
 
-    public EstadoCampeonato getEstado() {
-        return estado;
-    }
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
 
-    public void setEstado(EstadoCampeonato estado) {
-        this.estado = estado;
-    }
+  public EstadoCampeonato getEstado() {
+    return estado;
+  }
 
-    public List<Long> getJogos() {
-        return jogos;
-    }
+  public void setEstado(EstadoCampeonato estado) {
+    this.estado = estado;
+  }
 
-    public void setJogos(List<Long> jogos) {
-        this.jogos = jogos;
-    }
+  public List<Long> getJogos() {
+    return jogos;
+  }
 
-    public List<Long> getEquipas() {
-        return equipas;
-    }
+  public void setJogos(List<Long> jogos) {
+    this.jogos = jogos;
+  }
 
-    public void setEquipas(List<Long> equipas) {
-        this.equipas = equipas;
-    }
-    
-    public Date getDataInicio() {
-        return dataInicio;
-    }
+  public List<Long> getEquipas() {
+    return equipas;
+  }
 
-    public void setDataInicio(Date dataInicio) {
-        this.dataInicio = dataInicio;
-    }
+  public void setEquipas(List<Long> equipas) {
+    this.equipas = equipas;
+  }
 
-    public String getTipo() {
-        return tipo;
-    }
+  public Date getDataInicio() {
+    return dataInicio;
+  }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+  public void setDataInicio(Date dataInicio) {
+    this.dataInicio = dataInicio;
+  }
 
-    public CampeonatoEliminatoriaDto getEliminatoriaDto() {
-        return eliminatoriaDto;
-    }
+  public String getTipo() {
+    return tipo;
+  }
 
-    public void setEliminatoriaDto(CampeonatoEliminatoriaDto eliminatoriaDto) {
-        this.eliminatoriaDto = eliminatoriaDto;
-    }
+  public void setTipo(String tipo) {
+    this.tipo = tipo;
+  }
 
-    public CampeonatoPontosDto getPontosDto() {
-        return pontosDto;
-    }
+  public CampeonatoEliminatoriaDto getEliminatoriaDto() {
+    return eliminatoriaDto;
+  }
 
-    public void setPontosDto(CampeonatoPontosDto pontosDto) {
-        this.pontosDto = pontosDto;
-    }
+  public void setEliminatoriaDto(CampeonatoEliminatoriaDto eliminatoriaDto) {
+    this.eliminatoriaDto = eliminatoriaDto;
+  }
 
-    @Override
-    public String toString() {
-        return "CampeonatoDto [id=" + id + ", nome=" + nome + ", estado=" + estado + ", dataInicio=" + dataInicio
-                + ", tipo=" + tipo + "]";
-    }
+  public CampeonatoPontosDto getPontosDto() {
+    return pontosDto;
+  }
 
+  public void setPontosDto(CampeonatoPontosDto pontosDto) {
+    this.pontosDto = pontosDto;
+  }
 
-    
+  @Override
+  public String toString() {
+    return "CampeonatoDto [id="
+        + id
+        + ", nome="
+        + nome
+        + ", estado="
+        + estado
+        + ", dataInicio="
+        + dataInicio
+        + ", tipo="
+        + tipo
+        + "]";
+  }
 }
