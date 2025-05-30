@@ -1,14 +1,14 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.util.EnumMap;
-import java.util.Map;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
@@ -24,31 +24,31 @@ public class Selecao {
   @JoinColumn(name = "jogo_id", nullable = false)
   private Jogo jogo;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "equipa1")
   private Equipa equipa;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "capitao1")
   private Jogador capitao;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "guardaRedes1")
   private Jogador guardaRedes;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "fixo1")
   private Jogador fixo;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "alaEsquerda1")
   private Jogador alaEsquerda;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "alaDireita1")
   private Jogador alaDireita;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "pivot1")
   private Jogador pivot;
 

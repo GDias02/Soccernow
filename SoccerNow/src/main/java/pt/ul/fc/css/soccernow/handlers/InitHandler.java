@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogadorDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
@@ -71,19 +73,23 @@ public class InitHandler {
 
   @Transactional
   public void init() {
-    deleteAll();
     fillJogos();
   }
 
   @Transactional
+  public void assassinate() {
+    deleteAll();
+  }
+
+  @Transactional
   private void deleteAll() {
-    localRepository.deleteAll();
     goloRepository.deleteAll();
     cartaoRepository.deleteAll();
     jogoRepository.deleteAll();
     equipaRepository.deleteAll();
     arbitroRepository.deleteAll();
     jogadorRepository.deleteAll();
+    localRepository.deleteAll();
   }
 
   /**

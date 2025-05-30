@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:controller="pt.ul.fc.di.css.javafxexample.controller.InitController" prefHeight="300.0" prefWidth="230.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <MenuBar prefHeight="5.0" prefWidth="323.0" VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem fx:id="menuUtilizadores" mnemonicParsing="false" onAction="#initUtilizadores" text="Utilizadores" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menuEquipas" mnemonicParsing="false" onAction="#initEquipas" text="Equipas" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menuJogos" mnemonicParsing="false" onAction="#initJogos" text="Jogos" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menuCampeonatos" mnemonicParsing="false" onAction="#initCampeonatos" text="Campeonatos" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menuQuit" mnemonicParsing="false" onAction="#quit" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About SoccerNow" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="334.0" prefWidth="230.0" VBox.vgrow="ALWAYS">
+      <children>
+            <Button fx:id="utilizadoresButton" layoutX="41.0" layoutY="30.0" mnemonicParsing="false" onAction="#initUtilizadores" prefHeight="51.0" prefWidth="147.0" text="Utilizadores" />
+            <Button fx:id="EquipasButton" layoutX="41.0" layoutY="85.0" mnemonicParsing="false" onAction="#initEquipas" prefHeight="51.0" prefWidth="147.0" text="Equipas" />
+            <Button fx:id="JogosButton" layoutX="41.0" layoutY="140.0" mnemonicParsing="false" onAction="#initJogos" prefHeight="51.0" prefWidth="147.0" text="Jogos" />
+            <Button fx:id="CampeonatosButton" layoutX="41.0" layoutY="195.0" mnemonicParsing="false" onAction="#initCampeonatos" prefHeight="51.0" prefWidth="147.0" text="Campeonatos" />
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>

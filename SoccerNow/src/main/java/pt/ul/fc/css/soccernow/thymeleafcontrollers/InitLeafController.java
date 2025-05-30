@@ -1,20 +1,20 @@
-package pt.ul.fc.css.soccernow.controllers;
+package pt.ul.fc.css.soccernow.thymeleafcontrollers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pt.ul.fc.css.soccernow.handlers.InitHandler;
 
-@RestController
-@RequestMapping("/api/init")
+@Controller
+@RequestMapping("/leaf/api/init")
 @Api(value = "Init API", tags = "Init")
-public class InitController {
+public class InitLeafController {
     
     @Autowired
     private InitHandler initHandler;
