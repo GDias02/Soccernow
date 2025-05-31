@@ -17,9 +17,9 @@ public class CampeonatoDto {
   private CampeonatoEliminatoriaDto eliminatoriaDto;
   private CampeonatoPontosDto pontosDto;
 
-  CampeonatoDto() {}
+  public CampeonatoDto() {}
 
-  CampeonatoDto(
+  public CampeonatoDto(
       Long id,
       String nome,
       EstadoCampeonato estado,

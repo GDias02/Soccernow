@@ -25,7 +25,7 @@ public class CampeonatoPontosDto {
 
   private Map<Long, Long> serializeTabela(Map<Equipa, Long> t) {
     Map<Long, Long> tabela = new HashMap<>();
-    t.forEach((equipa, pontos) -> tabela.put(equipa.id, pontos));
+    t.forEach((equipa, pontos) -> tabela.put(equipa.getId(), pontos));
     return tabela;
   }
 }

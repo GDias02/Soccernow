@@ -1,11 +1,15 @@
 package pt.ul.fc.css.soccernow.mappers.campeonatos;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import pt.ul.fc.css.soccernow.dto.campeonatos.CampeonatoDto;
 import pt.ul.fc.css.soccernow.dto.campeonatos.CampeonatoEliminatoriaDto;
 import pt.ul.fc.css.soccernow.dto.campeonatos.CampeonatoPontosDto;
 import pt.ul.fc.css.soccernow.entities.campeonatos.Campeonato;
 import pt.ul.fc.css.soccernow.entities.campeonatos.CampeonatoEliminatoria;
 import pt.ul.fc.css.soccernow.entities.campeonatos.CampeonatoPontos;
+import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
+import pt.ul.fc.css.soccernow.entities.jogos.JogoCampeonato;
 import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
 import pt.ul.fc.css.soccernow.repositories.JogoRepository;
 
@@ -13,47 +17,63 @@ public class CampeonatoMapper {
   public static CampeonatoDto campeonatoToDto(Campeonato campeonato) {
     if (!((campeonato instanceof CampeonatoEliminatoria)
         || (campeonato instanceof CampeonatoPontos)))
-      throw RuntimeException("Este campeonato é inválido");
+      throw new RuntimeException("Este campeonato é inválido");
 
+    String tipo = campeonato instanceof CampeonatoEliminatoria ? "eliminatoria" : "pontos";
+    List<Long> equipas =
+        campeonato.getEquipas().stream()
+            .map((equipa) -> equipa.getId())
+            .collect(Collectors.toList());
+    List<Long> jogos =
+        campeonato.getJogos().stream().map((jogo) -> jogo.getId()).collect(Collectors.toList());
     CampeonatoDto campeonatoDto =
         new CampeonatoDto(
             campeonato.getId(),
             campeonato.getNome(),
             campeonato.getEstado(),
-            campeonato.getJogos(),
-            campeonato.getEquipas(),
+            jogos,
+            equipas,
             campeonato.getDataInicio(),
-            campeonato instanceof CampeonatoEliminatoria ? "eliminatoria" : "pontos");
+            tipo);
 
-    if (campeonatoDto.getTipo() == "eliminatoria") {
-      CampeonatoEliminatoria eliminatoria = new CampeonatoEliminatoriaDto(campeonato);
+    if (campeonato instanceof CampeonatoEliminatoria) {
+      CampeonatoEliminatoriaDto eliminatoria =
+          new CampeonatoEliminatoriaDto((CampeonatoEliminatoria) campeonato);
       campeonatoDto.setEliminatoriaDto(eliminatoria);
-    } else {
-      CampeonatoPontos pontos = new CampeonatoPontosDto(campeonato);
+    } else if (campeonato instanceof CampeonatoPontos) {
+      CampeonatoPontosDto pontos = new CampeonatoPontosDto((CampeonatoPontos) campeonato);
       campeonatoDto.setPontosDto(pontos);
     }
 
     return campeonatoDto;
   }
 
+  public static List<CampeonatoDto> manyCampeonatosToDtos(List<Campeonato> campeonatos) {
+    return campeonatos.stream().map(CampeonatoMapper::campeonatoToDto).collect(Collectors.toList());
+  }
+
   public static Campeonato dtoToCampeonato(
       CampeonatoDto campeonatoDto,
       EquipaRepository equipaRepository,
       JogoRepository jogoRepository) {
-    Campeonato campeonato;
+    Campeonato campeonato = null;
     List<Equipa> equipas = equipaRepository.findAllById(campeonatoDto.getEquipas());
-    List<Jogos> jogos = jogoRepository.findAllById(campeonatoDto.getJogos());
+    List<JogoCampeonato> jogos =
+        jogoRepository.findAllById(campeonatoDto.getJogos()).stream()
+            .map(jogo -> (JogoCampeonato) jogo)
+            .collect(Collectors.toList());
     if (campeonatoDto.getTipo() == "pontos") {
       campeonato =
           new CampeonatoPontos(
-              (campeonatoDto.getId()),
+              campeonatoDto.getId(),
               campeonatoDto.getNome(),
               campeonatoDto.getEstado(),
               campeonatoDto.getDataInicio(),
               jogos,
-              equipas,
-              campeonatoDto.getPontosDto().getTabela());
+              equipas);
+
     } else if (campeonatoDto.getTipo() == "eliminatoria") {
+
       campeonato =
           new CampeonatoEliminatoria(
               campeonatoDto.getId(),
@@ -64,5 +84,17 @@ public class CampeonatoMapper {
               equipas);
     }
     return campeonato;
+  }
+
+  public static List<Campeonato> manyDtosToCampeonatos(
+      List<CampeonatoDto> campeonatos,
+      EquipaRepository equipaRepository,
+      JogoRepository jogoRepository) {
+    return campeonatos.stream()
+        .map(
+            campeonato -> {
+              return dtoToCampeonato(campeonato, equipaRepository, jogoRepository);
+            })
+        .collect(Collectors.toList());
   }
 }
