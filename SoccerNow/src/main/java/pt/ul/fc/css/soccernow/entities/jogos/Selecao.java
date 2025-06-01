@@ -25,31 +25,31 @@ public class Selecao {
   private Jogo jogo;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "equipa1")
+  @JoinColumn(name = "equipa")
   private Equipa equipa;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "capitao1")
+  @JoinColumn(name = "capitao")
   private Jogador capitao;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "guardaRedes1")
+  @JoinColumn(name = "guardaRedes")
   private Jogador guardaRedes;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "fixo1")
+  @JoinColumn(name = "fixo")
   private Jogador fixo;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "alaEsquerda1")
+  @JoinColumn(name = "alaEsquerda")
   private Jogador alaEsquerda;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "alaDireita1")
+  @JoinColumn(name = "alaDireita")
   private Jogador alaDireita;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "pivot1")
+  @JoinColumn(name = "pivot")
   private Jogador pivot;
 
   public Selecao(Equipa e, Jogador capitao, Map<Posicao, Jogador> jogadores) {
@@ -148,5 +148,28 @@ public class Selecao {
 
   public Long getId() {
     return id;
+  }
+
+  @Override
+  public String toString() {
+    return "Selecao [id="
+        + id
+        + ", jogo="
+        + jogo.getId()
+        + ", equipa="
+        + equipa.getId()
+        + ", capitao="
+        + capitao.getId()
+        + ", guardaRedes="
+        + guardaRedes.getId()
+        + ", fixo="
+        + fixo.getId()
+        + ", alaEsquerda="
+        + alaEsquerda.getId()
+        + ", alaDireita="
+        + alaDireita.getId()
+        + ", pivot="
+        + pivot.getId()
+        + "]";
   }
 }

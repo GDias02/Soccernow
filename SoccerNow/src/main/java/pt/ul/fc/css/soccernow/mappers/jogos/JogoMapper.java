@@ -1,6 +1,5 @@
 package pt.ul.fc.css.soccernow.mappers.jogos;
 
-import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
@@ -13,10 +12,8 @@ import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.entities.jogos.JogoAmigavel;
 import pt.ul.fc.css.soccernow.entities.jogos.JogoCampeonato;
 import pt.ul.fc.css.soccernow.entities.jogos.Placar;
-import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.exceptions.jogos.CriarJogoException;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
-import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.CampeonatoRepository;
 
 public class JogoMapper {
@@ -72,8 +69,7 @@ public class JogoMapper {
    * @return
    * @throws CriarJogoException
    */
-  public static Jogo createDtoToJogo(
-      JogoDto jogodto, ArbitroRepository aRep, CampeonatoRepository cRep)
+  public static Jogo createDtoToJogo(JogoDto jogodto, CampeonatoRepository cRep)
       throws CriarJogoException {
     if (jogodto == null) throw new CriarJogoException("JogoDto é null");
     if (jogodto.getLocalDto() == null || !validarCriarLocalDto(jogodto.getLocalDto()))
@@ -92,16 +88,6 @@ public class JogoMapper {
 
     jogo.setEstadoAtual(
         EstadoDeJogo.AGENDADO); // Nao importa o que esta no dto, a criacao gera AGENDADO.
-
-    try {
-      List<Arbitro> arbitros =
-          jogodto.getEquipaDeArbitros().stream()
-              .map(a -> aRep.getReferenceById(a.getUtilizador().getId()))
-              .collect(Collectors.toList());
-      jogo.setEquipaDeArbitros(arbitros);
-    } catch (EntityNotFoundException e) {
-      throw new CriarJogoException("Pelo menos um dos árbitros indicados não está registado.");
-    }
     Placar p = new Placar();
     p.setScore(0, 0);
     jogo.setPlacar(p);

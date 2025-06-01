@@ -1,8 +1,11 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -17,6 +20,7 @@ import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.LocalDto;
 import pt.ul.fc.css.soccernow.dto.jogos.SelecaoDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.Cartao;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
@@ -25,6 +29,7 @@ import pt.ul.fc.css.soccernow.entities.jogos.Golo;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Local;
 import pt.ul.fc.css.soccernow.entities.jogos.Selecao;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 import pt.ul.fc.css.soccernow.exceptions.jogos.CriarJogoException;
@@ -113,11 +118,34 @@ public class JogoHandler implements IJogoHandler {
     LocalDateTime diaEHora = jogodto.getDiaEHora();
     LocalDateTime start = diaEHora.minus(2, ChronoUnit.HOURS);
     LocalDateTime end = diaEHora.plus(2, ChronoUnit.HOURS);
+
     if (jogoRepository.existsLocalAtSameIntervalContainedIn(local.getId(), start, end))
       throw new CriarJogoException("Ja existe um jogo marcado nesse local dentro desse periodo.");
 
+    List<Arbitro> arbitros = getArbitroFromDto(jogodto.getEquipaDeArbitros());
+    List<Jogo> result =
+        jogoRepository.existsArbitroOcupadoAtSameIntervalContainedIn(start, end, arbitros);
+
+    if (result.size() > 0) {
+      throw new CriarJogoException(
+          "Algum dos árbitros já tem um jogo marcado dentro desse periodo.");
+    }
+
     SelecaoDto s1dto = jogodto.getS1();
     SelecaoDto s2dto = jogodto.getS2();
+
+    List<Long> jogs1 = new ArrayList<>(s1dto.getJogadores().values());
+    List<Long> jogs2 = new ArrayList<>(s2dto.getJogadores().values());
+
+    if (selecaoRepository.existsJogoAtSameIntervalContainedIn(start, end, jogs1)) {
+      throw new CriarJogoException(
+          "Algum dos jogadores da Selecao 1 já tem um jogo marcado dentro desse periodo.");
+    }
+    if (selecaoRepository.existsJogoAtSameIntervalContainedIn(start, end, jogs2)) {
+      throw new CriarJogoException(
+          "Algum dos jogadores da Selecao 2 já tem um jogo marcado dentro desse periodo.");
+    }
+
     Equipa e1 = getEquipaFromSelecao(s1dto);
     Equipa e2 = getEquipaFromSelecao(s2dto);
 
@@ -131,9 +159,10 @@ public class JogoHandler implements IJogoHandler {
     Selecao s1 = new Selecao(e1, c1, s1jogadores);
     Selecao s2 = new Selecao(e2, c2, s2jogadores);
 
-    Jogo jogo = JogoMapper.createDtoToJogo(jogodto, arbitroRepository, campeonatoRepository);
+    Jogo jogo = JogoMapper.createDtoToJogo(jogodto, campeonatoRepository);
 
     jogo.setLocal(local);
+    jogo.setEquipaDeArbitros(arbitros);
     jogo.setS1(s1);
     jogo.setS2(s2);
 
@@ -158,7 +187,6 @@ public class JogoHandler implements IJogoHandler {
 
   @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = SelecaoException.class)
   public Jogador getJogadorFromSelecao(Long jogadorId, Equipa e) throws SelecaoException {
-    System.out.println("\n\nVerificando se jogador " + jogadorId + " pertence a equipa...\n\n");
     if (jogadorId != null && jogadorId > 0) {
       Jogador j = e.getJogador(jogadorId);
       if (j == null) throw new SelecaoException("O jogador nao pertence à equipa desta seleção");
@@ -168,7 +196,20 @@ public class JogoHandler implements IJogoHandler {
     }
   }
 
-  @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = JogoLocalException.class)
+  @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = SelecaoException.class)
+  public List<Arbitro> getArbitroFromDto(List<ArbitroDto> arbitrosDto) throws SelecaoException {
+    try {
+      List<Arbitro> arbitros =
+          arbitrosDto.stream()
+              .map(a -> arbitroRepository.getReferenceById(a.getUtilizador().getId()))
+              .collect(Collectors.toList());
+      return arbitros;
+    } catch (EntityNotFoundException e) {
+      throw new CriarJogoException("Pelo menos um dos árbitros indicados não está registado.");
+    }
+  }
+
+  @Transactional(rollbackFor = JogoLocalException.class)
   public Local createLocal(LocalDto localdto) throws JogoLocalException {
     if (localdto.getId() > 0) {
       Optional<Local> maybelocal = localRepository.findById(localdto.getId());
