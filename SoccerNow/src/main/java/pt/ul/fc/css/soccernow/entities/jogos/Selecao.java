@@ -8,7 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
@@ -77,6 +79,16 @@ public class Selecao {
     jogadores.put(Posicao.ALA_ESQUERDA, alaEsquerda);
     jogadores.put(Posicao.ALA_DIREITA, alaDireita);
     jogadores.put(Posicao.PIVO, pivot);
+    return jogadores;
+  }
+
+  public Set<Long> getJogadoresIds() {
+    Set<Long> jogadores = new HashSet<>();
+    jogadores.add(guardaRedes.getId());
+    jogadores.add(fixo.getId());
+    jogadores.add(alaEsquerda.getId());
+    jogadores.add(alaDireita.getId());
+    jogadores.add(pivot.getId());
     return jogadores;
   }
 

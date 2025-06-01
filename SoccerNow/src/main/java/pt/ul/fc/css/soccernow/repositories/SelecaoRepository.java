@@ -1,7 +1,7 @@
 package pt.ul.fc.css.soccernow.repositories;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,5 +24,5 @@ public interface SelecaoRepository extends JpaRepository<Selecao, Long> {
   boolean existsJogoAtSameIntervalContainedIn(
       @Param("start") LocalDateTime start,
       @Param("end") LocalDateTime end,
-      @Param("jogadores") List<Long> jogadores);
+      @Param("jogadores") Set<Long> jogadores);
 }

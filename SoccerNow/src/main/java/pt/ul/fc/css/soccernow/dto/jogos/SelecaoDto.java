@@ -1,7 +1,9 @@
 package pt.ul.fc.css.soccernow.dto.jogos;
 
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 
 /**
@@ -117,6 +119,16 @@ public class SelecaoDto {
     jogadores.put(Posicao.ALA_ESQUERDA, alaEsquerda);
     jogadores.put(Posicao.ALA_DIREITA, alaDireita);
     jogadores.put(Posicao.PIVO, pivot);
+    return jogadores;
+  }
+
+  public Set<Long> getJogadoresIds() {
+    Set<Long> jogadores = new HashSet<>();
+    jogadores.add(guardaRedes);
+    jogadores.add(fixo);
+    jogadores.add(alaEsquerda);
+    jogadores.add(alaDireita);
+    jogadores.add(pivot);
     return jogadores;
   }
 

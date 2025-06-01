@@ -50,15 +50,17 @@ public class JogoMapper {
     if (jogo.getCampeonato() != null) {
       jogoDto.setCampeonato(jogo.getCampeonato().getId());
     }
+    if (jogo.getStats() != null) {
+      jogoDto.setStats(EstatisticaMapper.estatisticaJogoToDto(jogo.getStats()));
+    }
 
     return jogoDto;
   }
 
   /**
-   * Converte um DTO de criar jogo para um Jogo propriamente dito, sem o guardar. Verifica a
-   * existencia dos campos relevantes e a validade dos IDs passados. Não verifica: Se jogadores
-   * estão em ambas as equipas, Se jogadores ou árbitros estão ocupados na data indicada, Se o local
-   * indicado é novo ou já existe.
+   * Converte um DTO de criar jogo para um Jogo propriamente dito, sem o guardar. Não verifica: Se
+   * jogadores estão em ambas as equipas, Se jogadores ou árbitros estão ocupados na data indicada,
+   * Se o local indicado é novo ou já existe.
    *
    * @param jogodto
    * @param lRep

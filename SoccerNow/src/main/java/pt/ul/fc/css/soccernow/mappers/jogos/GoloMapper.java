@@ -1,7 +1,9 @@
 package pt.ul.fc.css.soccernow.mappers.jogos;
 
+import jakarta.persistence.EntityNotFoundException;
 import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
 import pt.ul.fc.css.soccernow.entities.jogos.Golo;
+import pt.ul.fc.css.soccernow.exceptions.jogos.AtualizarJogoException;
 import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
 import pt.ul.fc.css.soccernow.repositories.JogoRepository;
@@ -30,15 +32,22 @@ public class GoloMapper {
   }
 
   public static Golo createDtoToGolo(
-      GoloDto g, JogadorRepository jRep, EquipaRepository eRep, JogoRepository jogoRep) {
+      GoloDto g, JogadorRepository jRep, EquipaRepository eRep, JogoRepository jogoRep)
+      throws AtualizarJogoException {
     if (g == null) {
       return null;
     }
     Golo golo = new Golo();
     golo.setQuando(g.getQuando());
-    golo.setJogo(jogoRep.getReferenceById(g.getJogo()));
-    golo.setMarcador(jRep.getReferenceById(g.getMarcador()));
-    golo.setEquipa(eRep.getReferenceById(g.getEquipa()));
+    try {
+      golo.setJogo(jogoRep.getReferenceById(g.getJogo()));
+      golo.setMarcador(jRep.getReferenceById(g.getMarcador()));
+      golo.setEquipa(eRep.getReferenceById(g.getEquipa()));
+    } catch (EntityNotFoundException e) {
+      throw new AtualizarJogoException(
+          "O golo tem de ser marcado num jogo registado, por um jogador registado, numa equipa"
+              + " registada.");
+    }
 
     return golo;
   }

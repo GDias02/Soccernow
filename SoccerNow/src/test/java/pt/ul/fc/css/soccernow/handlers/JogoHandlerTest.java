@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +23,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.css.soccernow.SoccerNowApplication;
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
+import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogadorDto;
+import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
+import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.LocalDto;
 import pt.ul.fc.css.soccernow.dto.jogos.MoradaDto;
@@ -32,9 +36,12 @@ import pt.ul.fc.css.soccernow.dto.utilizadores.CertificadoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorPostDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
+import pt.ul.fc.css.soccernow.entities.jogos.Cor;
+import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
+import pt.ul.fc.css.soccernow.exceptions.jogos.AtualizarJogoException;
 import pt.ul.fc.css.soccernow.exceptions.jogos.CriarJogoException;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
@@ -239,7 +246,6 @@ public class JogoHandlerTest {
               jogoHandler.createJogo(jogoDto);
             });
     String actualMessage = exception.getMessage();
-    System.out.println("\n\n" + actualMessage + "\n\n");
     assertTrue(!actualMessage.isBlank());
   }
 
@@ -268,14 +274,14 @@ public class JogoHandlerTest {
   @Test
   @Order(7)
   @Rollback(false)
-  @DisplayName("Registar Resultado de Jogo requer pelo menos um Arbitro no Jogo")
+  @DisplayName("Criar Jogo requer pelo menos um Arbitro no Jogo")
   @Transactional
   public void testRegistarResultadoJogo3() {}
 
   @Test
   @Order(8)
   @Rollback(false)
-  @DisplayName("Registar Resultado de Jogo requer 10 jogadores, 5 em cada selecao")
+  @DisplayName("Criar Jogo requer 10 jogadores, 5 em cada selecao")
   @Transactional
   public void testRegistarResultadoJogo4() {}
 
@@ -283,8 +289,7 @@ public class JogoHandlerTest {
   @Order(9)
   @Rollback(false)
   @DisplayName(
-      "Registar Resultado de Jogo requer que nenhum jogador esteja simultaneamente em ambas as"
-          + " selecoes.")
+      "Criar Jogo requer que nenhum jogador esteja simultaneamente em ambas as" + " selecoes.")
   @Transactional
   public void testRegistarResultadoJogo5() {}
 
@@ -292,7 +297,7 @@ public class JogoHandlerTest {
   @Order(10)
   @Rollback(true)
   @DisplayName(
-      "Registar Resultado de Jogo requer que nenhum jogador esteja simultaneamente noutro jogo que"
+      "Criar Jogo requer que nenhum jogador esteja simultaneamente noutro jogo que"
           + " ocorre na mesma altura.")
   @Transactional
   public void testRegistarResultadoJogo6() {
@@ -326,7 +331,6 @@ public class JogoHandlerTest {
               jogoHandler.createJogo(jogoDto);
             });
     String actualMessage = exception.getMessage();
-    System.out.println("\n\n" + actualMessage + "\n\n");
     assertTrue(!actualMessage.isBlank());
   }
 
@@ -334,7 +338,7 @@ public class JogoHandlerTest {
   @Order(11)
   @Rollback(true)
   @DisplayName(
-      "Registar Resultado de Jogo requer que nenhum arbitro esteja simultaneamente noutro jogo que"
+      "Criar Jogo requer que nenhum arbitro esteja simultaneamente noutro jogo que"
           + " ocorre no mesmo dia.")
   @Transactional
   public void testRegistarResultadoJogo7() {
@@ -364,7 +368,6 @@ public class JogoHandlerTest {
               jogoHandler.createJogo(jogoDto);
             });
     String actualMessage = exception.getMessage();
-    System.out.println("\n\n" + actualMessage + "\n\n");
     assertTrue(!actualMessage.isBlank());
   }
 
@@ -378,31 +381,104 @@ public class JogoHandlerTest {
 
   @Test
   @Order(13)
-  @Rollback(false)
+  @Rollback(true)
   @DisplayName("Cartao so pode ser registado no mesmo dia e após o inicio do Jogo")
   @Transactional
-  public void testRegistarCartaoInvalido() {}
+  public void testRegistarCartaoInvalido() {
+    JogoDto jogoAcabado = new JogoDto();
+    jogoAcabado.setId(1L);
+    jogoAcabado.setEstadoDeJogo(EstadoDeJogo.TERMINADO);
+
+    Long marcador = jogadorHandler.verificarJogador(111111110).getUtilizador().getId();
+    GoloDto g = new GoloDto(dataTeste.plusMinutes(30), 1L, marcador, 1L);
+    Set<GoloDto> golos = new HashSet<>();
+    golos.add(g);
+
+    Long arbitro = arbitroHandler.verificarArbitro(101010101).getUtilizador().getId();
+    CartaoDto c = new CartaoDto(dataTeste.plusHours(5), 1L, marcador, arbitro, 1L, Cor.AMARELO);
+    Set<CartaoDto> cartoes = new HashSet<>();
+    cartoes.add(c);
+
+    EstatisticaJogoDto ejdto = new EstatisticaJogoDto();
+    ejdto.setGolos(golos);
+    ejdto.setCartoes(cartoes);
+    jogoAcabado.setStats(ejdto);
+    Exception exception =
+        assertThrows(
+            AtualizarJogoException.class,
+            () -> {
+              jogoHandler.registarResultadoDeJogo(jogoAcabado);
+            });
+    String actualMessage = exception.getMessage();
+    assertTrue(!actualMessage.isBlank());
+  }
 
   @Test
   @Order(14)
-  @Rollback(false)
-  @DisplayName("Golo so pode ser registado no mesmo dia e após o inicio do Jogo")
+  @Rollback(true)
+  @DisplayName("Golo nao pode ser registado num jogo TERMINADO")
   @Transactional
-  public void testRegistarGoloInvalido() {}
+  public void testRegistarGoloInvalido() {
+    JogoDto jogoAcabado = new JogoDto();
+    jogoAcabado.setId(1L);
+    jogoAcabado.setEstadoDeJogo(EstadoDeJogo.TERMINADO);
+
+    Set<GoloDto> golos = new HashSet<>();
+    Set<CartaoDto> cartoes = new HashSet<>();
+
+    EstatisticaJogoDto ejdto = new EstatisticaJogoDto();
+    ejdto.setGolos(golos);
+    ejdto.setCartoes(cartoes);
+    jogoAcabado.setStats(ejdto);
+    JogoDto terminado = jogoHandler.registarResultadoDeJogo(jogoAcabado);
+
+    Long marcador = jogadorHandler.verificarJogador(111111110).getUtilizador().getId();
+    GoloDto g = new GoloDto(dataTeste.plusMinutes(30), 1L, marcador, 1L);
+    golos.add(g);
+    ejdto.setGolos(golos);
+    terminado.setStats(ejdto);
+
+    Exception exception =
+        assertThrows(
+            AtualizarJogoException.class,
+            () -> {
+              jogoHandler.registarResultadoDeJogo(terminado);
+            });
+    String actualMessage = exception.getMessage();
+    assertTrue(!actualMessage.isBlank());
+  }
 
   @Test
   @Order(15)
   @Rollback(false)
   @DisplayName("Equipa vencedora eh a que marcou mais golos.")
   @Transactional
-  public void testRegistarResultadoJogo8() {}
+  public void testRegistarResultadoJogo9() {
+    JogoDto jogoDB = jogoHandler.getJogo(1L);
+    Long e1 = jogoDB.getS1().getEquipa();
+    Long marcador = jogoDB.getS1().getAlaDireita();
 
-  @Test
-  @Order(16)
-  @Rollback(false)
-  @DisplayName("Placar do Jogo representa o numero de golos marcados por cada equipa.")
-  @Transactional
-  public void testRegistarResultadoJogo9() {}
+    JogoDto jogoAcabado = new JogoDto();
+    jogoAcabado.setId(1L);
+    jogoAcabado.setEstadoDeJogo(EstadoDeJogo.TERMINADO);
+
+    GoloDto g = new GoloDto(dataTeste.plusMinutes(30), 1L, marcador, e1);
+    Set<GoloDto> golos = new HashSet<>();
+    golos.add(g);
+
+    Long arbitro = arbitroHandler.verificarArbitro(101010101).getUtilizador().getId();
+    CartaoDto c = new CartaoDto(dataTeste.plusMinutes(15), 1L, marcador, arbitro, e1, Cor.AMARELO);
+    Set<CartaoDto> cartoes = new HashSet<>();
+    cartoes.add(c);
+
+    EstatisticaJogoDto ejdto = new EstatisticaJogoDto();
+    ejdto.setGolos(golos);
+    ejdto.setCartoes(cartoes);
+    jogoAcabado.setStats(ejdto);
+
+    JogoDto resultado = jogoHandler.registarResultadoDeJogo(jogoAcabado);
+    assertEquals(e1, resultado.getEquipaVencedora());
+  }
 
   private List<Long> createSamplesJogadores() {
     EstatisticaJogadorDto empty = new EstatisticaJogadorDto();

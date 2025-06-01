@@ -8,6 +8,15 @@ import java.time.LocalDateTime;
  * atributo marcador e equipa requerem apenas os ids respetivos.
  */
 public class GoloDto {
+  public GoloDto() {}
+
+  public GoloDto(LocalDateTime quando, Long jogo, Long marcador, Long equipa) {
+    this.quando = quando;
+    this.jogo = jogo;
+    this.marcador = marcador;
+    this.equipa = equipa;
+  }
+
   private LocalDateTime quando;
   private Long jogo;
   private Long marcador;
@@ -43,5 +52,18 @@ public class GoloDto {
 
   public void setEquipa(Long equipa) {
     this.equipa = equipa;
+  }
+
+  @Override
+  public String toString() {
+    return "GoloDto [quando="
+        + quando
+        + ", jogo="
+        + jogo
+        + ", marcador="
+        + marcador
+        + ", equipa="
+        + equipa
+        + "]";
   }
 }

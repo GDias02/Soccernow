@@ -1,7 +1,9 @@
 package pt.ul.fc.css.soccernow.mappers.jogos;
 
+import jakarta.persistence.EntityNotFoundException;
 import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
 import pt.ul.fc.css.soccernow.entities.jogos.Cartao;
+import pt.ul.fc.css.soccernow.exceptions.jogos.AtualizarJogoException;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
@@ -37,19 +39,24 @@ public class CartaoMapper {
       JogadorRepository jRep,
       EquipaRepository eRep,
       JogoRepository jogoRep,
-      ArbitroRepository aRep) {
+      ArbitroRepository aRep)
+      throws AtualizarJogoException {
     if (c == null) {
       return null;
     }
     Cartao cartao = new Cartao();
     cartao.setQuando(c.getQuando());
-    cartao.setJogo(jogoRep.getReferenceById(c.getJogo()));
-    cartao.setAtribuidoA(jRep.getReferenceById(c.getAtribuidoA()));
-    cartao.setEquipa(eRep.getReferenceById(c.getEquipa()));
-    cartao.setArbitro(aRep.getReferenceById(c.getArbitro()));
-
-    cartao.setQuando(c.getQuando());
     cartao.setCor(c.getCor());
+    try {
+      cartao.setJogo(jogoRep.getReferenceById(c.getJogo()));
+      cartao.setAtribuidoA(jRep.getReferenceById(c.getAtribuidoA()));
+      cartao.setEquipa(eRep.getReferenceById(c.getEquipa()));
+      cartao.setArbitro(aRep.getReferenceById(c.getArbitro()));
+    } catch (EntityNotFoundException e) {
+      throw new AtualizarJogoException(
+          "O cartão tem de ser atribuído num jogo registado, a um jogador registado, numa equipa"
+              + " registada, por um árbitro registado.");
+    }
     return cartao;
   }
 }

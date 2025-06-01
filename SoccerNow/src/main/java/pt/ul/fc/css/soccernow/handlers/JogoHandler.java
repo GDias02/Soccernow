@@ -3,7 +3,6 @@ package pt.ul.fc.css.soccernow.handlers;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +31,7 @@ import pt.ul.fc.css.soccernow.entities.jogos.Selecao;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
+import pt.ul.fc.css.soccernow.exceptions.jogos.AtualizarJogoException;
 import pt.ul.fc.css.soccernow.exceptions.jogos.CriarJogoException;
 import pt.ul.fc.css.soccernow.exceptions.jogos.JogoLocalException;
 import pt.ul.fc.css.soccernow.exceptions.jogos.SelecaoException;
@@ -134,8 +134,8 @@ public class JogoHandler implements IJogoHandler {
     SelecaoDto s1dto = jogodto.getS1();
     SelecaoDto s2dto = jogodto.getS2();
 
-    List<Long> jogs1 = new ArrayList<>(s1dto.getJogadores().values());
-    List<Long> jogs2 = new ArrayList<>(s2dto.getJogadores().values());
+    Set<Long> jogs1 = s1dto.getJogadoresIds();
+    Set<Long> jogs2 = s2dto.getJogadoresIds();
 
     if (selecaoRepository.existsJogoAtSameIntervalContainedIn(start, end, jogs1)) {
       throw new CriarJogoException(
@@ -223,7 +223,7 @@ public class JogoHandler implements IJogoHandler {
   }
 
   @Transactional
-  public JogoDto registarResultadoDeJogo(JogoDto jogodto) {
+  public JogoDto registarResultadoDeJogo(JogoDto jogodto) throws AtualizarJogoException {
     if (jogodto == null) {
       return null;
     }
@@ -236,15 +236,16 @@ public class JogoHandler implements IJogoHandler {
 
     Optional<Jogo> jogoOptional = jogoRepository.findById(jogodto.getId());
     if (jogoOptional.isEmpty()) {
-      return null;
+      throw new AtualizarJogoException("Nao é possivel atualizar um jogo que não está registado.");
     }
     Jogo jogo = jogoOptional.get();
 
     if (jogo.getEstadoDeJogo() == EstadoDeJogo.TERMINADO) {
-      return null;
+      throw new AtualizarJogoException("Nao é possivel atualizar um jogo que já terminou.");
     } // Nao se pode registar resultados após o jogo ter terminado
     if (jogodto.getEstadoDeJogo() != EstadoDeJogo.TERMINADO) {
-      return null;
+      throw new AtualizarJogoException(
+          "Para registar o resultado, deve indicar que o jogo acabou de terminar.");
     } // Pressupoe que este metodo só regista golos e cartoes após ter terminado
 
     EstatisticaJogoDto ej = jogodto.getStats();
@@ -253,27 +254,68 @@ public class JogoHandler implements IJogoHandler {
     Set<Cartao> cartoesMarcados =
         ej.getCartoes().stream().map(c -> markCartaoFromDto(c, jogo)).collect(Collectors.toSet());
 
-    goloRepository.saveAll(golosMarcados);
-    cartaoRepository.saveAll(cartoesMarcados);
+    if (!golosMarcados.isEmpty()) {
+      goloRepository.saveAll(golosMarcados);
+    }
+    if (!cartoesMarcados.isEmpty()) {
+      cartaoRepository.saveAll(cartoesMarcados);
+    }
+
     EstatisticaJogo stat = new EstatisticaJogo();
     stat.setCartoes(cartoesMarcados);
     stat.setGolos(golosMarcados);
 
     stat.setJogo(jogo);
+    jogo.setStats(stat);
     jogo.setPlacar(stat.getPlacar());
     jogo.setEstadoAtual(EstadoDeJogo.TERMINADO);
     Jogo savedJogo = jogoRepository.save(jogo);
     return JogoMapper.jogoToDto(savedJogo);
   }
 
-  private Golo scoreGoloFromDto(GoloDto golodto, Jogo j) {
+  private Golo scoreGoloFromDto(GoloDto golodto, Jogo j) throws AtualizarJogoException {
+    if (golodto == null) return null;
+    LocalDateTime start = j.getDiaEHora();
+    LocalDateTime end = start.plusHours(1);
+    LocalDateTime marcado = golodto.getQuando();
+    if (marcado == null || !(marcado.isBefore(end) && marcado.isAfter(start))) {
+      throw new AtualizarJogoException("O golo só pode ser marcado durante o periodo de jogo!");
+    }
+
+    Long e1 = j.getS1().getEquipa().getId();
+    Long e2 = j.getS2().getEquipa().getId();
+    Long equipa = golodto.getEquipa();
+    if (equipa == null || !(equipa.equals(e1) || equipa.equals(e2))) {
+      throw new AtualizarJogoException("O golo só pode ser marcado por uma das equipas que jogou!");
+    }
+
+    Set<Long> j1 = j.getS1().getJogadoresIds();
+    Set<Long> j2 = j.getS2().getJogadoresIds();
+    Long jogador = golodto.getMarcador();
+    if (jogador == null || !(j1.contains(jogador) || j2.contains(jogador))) {
+      throw new AtualizarJogoException(
+          "O golo só pode ser marcado por um dos jogadores que jogou!");
+    }
+
     golodto.setJogo(j.getId());
     Golo g =
         GoloMapper.createDtoToGolo(golodto, jogadorRepository, equipaRepository, jogoRepository);
     return g;
   }
 
-  private Cartao markCartaoFromDto(CartaoDto cartaodto, Jogo j) {
+  private Cartao markCartaoFromDto(CartaoDto cartaodto, Jogo j) throws AtualizarJogoException {
+    if (cartaodto == null) {
+      return null;
+    }
+    if (cartaodto.getCor() == null) {
+      throw new AtualizarJogoException("O cartao tem de ter uma cor.");
+    }
+    LocalDateTime start = j.getDiaEHora();
+    LocalDateTime end = start.plusHours(1);
+    LocalDateTime marcado = cartaodto.getQuando();
+    if (marcado == null || !(marcado.isBefore(end) && marcado.isAfter(start))) {
+      throw new AtualizarJogoException("O cartão só pode ser atribuido durante o periodo de jogo!");
+    }
     cartaodto.setJogo(j.getId());
     Cartao c =
         CartaoMapper.createDtoToCartao(
