@@ -2,8 +2,11 @@ package pt.ul.fc.css.soccernow.handlers;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import pt.ul.fc.css.soccernow.dto.campeonatos.CampeonatoDto;
 import pt.ul.fc.css.soccernow.entities.campeonatos.Campeonato;
 import pt.ul.fc.css.soccernow.mappers.campeonatos.CampeonatoMapper;
@@ -12,6 +15,7 @@ import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
 import pt.ul.fc.css.soccernow.repositories.JogoRepository;
 
 /** Handler for Campeonato operations. */
+@Service
 public class CampeonatoHandler implements ICampeonatoHandler {
 
   @Autowired private CampeonatoRepository campeonatoRepository;

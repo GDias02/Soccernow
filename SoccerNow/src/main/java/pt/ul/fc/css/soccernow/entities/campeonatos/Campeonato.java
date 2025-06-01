@@ -1,13 +1,14 @@
 package pt.ul.fc.css.soccernow.entities.campeonatos;
 
+import java.util.Date;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import java.util.Date;
-import java.util.List;
+import jakarta.persistence.OneToMany;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.JogoCampeonato;
 
@@ -21,7 +22,7 @@ public abstract class Campeonato implements ICampeonato {
   protected EstadoCampeonato estado;
   protected Date dataInicio;
 
-  @ManyToOne protected List<JogoCampeonato> jogos;
+  @OneToMany protected List<JogoCampeonato> jogos;
 
   @ManyToMany protected List<Equipa> equipas;
 
