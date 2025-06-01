@@ -15,6 +15,11 @@ import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorPostDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
 import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaJogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.AtualizarJogadorException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.NotFoundException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.RegistarJogadorException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.RemoverJogadorException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.VerificarJogadorException;
 import pt.ul.fc.css.soccernow.mappers.jogos.EstatisticaJogadorMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorPostMapper;
@@ -35,26 +40,32 @@ public class JogadorHandler implements IJogadorHandler {
 
     @Override
     @Transactional
-    public JogadorDto registarJogador(JogadorPostDto jogadorPostDto) {
-        if (jogadorPostDto == null) return null;
+    public JogadorDto registarJogador(JogadorPostDto jogadorPostDto) throws RegistarJogadorException {
+        if (jogadorPostDto == null) throw new RegistarJogadorException("Sem dados para o jogador");
 
         JogadorDto jogadorDto = new JogadorDto(jogadorPostDto);
-        if (!validInput(jogadorDto)) return null;
-
         UtilizadorDto utilizadorDto = jogadorDto.getUtilizador();
 
-        if (utilizadorDto.getId() != 0) return null;
+        try {
+            validInput(utilizadorDto);
+        } catch (IllegalArgumentException e) {
+            throw new RegistarJogadorException(e.getMessage());
+        }
 
         int nif = utilizadorDto.getNif();
-        if (!jogadorRepository.findByNif(nif).isEmpty() || !arbitroRepository.findByNif(nif).isEmpty()) return null;
+        if (!jogadorRepository.findByNif(nif).isEmpty() || !arbitroRepository.findByNif(nif).isEmpty())
+            throw new RegistarJogadorException("Já existe um utilizador com esse nif");
 
         Jogador jogador = JogadorMapper.dtoToJogador(jogadorDto);
+        jogador.setId(0L);
+
         Jogador savedJogador = new Jogador();
         try {
             savedJogador = jogadorRepository.save(jogador);
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            throw new RegistarJogadorException("Erro a registar jogador: " + e.getMessage());
         }
+
         JogadorDto responseDto = JogadorMapper.jogadorToDto(savedJogador);
         responseDto.setEstatisticas(new EstatisticaJogadorDto(new HashSet<>(), new HashSet<>()));
 
@@ -63,60 +74,76 @@ public class JogadorHandler implements IJogadorHandler {
 
     @Override
     @Transactional
-    public JogadorDto verificarJogador(int nif) {
-        Optional<Jogador> maybeJogador = jogadorRepository.findByNif(nif);
+    public JogadorDto verificarJogador(int nif) throws VerificarJogadorException, NotFoundException {
+        if (!(100000000 <= nif && nif <= 999999999)) throw new VerificarJogadorException("O nif do jogador tem de ter 9 dígitos");
 
-        JogadorDto jogadorDto = null;
-        Jogador jogador = null;
-        if (!maybeJogador.isEmpty()) {
-            jogador = maybeJogador.get();
-            jogadorDto = JogadorMapper.jogadorToDto(jogador);
-            EstatisticaJogador estatisticas = estatisticasHandler.criarEstatisticaJogador(jogadorDto);
-            jogadorDto.setEstatisticas(EstatisticaJogadorMapper.estatisticaJogadorToDto(estatisticas));
-        }
+        Optional<Jogador> maybeJogador = jogadorRepository.findAliveByNif(nif);
+        if (maybeJogador.isEmpty()) throw new NotFoundException("O jogador não existe");
+
+        Jogador jogador = maybeJogador.get();
+        JogadorDto jogadorDto = JogadorMapper.jogadorToDto(jogador);
+        EstatisticaJogador estatisticas = estatisticasHandler.criarEstatisticaJogador(jogadorDto);
+        jogadorDto.setEstatisticas(EstatisticaJogadorMapper.estatisticaJogadorToDto(estatisticas));
+
         return jogadorDto;
     }
 
     @Override
     @Transactional
-    public void removerJogador(int nif) {
-        Optional<Jogador> maybeJogador = jogadorRepository.findByNif(nif);
+    public void removerJogador(int nif) throws RemoverJogadorException, NotFoundException {
+        if (!(100000000 <= nif && nif <= 999999999)) throw new RemoverJogadorException("O nif do jogador tem de ter 9 dígitos");
+
+        Optional<Jogador> maybeJogador = jogadorRepository.findAliveByNif(nif);
+        if (maybeJogador.isEmpty()) throw new NotFoundException("O jogador não existe");
+
+        estatisticasHandler.removerEstatisticaJogador(JogadorMapper.jogadorToDto(maybeJogador.get()));
         jogadorRepository.deleteByNif(nif);
-        if (!maybeJogador.isEmpty()) 
-            estatisticasHandler.removerEstatisticaJogador(JogadorMapper.jogadorToDto(maybeJogador.get()));
     }
 
     @Override
     @Transactional
-    public JogadorPostDto atualizarJogador(JogadorPostDto jogadorDto) {
-        if (!validPostInput(jogadorDto)) return null;
+    public JogadorPostDto atualizarJogador(JogadorPostDto jogadorDto) throws AtualizarJogadorException, NotFoundException {
+        if (jogadorDto == null) throw new AtualizarJogadorException("Sem dados para o jogador");
 
         UtilizadorDto utilizador = jogadorDto.getUtilizador();
 
+        try {
+            validInput(utilizador);
+        } catch (IllegalArgumentException e) {
+            throw new AtualizarJogadorException(e.getMessage());
+        }
+
         Long id = utilizador.getId();
-        if (id == 0) return null;
+        if (!(id > 0)) throw new AtualizarJogadorException("O id do jogador tem de ser positivo");
+        Optional<Jogador> maybeJogador = jogadorRepository.findAliveById(id);
+        if (maybeJogador.isEmpty()) throw new NotFoundException("O jogador não existe");
 
         int nif = utilizador.getNif();
-        if (!arbitroRepository.findByNif(nif).isEmpty()) return null;
+        Optional<Jogador> maybeDuplicate = jogadorRepository.findByNif(nif);
+        if ((!maybeDuplicate.isEmpty() && !id.equals(maybeDuplicate.get().getId())) || !arbitroRepository.findByNif(nif).isEmpty())
+            throw new AtualizarJogadorException("Já existe um utilizador com esse nif");
 
-        Optional<Jogador> maybeJogador = jogadorRepository.findById(id);
-        if (maybeJogador.isEmpty()) return null;
         Jogador jogador = maybeJogador.get();
         jogador.setNif(utilizador.getNif());
         jogador.setNome(utilizador.getNome());
         jogador.setContacto(utilizador.getContacto());
         jogador.setPosicaoPreferida(jogadorDto.getPosicaoPreferida());
 
-        Jogador updatedJogador = jogadorRepository.save(jogador);
+        Jogador updatedJogador = new Jogador();
+        try {
+            updatedJogador = jogadorRepository.save(jogador);
+        } catch (IllegalArgumentException e) {
+            throw new AtualizarJogadorException("Erro a atualizar jogador: " + e.getMessage());
+        }
+        
         JogadorPostDto responseDto = JogadorPostMapper.jogadorToDto(updatedJogador);
-
         return responseDto;
     }
 
     @Override
     @Transactional
     public Set<JogadorDto> buscarJogadores() {
-        Set<JogadorDto> jogadorDtos = jogadorRepository.findAll().stream().map(JogadorMapper::jogadorToDto).collect(Collectors.toSet());
+        Set<JogadorDto> jogadorDtos = jogadorRepository.findAliveAll().stream().map(JogadorMapper::jogadorToDto).collect(Collectors.toSet());
         for (JogadorDto jogadorDto : jogadorDtos) {
             EstatisticaJogador estatisticas = estatisticasHandler.criarEstatisticaJogador(jogadorDto);
             jogadorDto.setEstatisticas(EstatisticaJogadorMapper.estatisticaJogadorToDto(estatisticas));
@@ -124,35 +151,17 @@ public class JogadorHandler implements IJogadorHandler {
         return jogadorDtos;
     }
 
-    private boolean validInput(JogadorDto jogadorDto) {
-        if (jogadorDto == null) return false;
-
-        UtilizadorDto utilizador = jogadorDto.getUtilizador();
-        if (utilizador == null) return false;
+    private void validInput(UtilizadorDto utilizador) throws IllegalArgumentException {
+        if (utilizador == null) throw new IllegalArgumentException("Sem dados de utilizador para o jogador");
 
         int nif = utilizador.getNif();
+        String nome = utilizador.getNome();
 
-        return (100000000 <= nif && nif <= 999999999)
-            && isFilled(utilizador.getNome())
-            && jogadorDto.getPosicaoPreferida() != null;
-    }
-
-    private boolean validPostInput(JogadorPostDto jogadorDto) {
-        if (jogadorDto == null) return false;
-
-        UtilizadorDto utilizador = jogadorDto.getUtilizador();
-        if (utilizador == null) return false;
-
-        int nif = utilizador.getNif();
-
-        return (100000000 <= nif && nif <= 999999999)
-            && isFilled(utilizador.getNome())
-            && isFilled(utilizador.getContacto())
-            && jogadorDto.getPosicaoPreferida() != null;
+        if (!(100000000 <= nif && nif <= 999999999)) throw new IllegalArgumentException("O nif do jogador tem de ter 9 dígitos");
+        if (!isFilled(nome)) throw new IllegalArgumentException("O nome do jogador é obrigatório");
     }
 
     private boolean isFilled(String field) {
         return field != null && field.length() > 0;
-    }
-    
+    } 
 }

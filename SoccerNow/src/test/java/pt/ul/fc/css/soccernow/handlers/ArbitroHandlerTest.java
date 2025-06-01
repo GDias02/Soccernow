@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -104,7 +103,7 @@ public class ArbitroHandlerTest {
     @Transactional
     public void testUpdateArbitro() {
         Long id = 2L;
-        int nif = 222222222;
+        int nif = 333333333;
         String nome = "Ana";
         String contacto = "911111111";
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
@@ -134,7 +133,7 @@ public class ArbitroHandlerTest {
     @Transactional
     public void testUpdateInvalidNifArbitro() {
         Long id = 2L;
-        int nif = 222;
+        int nif = 333;
         String nome = "Ana";
         String contacto = "911111111";
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
@@ -153,7 +152,7 @@ public class ArbitroHandlerTest {
     @Transactional
     public void testGetArbitro() {
         Long id = 2L;
-        int nif = 222222222;
+        int nif = 333333333;
         String nome = "Ana";
         String contacto = "911111111";
 
@@ -192,7 +191,7 @@ public class ArbitroHandlerTest {
     @DisplayName("Delete Arbitro")
     @Transactional
     public void testDeleteArbitro() {
-        int nif = 222222222;
+        int nif = 333333333;
 
         arbitroHandler.removerArbitro(nif);
         ArbitroDto responseDto = arbitroHandler.verificarArbitro(nif);

@@ -3,6 +3,7 @@ package pt.ul.fc.css.soccernow.controllers;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorPostDto;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.AtualizarJogadorException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.NotFoundException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.RegistarJogadorException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.RemoverJogadorException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.VerificarJogadorException;
 import pt.ul.fc.css.soccernow.handlers.JogadorHandler;
 
 @RestController
@@ -29,39 +35,52 @@ public class JogadorController {
 
     @PostMapping("/create")
     @ApiOperation(value = "Create jogador", notes = "Creates a new jogador and returns the created jogador DTO.")
-    public ResponseEntity<JogadorDto> registarJogador(@RequestBody JogadorPostDto jogadorDto) {
-        JogadorDto responseDto = jogadorHandler.registarJogador(jogadorDto);
-        if (responseDto != null) {
+    public ResponseEntity registarJogador(@RequestBody JogadorPostDto jogadorDto) {
+        try {
+            JogadorDto responseDto = jogadorHandler.registarJogador(jogadorDto);
             return ResponseEntity.ok(responseDto);
+        } catch (RegistarJogadorException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/{nif}")
     @ApiOperation(value = "Get jogador by NIF", notes = "Returns a jogador given its NIF.")
-    public ResponseEntity<JogadorDto> verificarJogador(@PathVariable("nif") int nif) {
-        JogadorDto jogadorDto = jogadorHandler.verificarJogador(nif);
-        if (jogadorDto != null) {
+    public ResponseEntity verificarJogador(@PathVariable("nif") int nif) {
+        try {
+            JogadorDto jogadorDto = jogadorHandler.verificarJogador(nif);
             return ResponseEntity.ok(jogadorDto);
+        } catch (VerificarJogadorException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (NotFoundException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatusCode.valueOf(404));
         }
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{nif}")
     @ApiOperation(value = "Delete jogador by NIF", notes = "Deletes a jogador with a given NIF.")
-    public ResponseEntity<JogadorDto> removerJogador(@PathVariable("nif") int nif) {
-        jogadorHandler.removerJogador(nif);
-        return ResponseEntity.ok().build();
+    public ResponseEntity removerJogador(@PathVariable("nif") int nif) {
+        try {
+            jogadorHandler.removerJogador(nif);
+            return ResponseEntity.ok().build();
+        } catch (RemoverJogadorException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (NotFoundException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatusCode.valueOf(404));
+        }
     }
 
     @PutMapping("/update")
     @ApiOperation(value = "Update jogador", notes = "Updates the given jogador.")
-    public ResponseEntity<JogadorPostDto> atualizarJogador(@RequestBody JogadorPostDto jogadorDto) {
-        JogadorPostDto responseDto = jogadorHandler.atualizarJogador(jogadorDto);
-        if (responseDto != null) {
+    public ResponseEntity atualizarJogador(@RequestBody JogadorPostDto jogadorDto) {
+        try {
+            JogadorPostDto responseDto = jogadorHandler.atualizarJogador(jogadorDto);
             return ResponseEntity.ok(responseDto);
+        } catch (AtualizarJogadorException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (NotFoundException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatusCode.valueOf(404));
         }
-        return ResponseEntity.notFound().build();
     }
 
     @GetMapping

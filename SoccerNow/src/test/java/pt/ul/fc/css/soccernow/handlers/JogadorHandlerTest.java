@@ -1,12 +1,12 @@
 package pt.ul.fc.css.soccernow.handlers;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Set;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -23,6 +23,9 @@ import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorPostDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.AtualizarJogadorException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.NotFoundException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.RegistarJogadorException;
 
 @SpringBootTest(classes = SoccerNowApplication.class)
 @TestMethodOrder(OrderAnnotation.class)
@@ -46,9 +49,7 @@ public class JogadorHandlerTest {
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
         JogadorPostDto jogadorPostDto = new JogadorPostDto(utilizadorDto, posicao);
 
-        JogadorDto responseDto = jogadorHandler.registarJogador(jogadorPostDto);
-
-        assertNotNull(responseDto);
+        JogadorDto responseDto = assertDoesNotThrow(() -> jogadorHandler.registarJogador(jogadorPostDto));
 
         UtilizadorDto responseUtilizador = responseDto.getUtilizador();
         assertNotNull(responseUtilizador);
@@ -79,9 +80,7 @@ public class JogadorHandlerTest {
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
         JogadorPostDto jogadorPostDto = new JogadorPostDto(utilizadorDto, posicao);
 
-        JogadorDto responseDto = jogadorHandler.registarJogador(jogadorPostDto);
-
-        assertNull(responseDto);
+        assertThrows(RegistarJogadorException.class, () -> jogadorHandler.registarJogador(jogadorPostDto));
     }
 
     @Test
@@ -98,9 +97,7 @@ public class JogadorHandlerTest {
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
         JogadorPostDto jogadorPostDto = new JogadorPostDto(utilizadorDto, posicao);
 
-        JogadorDto responseDto = jogadorHandler.registarJogador(jogadorPostDto);
-
-        assertNull(responseDto);
+        assertThrows(RegistarJogadorException.class, () -> jogadorHandler.registarJogador(jogadorPostDto));
     }
 
     @Test
@@ -117,9 +114,7 @@ public class JogadorHandlerTest {
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
         JogadorPostDto jogadorDto = new JogadorPostDto(utilizadorDto, posicao);
 
-        JogadorPostDto responseDto = jogadorHandler.atualizarJogador(jogadorDto);
-
-        assertNotNull(responseDto);
+        JogadorPostDto responseDto = assertDoesNotThrow(() -> jogadorHandler.atualizarJogador(jogadorDto));
 
         UtilizadorDto responseUtilizador = responseDto.getUtilizador();
         assertNotNull(responseUtilizador);
@@ -145,9 +140,7 @@ public class JogadorHandlerTest {
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
         JogadorPostDto jogadorDto = new JogadorPostDto(utilizadorDto, posicao);
 
-        JogadorPostDto responseDto = jogadorHandler.atualizarJogador(jogadorDto);
-
-        assertNull(responseDto);
+        assertThrows(AtualizarJogadorException.class, () -> jogadorHandler.atualizarJogador(jogadorDto));
     }
 
     @Test
@@ -162,9 +155,7 @@ public class JogadorHandlerTest {
         String contacto = "911111111";
         Posicao posicao = Posicao.FIXO;
 
-        JogadorDto responseDto = jogadorHandler.verificarJogador(nif);
-
-        assertNotNull(responseDto);
+        JogadorDto responseDto = assertDoesNotThrow(() -> jogadorHandler.verificarJogador(nif));
 
         UtilizadorDto responseUtilizador = responseDto.getUtilizador();
         assertNotNull(responseUtilizador);
@@ -189,9 +180,7 @@ public class JogadorHandlerTest {
     public void testGetInvalidJogador() {
         int nif = 111111111;
 
-        JogadorDto responseDto = jogadorHandler.verificarJogador(nif);
-
-        assertNull(responseDto);
+        assertThrows(NotFoundException.class, () -> jogadorHandler.verificarJogador(nif));
     }
 
     @Test
@@ -235,9 +224,7 @@ public class JogadorHandlerTest {
     public void testDeleteJogador() {
         int nif = 222222222;
 
-        jogadorHandler.removerJogador(nif);
-        JogadorDto responseDto = jogadorHandler.verificarJogador(nif);
-
-        assertNull(responseDto);
+        assertDoesNotThrow(() -> jogadorHandler.removerJogador(nif));
+        assertThrows(NotFoundException.class, () -> jogadorHandler.verificarJogador(nif));
     }
 }
