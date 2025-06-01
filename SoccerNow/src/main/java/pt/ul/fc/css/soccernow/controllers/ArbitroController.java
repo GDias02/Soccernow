@@ -1,6 +1,7 @@
 package pt.ul.fc.css.soccernow.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.AtualizarArbitroException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.NotFoundException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.RegistarArbitroException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.RemoverArbitroException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.VerificarArbitroException;
 import pt.ul.fc.css.soccernow.handlers.ArbitroHandler;
 
 @RestController
@@ -26,38 +32,51 @@ public class ArbitroController {
 
     @PostMapping("/create")
     @ApiOperation(value = "Create arbitro", notes = "Creates a new arbitro and returns the created arbitro DTO.")
-    public ResponseEntity<ArbitroDto> registarArbitro(@RequestBody ArbitroDto arbitroDto) {
-        ArbitroDto responseDto = arbitroHandler.registarArbitro(arbitroDto);
-        if (responseDto != null) {
+    public ResponseEntity registarArbitro(@RequestBody ArbitroDto arbitroDto) {
+        try {
+            ArbitroDto responseDto = arbitroHandler.registarArbitro(arbitroDto);
             return ResponseEntity.ok(responseDto);
+        } catch (RegistarArbitroException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/{nif}")
     @ApiOperation(value = "Get arbitro by NIF", notes = "Returns an arbitro given its NIF.")
-    public ResponseEntity<ArbitroDto> verificarArbitro(@PathVariable("nif") int nif) {
-        ArbitroDto arbitroDto = arbitroHandler.verificarArbitro(nif);
-        if (arbitroDto != null) {
+    public ResponseEntity verificarArbitro(@PathVariable("nif") int nif) {
+        try {
+            ArbitroDto arbitroDto = arbitroHandler.verificarArbitro(nif);
             return ResponseEntity.ok(arbitroDto);
+        } catch (VerificarArbitroException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (NotFoundException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatusCode.valueOf(404));
         }
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{nif}")
     @ApiOperation(value = "Delete arbitro by NIF", notes = "Deletes an arbitro with a given NIF.")
-    public ResponseEntity<ArbitroDto> removerArbitro(@PathVariable("nif") int nif) {
-        arbitroHandler.removerArbitro(nif);
-        return ResponseEntity.ok().build();
+    public ResponseEntity removerArbitro(@PathVariable("nif") int nif) {
+        try {
+            arbitroHandler.removerArbitro(nif);
+            return ResponseEntity.ok().build();
+        } catch (RemoverArbitroException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (NotFoundException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatusCode.valueOf(404));
+        }
     }
 
     @PutMapping("/update")
     @ApiOperation(value = "Update arbitro", notes = "Updates the given arbitro.")
-    public ResponseEntity<ArbitroDto> atualizarArbitro(@RequestBody ArbitroDto arbitroDto) {
-        ArbitroDto responseDto = arbitroHandler.atualizarArbitro(arbitroDto);
-        if (responseDto != null) {
+    public ResponseEntity atualizarArbitro(@RequestBody ArbitroDto arbitroDto) {
+        try {
+            ArbitroDto responseDto = arbitroHandler.atualizarArbitro(arbitroDto);
             return ResponseEntity.ok(responseDto);
+        } catch (AtualizarArbitroException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (NotFoundException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatusCode.valueOf(404));
         }
-        return ResponseEntity.notFound().build();
     }
 }

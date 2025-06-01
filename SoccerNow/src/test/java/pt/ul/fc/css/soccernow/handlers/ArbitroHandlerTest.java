@@ -1,9 +1,10 @@
 package pt.ul.fc.css.soccernow.handlers;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -19,6 +20,9 @@ import pt.ul.fc.css.soccernow.SoccerNowApplication;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.CertificadoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.AtualizarArbitroException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.NotFoundException;
+import pt.ul.fc.css.soccernow.exceptions.utilizadores.RegistarArbitroException;
 
 @SpringBootTest(classes = SoccerNowApplication.class)
 @TestMethodOrder(OrderAnnotation.class)
@@ -42,7 +46,7 @@ public class ArbitroHandlerTest {
         CertificadoDto certificadoDto = new CertificadoDto(false);
         ArbitroDto arbitroDto = new ArbitroDto(utilizadorDto, certificadoDto);
 
-        ArbitroDto responseDto = arbitroHandler.registarArbitro(arbitroDto);
+        ArbitroDto responseDto = assertDoesNotThrow(() -> arbitroHandler.registarArbitro(arbitroDto));
 
         assertNotNull(responseDto);
 
@@ -72,9 +76,7 @@ public class ArbitroHandlerTest {
         CertificadoDto certificadoDto = new CertificadoDto(false);
         ArbitroDto arbitroDto = new ArbitroDto(utilizadorDto, certificadoDto);
 
-        ArbitroDto responseDto = arbitroHandler.registarArbitro(arbitroDto);
-
-        assertNull(responseDto);
+        assertThrows(RegistarArbitroException.class, () -> arbitroHandler.registarArbitro(arbitroDto));
     }
 
     @Test
@@ -91,9 +93,7 @@ public class ArbitroHandlerTest {
         CertificadoDto certificadoDto = new CertificadoDto(false);
         ArbitroDto arbitroDto = new ArbitroDto(utilizadorDto, certificadoDto);
 
-        ArbitroDto responseDto = arbitroHandler.registarArbitro(arbitroDto);
-
-        assertNull(responseDto);
+        assertThrows(RegistarArbitroException.class, () -> arbitroHandler.registarArbitro(arbitroDto));
     }
 
     @Test
@@ -110,9 +110,7 @@ public class ArbitroHandlerTest {
         CertificadoDto certificadoDto = new CertificadoDto(true);
         ArbitroDto arbitroDto = new ArbitroDto(utilizadorDto, certificadoDto);
 
-        ArbitroDto responseDto = arbitroHandler.atualizarArbitro(arbitroDto);
-
-        assertNotNull(responseDto);
+        ArbitroDto responseDto = assertDoesNotThrow(() -> arbitroHandler.atualizarArbitro(arbitroDto));
 
         UtilizadorDto responseUtilizador = responseDto.getUtilizador();
         assertNotNull(responseUtilizador);
@@ -140,9 +138,7 @@ public class ArbitroHandlerTest {
         CertificadoDto certificadoDto = new CertificadoDto(false);
         ArbitroDto arbitroDto = new ArbitroDto(utilizadorDto, certificadoDto);
 
-        ArbitroDto responseDto = arbitroHandler.atualizarArbitro(arbitroDto);
-
-        assertNull(responseDto);
+        assertThrows(AtualizarArbitroException.class, () -> arbitroHandler.atualizarArbitro(arbitroDto));
     }
 
     @Test
@@ -156,7 +152,7 @@ public class ArbitroHandlerTest {
         String nome = "Ana";
         String contacto = "911111111";
 
-        ArbitroDto responseDto = arbitroHandler.verificarArbitro(nif);
+        ArbitroDto responseDto = assertDoesNotThrow(() -> arbitroHandler.verificarArbitro(nif));
 
         assertNotNull(responseDto);
 
@@ -180,9 +176,7 @@ public class ArbitroHandlerTest {
     public void testGetInvalidArbitro() {
         int nif = 111111111;
 
-        ArbitroDto responseDto = arbitroHandler.verificarArbitro(nif);
-
-        assertNull(responseDto);
+        assertThrows(NotFoundException.class, () -> arbitroHandler.verificarArbitro(nif));
     }
 
     @Test
@@ -193,9 +187,7 @@ public class ArbitroHandlerTest {
     public void testDeleteArbitro() {
         int nif = 333333333;
 
-        arbitroHandler.removerArbitro(nif);
-        ArbitroDto responseDto = arbitroHandler.verificarArbitro(nif);
-
-        assertNull(responseDto);
+        assertDoesNotThrow(() -> arbitroHandler.removerArbitro(nif));
+        assertThrows(NotFoundException.class, () -> arbitroHandler.verificarArbitro(nif));
     }
 }
