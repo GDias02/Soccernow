@@ -12,6 +12,8 @@ import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
  * setSelecao(Map<Posicao,JogadorDto>).
  */
 public class SelecaoDto {
+  private Long id;
+  private Long jogo;
   private Long equipa;
   private Long capitao;
   private Long guardaRedes;
@@ -111,5 +113,21 @@ public class SelecaoDto {
         + ", pivot="
         + pivot
         + "]";
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Long getJogo() {
+    return jogo;
+  }
+
+  public void setJogo(Long jogo) {
+    this.jogo = jogo;
   }
 }

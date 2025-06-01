@@ -1,26 +1,40 @@
 package pt.ul.fc.css.soccernow.handlers;
 
-import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
+import pt.ul.fc.css.soccernow.dto.jogos.LocalDto;
+import pt.ul.fc.css.soccernow.dto.jogos.SelecaoDto;
+import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.Cartao;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Golo;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Local;
-import pt.ul.fc.css.soccernow.entities.jogos.Placar;
+import pt.ul.fc.css.soccernow.entities.jogos.Selecao;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
+import pt.ul.fc.css.soccernow.exceptions.jogos.CriarJogoException;
+import pt.ul.fc.css.soccernow.exceptions.jogos.JogoLocalException;
+import pt.ul.fc.css.soccernow.exceptions.jogos.SelecaoException;
 import pt.ul.fc.css.soccernow.mappers.jogos.CartaoMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.EstatisticaMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.JogoMapper;
+import pt.ul.fc.css.soccernow.mappers.jogos.LocalMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.CampeonatoRepository;
 import pt.ul.fc.css.soccernow.repositories.CartaoRepository;
@@ -72,18 +86,99 @@ public class JogoHandler implements IJogoHandler {
     return JogoMapper.jogoToDto(jogoRepository.save(jogo));
   }
 
-  @Transactional
-  public JogoDto createJogo(JogoDto jogodto) {
-    Jogo jogo =
-        JogoMapper.createDtoToJogo(
-            jogodto, equipaRepository, jogadorRepository, arbitroRepository, campeonatoRepository);
+  @Transactional(rollbackFor = CriarJogoException.class)
+  public JogoDto createJogo(JogoDto jogodto) throws CriarJogoException, JogoLocalException {
+    if (jogodto == null)
+      throw new CriarJogoException(
+          "JogoDto é null. É preciso passar informação para criar um novo jogo.");
+    if (jogodto.getId() != null)
+      throw new CriarJogoException(
+          "Para criar um novo jogo, não pode ser passado um id de um jogo existente.");
+    if (jogodto.getLocalDto() == null)
+      throw new CriarJogoException(
+          "JogoDto não tem um Local definido. É preciso passar um local existente ou a informação"
+              + " de um local onde o jogo irá decorrer.");
+    if (jogodto.getDiaEHora() == null)
+      throw new CriarJogoException("O novo jogo não tem dia ou hora definidos");
+    if (jogodto.getS1() == null)
+      throw new CriarJogoException("O novo jogo não tem a selecao 1 definida.");
+    if (jogodto.getS2() == null)
+      throw new CriarJogoException("O novo jogo não tem a selecao 2 definida.");
+    if (jogodto.getEquipaDeArbitros() == null || jogodto.getEquipaDeArbitros().isEmpty())
+      throw new CriarJogoException("O novo jogo não tem equipa de árbitros.");
 
-    Local local = jogo.getLocal();
-    Local savedLocal = localRepository.save(local);
-    jogo.setLocal(savedLocal);
-    Jogo savedJogo = jogoRepository.save(jogo);
+    LocalDto localdto = jogodto.getLocalDto();
+    Local local = createLocal(localdto);
+
+    LocalDateTime diaEHora = jogodto.getDiaEHora();
+    LocalDateTime start = diaEHora.minus(2, ChronoUnit.HOURS);
+    LocalDateTime end = diaEHora.plus(2, ChronoUnit.HOURS);
+    if (jogoRepository.existsLocalAtSameIntervalContainedIn(local.getId(), start, end))
+      throw new CriarJogoException("Ja existe um jogo marcado nesse local dentro desse periodo.");
+
+    SelecaoDto s1dto = jogodto.getS1();
+    SelecaoDto s2dto = jogodto.getS2();
+    Equipa e1 = getEquipaFromSelecao(s1dto);
+    Equipa e2 = getEquipaFromSelecao(s2dto);
+
+    Jogador c1 = getJogadorFromSelecao(s1dto.getCapitao(), e1);
+    Jogador c2 = getJogadorFromSelecao(s2dto.getCapitao(), e2);
+    Map<Posicao, Jogador> s1jogadores = new EnumMap<>(Posicao.class);
+    Map<Posicao, Jogador> s2jogadores = new EnumMap<>(Posicao.class);
+    s1dto.getJogadores().forEach((k, v) -> s1jogadores.put(k, getJogadorFromSelecao(v, e1)));
+    s2dto.getJogadores().forEach((k, v) -> s2jogadores.put(k, getJogadorFromSelecao(v, e2)));
+
+    Selecao s1 = new Selecao(e1, c1, s1jogadores);
+    Selecao s2 = new Selecao(e2, c2, s2jogadores);
+
+    Jogo jogo = JogoMapper.createDtoToJogo(jogodto, arbitroRepository, campeonatoRepository);
+
+    jogo.setLocal(local);
+    jogo.setS1(s1);
+    jogo.setS2(s2);
+
+    Jogo savedJogo = jogoRepository.saveAndFlush(jogo);
     jogodto.setId(savedJogo.getId());
     return jogodto;
+  }
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = SelecaoException.class)
+  public Equipa getEquipaFromSelecao(SelecaoDto selecaodto) throws SelecaoException {
+    if (selecaodto.getEquipa() != null && selecaodto.getEquipa() > 0) {
+      Optional<Equipa> maybeEquipa = equipaRepository.findById(selecaodto.getEquipa());
+      if (maybeEquipa.isPresent()) {
+        return maybeEquipa.get();
+      } else {
+        throw new SelecaoException("Foi fornecido um id de uma equipa que nao existe.");
+      }
+    } else {
+      throw new SelecaoException("Falta definir a equipa da seleção!");
+    }
+  }
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = SelecaoException.class)
+  public Jogador getJogadorFromSelecao(Long jogadorId, Equipa e) throws SelecaoException {
+    System.out.println("\n\nVerificando se jogador " + jogadorId + " pertence a equipa...\n\n");
+    if (jogadorId != null && jogadorId > 0) {
+      Jogador j = e.getJogador(jogadorId);
+      if (j == null) throw new SelecaoException("O jogador nao pertence à equipa desta seleção");
+      return j;
+    } else {
+      throw new SelecaoException("Falta definir um jogador da seleção!");
+    }
+  }
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = JogoLocalException.class)
+  public Local createLocal(LocalDto localdto) throws JogoLocalException {
+    if (localdto.getId() > 0) {
+      Optional<Local> maybelocal = localRepository.findById(localdto.getId());
+      if (maybelocal.isPresent()) {
+        return maybelocal.get();
+      } else throw new JogoLocalException("Não existe nenhum Local guardado com esse ID.");
+    } else {
+      Local novolocal = LocalMapper.dtoToLocal(localdto);
+      return localRepository.saveAndFlush(novolocal);
+    }
   }
 
   @Transactional
@@ -147,78 +242,7 @@ public class JogoHandler implements IJogoHandler {
 
   @Transactional
   public JogoDto updateJogo(long jogoId, JogoDto jogodto) {
-    Optional<Jogo> jogoOptional = jogoRepository.findById(jogoId);
-    if (jogoOptional.isEmpty()) {
-      return null;
-    }
-    Jogo jogoGuardado = jogoOptional.get();
-    Jogo updatedJogo;
-    JogoDto res = null;
-    if (!updateValido(jogoGuardado, jogodto)) {
-      return null;
-    }
-    Jogo jogo = JogoMapper.dtoToJogo(jogodto);
-
-    EstatisticaJogoDto stat = jogodto.getStats();
-    if (stat != null) {
-      if (stat.getCartoes() != null && !stat.getCartoes().isEmpty()) {
-        Set<Cartao> cartoes =
-            stat.getCartoes().stream()
-                .map(
-                    c -> {
-                      Cartao cartao = CartaoMapper.dtoToCartao(c);
-                      cartao.setArbitro(arbitroRepository.getReferenceById(c.getArbitro()));
-                      cartao.setAtribuidoA(jogadorRepository.getReferenceById(c.getAtribuidoA()));
-                      cartao.setEquipa(equipaRepository.getReferenceById(c.getEquipa()));
-                      cartao.setJogo(jogo);
-                      return cartao;
-                    })
-                .collect(Collectors.toSet());
-        cartaoRepository.saveAll(cartoes);
-      }
-      Placar p = new Placar();
-      Long e1 = jogodto.getS1().getEquipa();
-      int golosE1 = 0;
-      int golosE2 = 0;
-      if (stat.getGolos() != null && !stat.getGolos().isEmpty()) {
-        Set<Golo> golos =
-            stat.getGolos().stream()
-                .map(
-                    g -> {
-                      Golo golo = GoloMapper.dtoToGolo(g);
-                      golo.setMarcador(jogadorRepository.getReferenceById(g.getMarcador()));
-                      golo.setEquipa(equipaRepository.getReferenceById(g.getEquipa()));
-                      golo.setJogo(jogoRepository.getReferenceById(jogoId));
-                      return golo;
-                    })
-                .collect(Collectors.toSet());
-        for (Golo g : golos) {
-          if (g.getEquipa().getId().equals(e1)) {
-            golosE1++;
-          } else {
-            golosE2++;
-          }
-        }
-        goloRepository.saveAll(golos);
-        p.setScore(golosE1, golosE2);
-        jogo.setPlacar(p);
-      }
-      updatedJogo = jogoRepository.save(jogo);
-      /*
-      res = JogoMapper.jogoToDto(updatedJogo);
-      EstatisticaJogoDto updatedStats =
-          EstatisticaMapper.estatisticaJogoToDto(estatisticasHandler.criarEstatisticaJogo(res));
-      res.setStats(updatedStats);
-      res.setEquipaVencedora(updatedJogo.getEquipaVencedora().getId());
-      */
-    }
-    return res;
-  }
-
-  // PERMITE DEMASIADAS COISAS
-  private boolean updateValido(Jogo updatedJogo, JogoDto jogodto) {
-    return (updatedJogo.getEstadoDeJogo() != EstadoDeJogo.TERMINADO);
-    // permite o registo final de um jogo.
+    return null;
   }
 
   @Transactional

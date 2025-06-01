@@ -145,4 +145,8 @@ public class Selecao {
   public void setPivot(Jogador pivot) {
     this.pivot = pivot;
   }
+
+  public Long getId() {
+    return id;
+  }
 }
