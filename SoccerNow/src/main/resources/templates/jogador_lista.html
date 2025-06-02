@@ -3,13 +3,42 @@
 
 <body>
     <section>
+        <form action="#" th:action="@{/leaf/api/jogadores/jogador}" th:object=${filtros} method="get">
+
+            <label for="nome">NOME: </label>
+            <input type="text" placeholder="Admin Doe" th:field="*{nome}" />
+
+            <label for="posicao">POSIÇÃO PREFERIDA: </label>
+            <select th:field="*{posicao}">
+                <option value="">QUALQUER</option>
+                <option th:each="pos : ${T(pt.ul.fc.css.soccernow.entities.utilizadores.Posicao).values()}"
+                        th:value="${pos}"
+                        th:text="${pos}">
+                </option>
+            </select>
+
+            <label for="golos">GOLOS MARCADOS: </label>
+            <input type="number" placeholder="0" th:field="*{golos}" />
+
+            <label for="cartoes">CARTÕES RECEBIDOS: </label>
+            <input type="number" placeholder="0" th:field="*{cartoes}" />
+
+            <label for="jogos">JOGOS REALIZADOS: </label>
+            <input type="number" placeholder="0" th:field="*{jogos}" />
+
+            <p><input type="submit" value="Filtrar" /> <input type="reset" value="Limpar Campos" /></p>
+            <!-- th:onclick="del(this, [[${filtros.nome}]])" -->
+        </form>
         <h2>Jogadores:</h2>
         <table>
             <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Nome</th>
                     <th>Nif</th>
+                    <th>Nome</th>
+                    <th>Posição Preferida</th>
+                    <th>Golos</th>
+                    <th>Cartões</th>
+                    <th>Jogos</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,9 +46,12 @@
                     <td colspan="3">Sem Jogadores</td>
                 </tr>
                 <tr th:each="j : ${jogadores}">
-                    <td th:text="${j.utilizador.id}">...</td>
-                    <td th:text="${j.utilizador.nome}">...</td>
                     <td th:text="${j.utilizador.nif}">...</td>
+                    <td th:text="${j.utilizador.nome}">...</td>
+                    <td th:text="${j.posicaoPreferida.toString()}">...</td>
+                    <td th:text="${j.estatisticas.golos.size()}">...</td>
+                    <td th:text="${j.estatisticas.cartoes.size()}">...</td>
+                    <td th:text="${j.estatisticas.jogos}">...</td>
                 </tr>
             </tbody>
         </table>

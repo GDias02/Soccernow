@@ -20,12 +20,14 @@ import pt.ul.fc.css.soccernow.mappers.jogos.CartaoMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
 import pt.ul.fc.css.soccernow.repositories.CartaoRepository;
 import pt.ul.fc.css.soccernow.repositories.GoloRepository;
+import pt.ul.fc.css.soccernow.repositories.SelecaoRepository;
 
 @Service
 public class EstatisticasHandler implements IEstatisticasHandler {
 
   @Autowired private GoloRepository goloRepository;
   @Autowired private CartaoRepository cartaoRepository;
+  @Autowired private SelecaoRepository selecaoRepository;
 
   public EstatisticaJogo criarEstatisticaJogo(JogoDto jogo) {
     Long id = jogo.getId();
@@ -56,9 +58,13 @@ public class EstatisticasHandler implements IEstatisticasHandler {
     Set<Cartao> cartoesRecebidos = null;
     if (!maybeCartoes.isEmpty()) cartoesRecebidos = maybeCartoes.get();
 
+    int jogos = selecaoRepository.selecoesComJogador(jogador.getUtilizador().getId());
+
     EstatisticaJogador ej = new EstatisticaJogador();
     ej.setCartoes(cartoesRecebidos);
     ej.setGolos(golosMarcados);
+    ej.setJogos(jogos);
+
     return ej;
   }
 

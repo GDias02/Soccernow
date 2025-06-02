@@ -11,10 +11,11 @@ import java.util.Set;
 public class EstatisticaJogadorDto {
     Set<GoloDto> golos;
     Set<CartaoDto> cartoes;
+    int jogos;
 
     public EstatisticaJogadorDto() {}
     
-    public EstatisticaJogadorDto(Set<GoloDto> golos, Set<CartaoDto> cartoes) {
+    public EstatisticaJogadorDto(Set<GoloDto> golos, Set<CartaoDto> cartoes, int jogos) {
         this.golos = golos;
         this.cartoes = cartoes;
     }
@@ -30,5 +31,13 @@ public class EstatisticaJogadorDto {
     }
     public void setCartoes(Set<CartaoDto> cartoes) {
         this.cartoes = cartoes;
+    }
+
+    public int getJogos() {
+        return jogos;
+    }
+
+    public void setJogos(int jogos) {
+        this.jogos = jogos;
     }
 }
