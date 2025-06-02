@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.css.soccernow.SoccerNowApplication;
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
-import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogadorDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
@@ -86,7 +85,7 @@ public class JogoHandlerTest {
   private final UtilizadorDto udup1 =
       new UtilizadorDto(null, 211111111, "DuplicadoAna", "911111111");
   private final UtilizadorDto udup2 =
-      new UtilizadorDto(null, 222222222, "DuplicadoBernardo", "922222222");
+      new UtilizadorDto(null, 222222220, "DuplicadoBernardo", "922222222");
   private final UtilizadorDto udup3 =
       new UtilizadorDto(null, 233333333, "DuplicadoCarla", "933333333");
   private final UtilizadorDto udup4 =
@@ -480,9 +479,6 @@ public class JogoHandlerTest {
   }
 
   private List<Long> createSamplesJogadores() {
-    EstatisticaJogadorDto empty = new EstatisticaJogadorDto();
-    empty.setGolos(Set.of());
-    empty.setCartoes(Set.of());
     List<JogadorDto> jogadoresDto = new ArrayList<>();
     jogadoresDto.add(new JogadorDto(j11));
     jogadoresDto.add(new JogadorDto(j12));
@@ -501,9 +497,6 @@ public class JogoHandlerTest {
   }
 
   private List<Long> createSamplesJogadoresDuplicados() {
-    EstatisticaJogadorDto empty = new EstatisticaJogadorDto();
-    empty.setGolos(Set.of());
-    empty.setCartoes(Set.of());
     List<JogadorDto> jogadoresDto = new ArrayList<>();
     jogadoresDto.add(new JogadorDto(jdup11));
     jogadoresDto.add(new JogadorDto(jdup12));

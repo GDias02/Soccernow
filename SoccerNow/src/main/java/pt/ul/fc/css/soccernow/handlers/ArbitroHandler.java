@@ -1,18 +1,21 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.CertificadoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Certificado;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.AtualizarArbitroException;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.NotFoundException;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.RegistarArbitroException;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.RemoverArbitroException;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.VerificarArbitroException;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
+import pt.ul.fc.css.soccernow.mappers.utilizadores.CertificadoMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
 
@@ -48,12 +51,8 @@ public class ArbitroHandler implements IArbitroHandler {
     }
 
     ArbitroDto responseDto = ArbitroMapper.arbitroToDto(savedArbitro);
+
     return responseDto;
-    /*
-        Arbitro arbitro = ArbitroMapper.dtoToArbitro(arbitroDto);
-        Arbitro savedArbitro = arbitroRepository.save(arbitro);
-        ArbitroDto responseDto = ArbitroMapper.arbitroToDto(savedArbitro);
-    */
   }
 
   @Override
@@ -108,10 +107,13 @@ public class ArbitroHandler implements IArbitroHandler {
     arbitro.setNif(utilizador.getNif());
     arbitro.setNome(utilizador.getNome());
     arbitro.setContacto(utilizador.getContacto());
-    /*
-        int nif = utilizador.getNif();
-        if (!jogadorRepository.findByNif(nif).isEmpty()) return null;
-    */
+
+    CertificadoDto certificadoDto = arbitroDto.getCertificado();
+    if (certificadoDto != null) {
+      Certificado certificado = CertificadoMapper.dtoToCertificado(certificadoDto);
+      arbitro.setCertificado(certificado);
+    }
+
     Arbitro updatedArbitro;
     try {
       updatedArbitro = arbitroRepository.save(arbitro);
@@ -136,15 +138,6 @@ public class ArbitroHandler implements IArbitroHandler {
     if (!isFilled(utilizadorDto.getNome()))
       throw new IllegalArgumentException("O nome do árbitro é obrigatório");
   }
-
-  /*
-    UtilizadorDto utilizadorDto = arbitroDto.getUtilizador();
-    if (utilizadorDto == null) return false;
-    int nif = utilizadorDto.getNif();
-
-    return (100000000 <= nif && nif <= 999999999) && isFilled(utilizadorDto.getNome());
-  }
-  */
 
   private boolean isFilled(String field) {
     return field != null && field.length() > 0;
