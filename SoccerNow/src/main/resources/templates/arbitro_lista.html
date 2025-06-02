@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}">
+
+<body>
+    <section>
+        <form action="#" th:action="@{/leaf/api/arbitros/arbitro}" th:object=${filtros} method="get">
+
+            <label for="nome">NOME: </label>
+            <input type="text" placeholder="Admin Doe" th:field="*{nome}" />
+
+            <label for="jogos">JOGOS REALIZADOS: </label>
+            <input type="number" placeholder="0" th:field="*{jogos}" />
+
+            <label for="cartoes">CARTÕES RECEBIDOS: </label>
+            <input type="number" placeholder="0" th:field="*{cartoes}" />
+
+            <p><input type="submit" value="Filtrar" /> <input type="reset" value="Limpar Campos" /></p>
+        </form>
+        <h2>Arbitros:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nif</th>
+                    <th>Nome</th>
+                    <th>Jogos</th>
+                    <th>Cartões</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${arbitros.empty}">
+                    <td colspan="3">Sem Árbitros</td>
+                </tr>
+                <tr th:each="a : ${arbitros}">
+                    <td th:text="${a.utilizador.nif}">...</td>
+                    <td th:text="${a.utilizador.nome}">...</td>
+                    <td th:text="${a.estatisticas.jogos}">...</td>
+                    <td th:text="${a.estatisticas.cartoes.size()}">...</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+
+</html>

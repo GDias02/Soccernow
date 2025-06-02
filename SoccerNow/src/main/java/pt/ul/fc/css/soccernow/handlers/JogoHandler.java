@@ -1,6 +1,5 @@
 package pt.ul.fc.css.soccernow.handlers;
 
-import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumMap;
@@ -9,17 +8,20 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.EntityNotFoundException;
 import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.LocalDto;
 import pt.ul.fc.css.soccernow.dto.jogos.SelecaoDto;
-import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroPostDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.Cartao;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
@@ -197,7 +199,7 @@ public class JogoHandler implements IJogoHandler {
   }
 
   @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = SelecaoException.class)
-  public List<Arbitro> getArbitroFromDto(List<ArbitroDto> arbitrosDto) throws SelecaoException {
+  public List<Arbitro> getArbitroFromDto(List<ArbitroPostDto> arbitrosDto) throws SelecaoException {
     try {
       List<Arbitro> arbitros =
           arbitrosDto.stream()

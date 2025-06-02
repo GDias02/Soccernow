@@ -2,10 +2,12 @@ package pt.ul.fc.css.soccernow.repositories;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 
@@ -31,6 +33,12 @@ public interface JogoRepository extends JpaRepository<Jogo, Long> {
       @Param("start") LocalDateTime start,
       @Param("end") LocalDateTime end,
       @Param("arbitros") List<Arbitro> arbitros);
+
+  @Query(
+        "SELECT COUNT(j)"
+            + " FROM Jogo j"
+            + " WHERE EXISTS (Select 1 from j.equipaDeArbitros a where a.id = :arbitro_id)")
+    int jogosArbitro(@Param("arbitro_id") Long arbitro_id);
 }
 /*
 " FROM Selecao s" +

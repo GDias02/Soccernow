@@ -18,6 +18,7 @@ public class EstatisticaJogadorDto {
     public EstatisticaJogadorDto(Set<GoloDto> golos, Set<CartaoDto> cartoes, int jogos) {
         this.golos = golos;
         this.cartoes = cartoes;
+        this.jogos = jogos;
     }
 
     public Set<GoloDto> getGolos() {
