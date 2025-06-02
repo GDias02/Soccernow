@@ -21,6 +21,7 @@ public class SelecaoMapper {
     selecaoDto.setId(selecao.getId());
     selecaoDto.setEquipa(selecao.getEquipa().getId());
     selecaoDto.setCapitao(selecao.getCapitao().getId());
+    selecaoDto.setJogo(selecao.getJogo().getId());
 
     Map<Posicao, Jogador> jogs = selecao.getJogadores();
     Map<Posicao, Long> jogadores = new EnumMap<>(Posicao.class);

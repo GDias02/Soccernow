@@ -44,8 +44,7 @@ public class JogoMapper {
             .collect(Collectors.toList());
     jogoDto.setEquipaDeArbitros(arbitros);
     if (jogo.getEstadoDeJogo() == EstadoDeJogo.TERMINADO) {
-      jogoDto.setEquipaVencedora(
-          jogo.getEquipaVencedora() != null ? jogo.getEquipaVencedora().getId() : 0L);
+      jogoDto.setEquipaVencedora(jogo.getPlacar().getEquipaVencedora());
     }
     if (jogo.getCampeonato() != null) {
       jogoDto.setCampeonato(jogo.getCampeonato().getId());
@@ -90,8 +89,7 @@ public class JogoMapper {
 
     jogo.setEstadoAtual(
         EstadoDeJogo.AGENDADO); // Nao importa o que esta no dto, a criacao gera AGENDADO.
-    Placar p = new Placar();
-    p.setScore(0, 0);
+    Placar p = new Placar(jogodto.getS1().getEquipa(), jogodto.getS2().getEquipa());
     jogo.setPlacar(p);
 
     return jogo;

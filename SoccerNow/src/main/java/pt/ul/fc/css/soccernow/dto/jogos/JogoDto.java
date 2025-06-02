@@ -75,6 +75,12 @@ public class JogoDto {
 
   public void setId(Long id) {
     this.id = id;
+    if (this.s1 != null) {
+      s1.setId(id);
+    }
+    if (this.s2 != null) {
+      s2.setId(id);
+    }
   }
 
   public EstadoDeJogo getEstadoDeJogo() {

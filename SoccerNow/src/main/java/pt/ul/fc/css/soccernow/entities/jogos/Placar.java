@@ -5,26 +5,30 @@ import jakarta.persistence.Transient;
 
 @Embeddable
 public class Placar {
-  @Transient String equipa1;
-  @Transient String equipa2;
+
+  @Transient Long equipa1;
+  @Transient Long equipa2;
+
+  Long equipaVencedora;
 
   int pontuacao1;
   int pontuacao2;
 
-  public Placar(String equipa1, String equipa2) {
-    this.equipa1 = equipa1;
-    this.equipa2 = equipa2;
+  public Placar() {}
+
+  public Placar(Long e1, Long e2) {
+    this.equipa1 = e1;
+    this.equipa2 = e2;
+    this.equipaVencedora = 0L; // 0 indica empate ou jogo ainda nao terminado
+
     this.pontuacao1 = 0;
     this.pontuacao2 = 0;
-  }
-
-  public Placar() {
-    // TODO Auto-generated constructor stub
   }
 
   public void setScore(int pontuacao1, int pontuacao2) {
     this.pontuacao1 = pontuacao1;
     this.pontuacao2 = pontuacao2;
+    this.equipaVencedora = calculateVencedor();
   }
 
   public int getPontuacao1() {
@@ -35,12 +39,26 @@ public class Placar {
     return pontuacao2;
   }
 
+  public Long getEquipaVencedora() {
+    return this.equipaVencedora;
+  }
+
   public String getShortScore() {
     return (pontuacao1 + " - " + pontuacao2);
   }
 
+  public Long calculateVencedor() {
+    if (this.pontuacao1 > this.pontuacao2) {
+      return this.equipa1;
+    }
+    if (this.pontuacao2 > this.pontuacao1) {
+      return this.equipa2;
+    }
+    return 0L;
+  }
+
   @Override
   public String toString() {
-    return (equipa1 + ": " + pontuacao1 + "\n" + equipa2 + ": " + pontuacao2);
+    return ("Pontuacao: " + pontuacao1 + "-" + pontuacao2 + " > vencedor: " + this.equipaVencedora);
   }
 }

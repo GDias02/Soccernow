@@ -12,7 +12,7 @@ public class EstatisticaJogo extends Estatistica {
     int golos1 =
         (int) super.getGolos().stream().filter(golo -> golo.getEquipa().equals(e1)).count();
     int golos2 = super.getGolos().size() - golos1;
-    Placar p = new Placar(e1.toString(), e2.toString()); // TODO - trocar o toString por getNome()
+    Placar p = new Placar(e1.getId(), e2.getId());
     p.setScore(golos1, golos2);
     return p;
   }
