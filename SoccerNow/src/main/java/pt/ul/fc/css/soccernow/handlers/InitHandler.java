@@ -7,11 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogadorDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
@@ -24,13 +22,12 @@ import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
-import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Local;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
-import pt.ul.fc.css.soccernow.mappers.jogos.JogoMapper;
+import pt.ul.fc.css.soccernow.mappers.jogos.LocalMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
@@ -41,6 +38,7 @@ import pt.ul.fc.css.soccernow.repositories.GoloRepository;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
 import pt.ul.fc.css.soccernow.repositories.JogoRepository;
 import pt.ul.fc.css.soccernow.repositories.LocalRepository;
+import pt.ul.fc.css.soccernow.repositories.SelecaoRepository;
 
 @Service
 public class InitHandler {
@@ -60,6 +58,8 @@ public class InitHandler {
   @Autowired private ArbitroRepository arbitroRepository;
 
   @Autowired private EquipaRepository equipaRepository;
+
+  @Autowired private SelecaoRepository selecaoRepository;
 
   @Autowired private JogoRepository jogoRepository;
 
@@ -121,9 +121,9 @@ public class InitHandler {
             new MoradaDto("3333-333", "Rua 3", "Localidade3", "Cidade3", "Estado3", "Pais3"));
 
     // Convert LocalDto to Local and save them
-    Local local1 = JogoMapper.dtoToLocal(l1);
-    Local local2 = JogoMapper.dtoToLocal(l2);
-    Local local3 = JogoMapper.dtoToLocal(l3);
+    Local local1 = LocalMapper.dtoToLocal(l1);
+    Local local2 = LocalMapper.dtoToLocal(l2);
+    Local local3 = LocalMapper.dtoToLocal(l3);
 
     localRepository.save(local1);
     localRepository.save(local2);
@@ -272,7 +272,7 @@ public class InitHandler {
         new JogoDto(
             null,
             EstadoDeJogo.AGENDADO,
-            JogoMapper.localToDto(local1),
+            LocalMapper.localToDto(local1),
             d1,
             s1,
             s2,
@@ -281,7 +281,7 @@ public class InitHandler {
         new JogoDto(
             null,
             EstadoDeJogo.AGENDADO,
-            JogoMapper.localToDto(local2),
+            LocalMapper.localToDto(local2),
             d2,
             s1,
             s2,
@@ -290,7 +290,7 @@ public class InitHandler {
         new JogoDto(
             null,
             EstadoDeJogo.AGENDADO,
-            JogoMapper.localToDto(local3),
+            LocalMapper.localToDto(local3),
             d3,
             s1,
             s2,
@@ -299,7 +299,7 @@ public class InitHandler {
         new JogoDto(
             null,
             EstadoDeJogo.AGENDADO,
-            JogoMapper.localToDto(local1),
+            LocalMapper.localToDto(local1),
             d1,
             s1,
             s2,
@@ -312,23 +312,24 @@ public class InitHandler {
     jogosDto.add(j3);
     jogosDto.add(j4);
 
-    Jogo teste1 =
-        JogoMapper.createDtoToJogo(
-            j1, equipaRepository, jogadorRepository, arbitroRepository, campeonatoRepository);
+    JogoDto teste1 = jogoHandler.createJogo(j1);
 
+    System.out.println(teste1);
+    // jogoRepository.save(teste1);
+    /*
     List<Jogo> jogos =
         jogosDto.stream()
             .map(
                 jDto ->
                     JogoMapper.createDtoToJogo(
                         jDto,
-                        equipaRepository,
-                        jogadorRepository,
                         arbitroRepository,
+                        selecaoRepository,
+                        equipaRepository,
                         campeonatoRepository))
             .collect(Collectors.toList());
     jogoRepository.saveAllAndFlush(jogos);
-
+    */
     /** Predictable id's for these Jogos */
     Long jogo1id = 1L;
     Long jogo2id = 2L;
