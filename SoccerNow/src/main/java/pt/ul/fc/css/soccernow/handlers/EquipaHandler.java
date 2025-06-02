@@ -5,14 +5,22 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.querydsl.core.types.dsl.BooleanExpression;
 
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
+import pt.ul.fc.css.soccernow.filters.PredicateFactory;
+import pt.ul.fc.css.soccernow.filters.equipas.EquipaPredicate;
+import pt.ul.fc.css.soccernow.filters.equipas.EquipaPredicatesBuilder;
 import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
 import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
@@ -120,5 +128,21 @@ public class EquipaHandler implements IEquipaHandler {
     return true;
   }
 
-  
+  public List<EquipaDto> search(String search){
+    EquipaPredicatesBuilder builder = new EquipaPredicatesBuilder();
+
+    if (search != null) {
+      Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+      Matcher matcher = pattern.matcher(search + ",");
+      while (matcher.find()) {
+          builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+      }
+    }
+    BooleanExpression exp = builder.build(EquipaPredicate::new);
+    
+    List<Equipa> equipas = new ArrayList<>();
+    equipaRepository.findAll(exp).forEach(equipas::add);
+
+    return EquipaMapper.manyEquipasToDtos(equipas);
+  }
 }
