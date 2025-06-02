@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroPostDto;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.AtualizarArbitroException;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.NotFoundException;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.RegistarArbitroException;
@@ -32,9 +33,9 @@ public class ArbitroController {
 
     @PostMapping("/create")
     @ApiOperation(value = "Create arbitro", notes = "Creates a new arbitro and returns the created arbitro DTO.")
-    public ResponseEntity registarArbitro(@RequestBody ArbitroDto arbitroDto) {
+    public ResponseEntity registarArbitro(@RequestBody ArbitroPostDto arbitroDto) {
         try {
-            ArbitroDto responseDto = arbitroHandler.registarArbitro(arbitroDto);
+            ArbitroPostDto responseDto = arbitroHandler.registarArbitro(arbitroDto);
             return ResponseEntity.ok(responseDto);
         } catch (RegistarArbitroException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -69,9 +70,9 @@ public class ArbitroController {
 
     @PutMapping("/update")
     @ApiOperation(value = "Update arbitro", notes = "Updates the given arbitro.")
-    public ResponseEntity atualizarArbitro(@RequestBody ArbitroDto arbitroDto) {
+    public ResponseEntity atualizarArbitro(@RequestBody ArbitroPostDto arbitroDto) {
         try {
-            ArbitroDto responseDto = arbitroHandler.atualizarArbitro(arbitroDto);
+            ArbitroPostDto responseDto = arbitroHandler.atualizarArbitro(arbitroDto);
             return ResponseEntity.ok(responseDto);
         } catch (AtualizarArbitroException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

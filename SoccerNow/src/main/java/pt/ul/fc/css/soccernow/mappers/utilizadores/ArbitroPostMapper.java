@@ -1,0 +1,46 @@
+package pt.ul.fc.css.soccernow.mappers.utilizadores;
+
+import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroPostDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.CertificadoDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
+import pt.ul.fc.css.soccernow.entities.utilizadores.Certificado;
+
+public class ArbitroPostMapper {
+    public static ArbitroPostDto arbitroToDto(Arbitro arbitro) {
+        ArbitroPostDto arbitroDto = new ArbitroPostDto();
+
+        UtilizadorDto utilizador = new UtilizadorDto();
+        utilizador.setId(arbitro.getId());
+        utilizador.setNif(arbitro.getNif());
+        utilizador.setNome(arbitro.getNome());
+        utilizador.setContacto(arbitro.getContacto());
+        arbitroDto.setUtilizador(utilizador);
+
+        Certificado certificado = arbitro.getCertificado();
+        if (certificado != null) {
+            CertificadoDto certificadoDto = CertificadoMapper.certificadoToDto(certificado);
+            arbitroDto.setCertificado(certificadoDto);
+        }
+
+        return arbitroDto;
+    }
+
+    public static Arbitro dtoToArbitro(ArbitroPostDto arbitroDto) {
+        Arbitro arbitro = new Arbitro();
+
+        UtilizadorDto utilizador = arbitroDto.getUtilizador();
+        arbitro.setId(utilizador.getId());
+        arbitro.setNif(utilizador.getNif());
+        arbitro.setNome(utilizador.getNome());
+        arbitro.setContacto(utilizador.getContacto());
+
+        CertificadoDto certificadoDto = arbitroDto.getCertificado();
+        if (certificadoDto != null) {
+            Certificado certificado = CertificadoMapper.dtoToCertificado(certificadoDto);
+            arbitro.setCertificado(certificado);
+        }
+
+        return arbitro;
+    }   
+}

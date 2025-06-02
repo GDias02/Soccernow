@@ -7,16 +7,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
+import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaArbitroDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogadorDto;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.LocalDto;
 import pt.ul.fc.css.soccernow.dto.jogos.MoradaDto;
 import pt.ul.fc.css.soccernow.dto.jogos.SelecaoDto;
-import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroPostDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.CertificadoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
@@ -28,7 +31,7 @@ import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.LocalMapper;
-import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
+import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroPostMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.CampeonatoRepository;
@@ -138,6 +141,9 @@ public class InitHandler {
     emptyEstatisticaJogadorDto.setGolos(Set.of());
     emptyEstatisticaJogadorDto.setCartoes(Set.of());
 
+    EstatisticaArbitroDto emptyEstatisticaArbitroDto = new EstatisticaArbitroDto();
+    emptyEstatisticaArbitroDto.setCartoes(Set.of());
+
     UtilizadorDto u0 = new UtilizadorDto(null, 111111110, "007", "900000000");
     UtilizadorDto u1 = new UtilizadorDto(null, 111111111, "Ana", "911111111");
     UtilizadorDto u2 = new UtilizadorDto(null, 122222222, "Bernardo", "922222222");
@@ -151,9 +157,9 @@ public class InitHandler {
     UtilizadorDto u10 = new UtilizadorDto(null, 101010101, "Jorge", "901010101");
     UtilizadorDto u11 = new UtilizadorDto(null, 202020202, "Leonor", "902020202");
     UtilizadorDto u12 = new UtilizadorDto(null, 303030303, "Miguel", "903030303");
-    ArbitroDto a1 = new ArbitroDto(u10, new CertificadoDto(true));
-    ArbitroDto a2 = new ArbitroDto(u11, new CertificadoDto(true));
-    ArbitroDto a3 = new ArbitroDto(u12, new CertificadoDto(true));
+    ArbitroPostDto a1 = new ArbitroPostDto(u10, new CertificadoDto(true));
+    ArbitroPostDto a2 = new ArbitroPostDto(u11, new CertificadoDto(true));
+    ArbitroPostDto a3 = new ArbitroPostDto(u12, new CertificadoDto(true));
 
     JogadorDto j11 = new JogadorDto(u0, Posicao.GUARDA_REDES, emptyEstatisticaJogadorDto);
     JogadorDto j12 = new JogadorDto(u1, Posicao.FIXO, emptyEstatisticaJogadorDto);
@@ -183,16 +189,16 @@ public class InitHandler {
     jogadorRepository.saveAllAndFlush(jogadores);
 
     /* -- Saving Arbitros */
-    List<ArbitroDto> arbitrosDto = new ArrayList<>();
+    List<ArbitroPostDto> arbitrosDto = new ArrayList<>();
     arbitrosDto.add(a1);
     arbitrosDto.add(a2);
     arbitrosDto.add(a3);
     List<Arbitro> arbitros =
-        arbitrosDto.stream().map(ArbitroMapper::dtoToArbitro).collect(Collectors.toList());
+        arbitrosDto.stream().map(ArbitroPostMapper::dtoToArbitro).collect(Collectors.toList());
     arbitroRepository.saveAllAndFlush(arbitros);
-    List<ArbitroDto> savedArbitrosDto =
+    List<ArbitroPostDto> savedArbitrosDto =
         arbitroRepository.findAll().stream()
-            .map(ArbitroMapper::arbitroToDto)
+            .map(ArbitroPostMapper::arbitroToDto)
             .collect(Collectors.toList());
     List<Arbitro> savedArbitros = arbitroRepository.findAll();
 

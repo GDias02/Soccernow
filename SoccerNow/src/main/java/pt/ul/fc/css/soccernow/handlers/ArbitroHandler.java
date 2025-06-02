@@ -1,20 +1,36 @@
 package pt.ul.fc.css.soccernow.handlers;
 
-import jakarta.transaction.Transactional;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.querydsl.core.support.FetchableQueryBase;
+import com.querydsl.jpa.impl.JPAQuery;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroPostDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.CertificadoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
+import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaArbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Certificado;
+import pt.ul.fc.css.soccernow.entities.utilizadores.QArbitro;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.AtualizarArbitroException;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.NotFoundException;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.RegistarArbitroException;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.RemoverArbitroException;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.VerificarArbitroException;
+import pt.ul.fc.css.soccernow.mappers.jogos.EstatisticaArbitroMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
+import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroPostMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.CertificadoMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
@@ -26,9 +42,14 @@ public class ArbitroHandler implements IArbitroHandler {
 
   @Autowired private JogadorRepository jogadorRepository;
 
+  @Autowired private EstatisticasHandler estatisticasHandler;
+
+  @PersistenceContext
+  private EntityManager entityManager;
+
   @Override
   @Transactional
-  public ArbitroDto registarArbitro(ArbitroDto arbitroDto) throws RegistarArbitroException {
+  public ArbitroPostDto registarArbitro(ArbitroPostDto arbitroDto) throws RegistarArbitroException {
     try {
       validInput(arbitroDto);
     } catch (IllegalArgumentException e) {
@@ -40,7 +61,7 @@ public class ArbitroHandler implements IArbitroHandler {
     if (!jogadorRepository.findByNif(nif).isEmpty() || !arbitroRepository.findByNif(nif).isEmpty())
       throw new RegistarArbitroException("Já existe um utilizador com esse nif");
 
-    Arbitro arbitro = ArbitroMapper.dtoToArbitro(arbitroDto);
+    Arbitro arbitro = ArbitroPostMapper.dtoToArbitro(arbitroDto);
     arbitro.setId(0L);
 
     Arbitro savedArbitro = new Arbitro();
@@ -50,7 +71,7 @@ public class ArbitroHandler implements IArbitroHandler {
       throw new RegistarArbitroException("Erro a registar árbitro: " + e.getMessage());
     }
 
-    ArbitroDto responseDto = ArbitroMapper.arbitroToDto(savedArbitro);
+    ArbitroPostDto responseDto = ArbitroPostMapper.arbitroToDto(savedArbitro);
 
     return responseDto;
   }
@@ -64,7 +85,11 @@ public class ArbitroHandler implements IArbitroHandler {
     Optional<Arbitro> maybeArbitro = arbitroRepository.findAliveByNif(nif);
     if (maybeArbitro.isEmpty()) throw new NotFoundException("O árbitro não existe");
 
-    ArbitroDto arbitroDto = ArbitroMapper.arbitroToDto(maybeArbitro.get());
+    Arbitro arbitro = maybeArbitro.get();
+    ArbitroDto arbitroDto = ArbitroMapper.arbitroToDto(arbitro);
+    EstatisticaArbitro estatisticas = estatisticasHandler.criarEstatisticaArbitro(arbitroDto);
+    arbitroDto.setEstatisticas(EstatisticaArbitroMapper.estatisticaArbitroToDto(estatisticas));
+    
     return arbitroDto;
   }
 
@@ -82,7 +107,7 @@ public class ArbitroHandler implements IArbitroHandler {
 
   @Override
   @Transactional
-  public ArbitroDto atualizarArbitro(ArbitroDto arbitroDto)
+  public ArbitroPostDto atualizarArbitro(ArbitroPostDto arbitroDto)
       throws AtualizarArbitroException, NotFoundException {
     try {
       validInput(arbitroDto);
@@ -121,11 +146,21 @@ public class ArbitroHandler implements IArbitroHandler {
       throw new AtualizarArbitroException("Erro a atualizar árbitro: " + e.getMessage());
     }
 
-    ArbitroDto responseDto = ArbitroMapper.arbitroToDto(updatedArbitro);
+    ArbitroPostDto responseDto = ArbitroPostMapper.arbitroToDto(updatedArbitro);
     return responseDto;
   }
 
-  private void validInput(ArbitroDto arbitroDto) throws IllegalArgumentException {
+  @Transactional
+  public Set<ArbitroDto> buscarArbitros() {
+      Set<ArbitroDto> arbitroDtos = arbitroRepository.findAliveAll().stream().map(ArbitroMapper::arbitroToDto).collect(Collectors.toSet());
+      for (ArbitroDto arbitroDto : arbitroDtos) {
+          EstatisticaArbitro estatisticas = estatisticasHandler.criarEstatisticaArbitro(arbitroDto);
+          arbitroDto.setEstatisticas(EstatisticaArbitroMapper.estatisticaArbitroToDto(estatisticas));
+      }
+      return arbitroDtos;
+  }
+
+  private void validInput(ArbitroPostDto arbitroDto) throws IllegalArgumentException {
     if (arbitroDto == null) throw new IllegalArgumentException("Sem dados para o árbitro");
 
     UtilizadorDto utilizadorDto = arbitroDto.getUtilizador();
@@ -141,5 +176,47 @@ public class ArbitroHandler implements IArbitroHandler {
 
   private boolean isFilled(String field) {
     return field != null && field.length() > 0;
+  }
+
+  public Set<ArbitroDto> filtrarArbitros(String nome, String jogos, String cartoes) {
+    if (nome == null) nome = "";
+    if (jogos == null) jogos = "";
+    if (cartoes == null) cartoes = "";
+
+    QArbitro arbitro = QArbitro.arbitro;
+    JPAQuery<Arbitro> query = new JPAQuery<>(entityManager);
+
+    FetchableQueryBase<Arbitro, JPAQuery<Arbitro>> fetchable = 
+        (FetchableQueryBase<Arbitro, JPAQuery<Arbitro>>) query.from(arbitro)
+            .where(
+                arbitro.deleted.eq(false),
+                arbitro.nome.containsIgnoreCase(nome)
+            )
+            .distinct();
+
+    List<Arbitro> arbitros = fetchable.fetch();
+
+    Set<ArbitroDto> arbitroDtos = arbitros.stream().map(ArbitroMapper::arbitroToDto).collect(Collectors.toSet());
+    Set<ArbitroDto> arbitrosFinaisDtos = new HashSet<>();
+    for (ArbitroDto arbitroDto : arbitroDtos) {
+        EstatisticaArbitro estatisticas = estatisticasHandler.criarEstatisticaArbitro(arbitroDto);
+        if (filtroEstatisticas(estatisticas, jogos, cartoes)) {
+            arbitroDto.setEstatisticas(EstatisticaArbitroMapper.estatisticaArbitroToDto(estatisticas));
+            arbitrosFinaisDtos.add(arbitroDto);
+        }
+    }
+    return arbitrosFinaisDtos;
+  }
+
+  private boolean filtroEstatisticas(EstatisticaArbitro estatisticas, String jogosStr, String cartoesStr) {
+    if (jogosStr.matches("\\d+")) {
+        int jogos = Integer.parseInt(jogosStr);
+        if (estatisticas.getJogos() != jogos) return false;
+    }
+    if (cartoesStr.matches("\\d+")) {
+        int cartoes = Integer.parseInt(cartoesStr);
+        if (estatisticas.getCartoes().size() != cartoes) return false;
+    }
+    return true;
   }
 }

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pt.ul.fc.css.soccernow.SoccerNowApplication;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroPostDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.CertificadoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
 import pt.ul.fc.css.soccernow.exceptions.utilizadores.AtualizarArbitroException;
@@ -44,9 +45,9 @@ public class ArbitroHandlerTest {
         String contacto = "911111111";
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
         CertificadoDto certificadoDto = new CertificadoDto(false);
-        ArbitroDto arbitroDto = new ArbitroDto(utilizadorDto, certificadoDto);
+        ArbitroPostDto arbitroDto = new ArbitroPostDto(utilizadorDto, certificadoDto);
 
-        ArbitroDto responseDto = assertDoesNotThrow(() -> arbitroHandler.registarArbitro(arbitroDto));
+        ArbitroPostDto responseDto = assertDoesNotThrow(() -> arbitroHandler.registarArbitro(arbitroDto));
 
         assertNotNull(responseDto);
 
@@ -74,7 +75,7 @@ public class ArbitroHandlerTest {
         String contacto = "911111111";
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
         CertificadoDto certificadoDto = new CertificadoDto(false);
-        ArbitroDto arbitroDto = new ArbitroDto(utilizadorDto, certificadoDto);
+        ArbitroPostDto arbitroDto = new ArbitroPostDto(utilizadorDto, certificadoDto);
 
         assertThrows(RegistarArbitroException.class, () -> arbitroHandler.registarArbitro(arbitroDto));
     }
@@ -91,7 +92,7 @@ public class ArbitroHandlerTest {
         String contacto = "911111111";
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
         CertificadoDto certificadoDto = new CertificadoDto(false);
-        ArbitroDto arbitroDto = new ArbitroDto(utilizadorDto, certificadoDto);
+        ArbitroPostDto arbitroDto = new ArbitroPostDto(utilizadorDto, certificadoDto);
 
         assertThrows(RegistarArbitroException.class, () -> arbitroHandler.registarArbitro(arbitroDto));
     }
@@ -108,9 +109,9 @@ public class ArbitroHandlerTest {
         String contacto = "911111111";
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
         CertificadoDto certificadoDto = new CertificadoDto(true);
-        ArbitroDto arbitroDto = new ArbitroDto(utilizadorDto, certificadoDto);
+        ArbitroPostDto arbitroDto = new ArbitroPostDto(utilizadorDto, certificadoDto);
 
-        ArbitroDto responseDto = assertDoesNotThrow(() -> arbitroHandler.atualizarArbitro(arbitroDto));
+        ArbitroPostDto responseDto = assertDoesNotThrow(() -> arbitroHandler.atualizarArbitro(arbitroDto));
 
         UtilizadorDto responseUtilizador = responseDto.getUtilizador();
         assertNotNull(responseUtilizador);
@@ -136,7 +137,7 @@ public class ArbitroHandlerTest {
         String contacto = "911111111";
         UtilizadorDto utilizadorDto = new UtilizadorDto(id, nif, nome, contacto);
         CertificadoDto certificadoDto = new CertificadoDto(false);
-        ArbitroDto arbitroDto = new ArbitroDto(utilizadorDto, certificadoDto);
+        ArbitroPostDto arbitroDto = new ArbitroPostDto(utilizadorDto, certificadoDto);
 
         assertThrows(AtualizarArbitroException.class, () -> arbitroHandler.atualizarArbitro(arbitroDto));
     }

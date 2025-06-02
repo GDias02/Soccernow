@@ -16,6 +16,7 @@ public class EstatisticaJogadorMapper {
         stat.getCartoes().stream().map(CartaoMapper::cartaoToDto).collect(Collectors.toSet()));
     statDto.setGolos(
         stat.getGolos().stream().map(GoloMapper::goloToDto).collect(Collectors.toSet()));
+    statDto.setJogos(stat.getJogos());
     return statDto;
   }
 
@@ -27,6 +28,7 @@ public class EstatisticaJogadorMapper {
     stat.setCartoes(
         stats.getCartoes().stream().map(CartaoMapper::dtoToCartao).collect(Collectors.toSet()));
     stat.setGolos(stats.getGolos().stream().map(GoloMapper::dtoToGolo).collect(Collectors.toSet()));
+    stat.setJogos(stats.getJogos());
     return stat;
   }
 }

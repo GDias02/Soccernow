@@ -1,3 +1,3 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
-public class EstatisticaArbitro extends Estatistica {}
+public class EstatisticaArbitro extends EstatisticaUtilizador {}

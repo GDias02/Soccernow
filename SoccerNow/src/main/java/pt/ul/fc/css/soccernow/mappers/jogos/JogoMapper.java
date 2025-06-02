@@ -2,10 +2,11 @@ package pt.ul.fc.css.soccernow.mappers.jogos;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.LocalDto;
 import pt.ul.fc.css.soccernow.dto.jogos.MoradaDto;
-import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroPostDto;
 import pt.ul.fc.css.soccernow.entities.campeonatos.Campeonato;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
@@ -13,7 +14,7 @@ import pt.ul.fc.css.soccernow.entities.jogos.JogoAmigavel;
 import pt.ul.fc.css.soccernow.entities.jogos.JogoCampeonato;
 import pt.ul.fc.css.soccernow.entities.jogos.Placar;
 import pt.ul.fc.css.soccernow.exceptions.jogos.CriarJogoException;
-import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
+import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroPostMapper;
 import pt.ul.fc.css.soccernow.repositories.CampeonatoRepository;
 
 public class JogoMapper {
@@ -38,9 +39,9 @@ public class JogoMapper {
     jogoDto.setEstadoDeJogo(jogo.getEstadoDeJogo());
     jogoDto.setLocalDto(LocalMapper.localToDto(jogo.getLocal()));
 
-    List<ArbitroDto> arbitros =
+    List<ArbitroPostDto> arbitros =
         jogo.getEquipaDeArbitros().stream()
-            .map(ArbitroMapper::arbitroToDto)
+            .map(ArbitroPostMapper::arbitroToDto)
             .collect(Collectors.toList());
     jogoDto.setEquipaDeArbitros(arbitros);
     if (jogo.getEstadoDeJogo() == EstadoDeJogo.TERMINADO) {

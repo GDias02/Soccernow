@@ -1,10 +1,5 @@
 package pt.ul.fc.css.soccernow.handlers;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -13,6 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
 import pt.ul.fc.css.soccernow.SoccerNowApplication;
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
@@ -32,6 +33,7 @@ import pt.ul.fc.css.soccernow.dto.jogos.LocalDto;
 import pt.ul.fc.css.soccernow.dto.jogos.MoradaDto;
 import pt.ul.fc.css.soccernow.dto.jogos.SelecaoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroPostDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.CertificadoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorPostDto;
@@ -43,7 +45,7 @@ import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 import pt.ul.fc.css.soccernow.exceptions.jogos.AtualizarJogoException;
 import pt.ul.fc.css.soccernow.exceptions.jogos.CriarJogoException;
-import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroMapper;
+import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroPostMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
@@ -104,10 +106,10 @@ public class JogoHandlerTest {
       new UtilizadorDto(null, 303030303, "DuplicadoJorge", "901010101");
   private final UtilizadorDto udup11 =
       new UtilizadorDto(null, 404040404, "DuplicadoLeonor", "902020202");
-  private final ArbitroDto a1 = new ArbitroDto(u10, new CertificadoDto(true));
-  private final ArbitroDto a2 = new ArbitroDto(u11, new CertificadoDto(false));
-  private final ArbitroDto adup1 = new ArbitroDto(udup10, new CertificadoDto(true));
-  private final ArbitroDto adup2 = new ArbitroDto(udup11, new CertificadoDto(false));
+  private final ArbitroPostDto a1 = new ArbitroPostDto(u10, new CertificadoDto(true));
+  private final ArbitroPostDto a2 = new ArbitroPostDto(u11, new CertificadoDto(false));
+  private final ArbitroPostDto adup1 = new ArbitroPostDto(udup10, new CertificadoDto(true));
+  private final ArbitroPostDto adup2 = new ArbitroPostDto(udup11, new CertificadoDto(false));
   private final JogadorPostDto j11 = new JogadorPostDto(u0, Posicao.GUARDA_REDES);
   private final JogadorPostDto j12 = new JogadorPostDto(u1, Posicao.FIXO);
   private final JogadorPostDto j13 = new JogadorPostDto(u2, Posicao.ALA_ESQUERDA);
@@ -149,7 +151,7 @@ public class JogoHandlerTest {
     Long e1 = createSampleEquipa1(jogadores);
     Long e2 = createSampleEquipa2(jogadores);
 
-    List<ArbitroDto> arbitros = createSamplesArbitros();
+    List<ArbitroPostDto> arbitros = createSamplesArbitros();
     jogoDto.setEquipaDeArbitros(arbitros);
 
     SelecaoDto s1 = createSampleSelecao1(e1, jogadores.get(0), jogadores);
@@ -182,7 +184,7 @@ public class JogoHandlerTest {
     Long e1 = createSampleEquipa1(jogadores);
     Long e2 = createSampleEquipa2(jogadores);
 
-    List<ArbitroDto> arbitros = createSamplesArbitros();
+    List<ArbitroPostDto> arbitros = createSamplesArbitros();
     jogoDto.setEquipaDeArbitros(arbitros);
 
     SelecaoDto s1 = createSampleSelecao1(e1, jogadores.get(0), jogadores);
@@ -211,7 +213,7 @@ public class JogoHandlerTest {
     Long e1 = createSampleEquipa1(jogadores);
     Long e2 = createSampleEquipa2(jogadores);
 
-    List<ArbitroDto> arbitros = createSamplesArbitrosDuplicados();
+    List<ArbitroPostDto> arbitros = createSamplesArbitrosDuplicados();
     jogoDto.setEquipaDeArbitros(arbitros);
 
     SelecaoDto s1 = createSampleSelecao1(e1, jogadores.get(0), jogadores);
@@ -300,7 +302,7 @@ public class JogoHandlerTest {
     Long e1 = createSampleEquipa1(jogadores);
     Long e2 = createSampleEquipa2(jogadores);
 
-    List<ArbitroDto> arbitros = createSamplesArbitrosDuplicados();
+    List<ArbitroPostDto> arbitros = createSamplesArbitrosDuplicados();
     jogoDto.setEquipaDeArbitros(arbitros);
 
     SelecaoDto s1 = createSampleSelecao1(e1, jogadores.get(0), jogadores);
@@ -342,14 +344,14 @@ public class JogoHandlerTest {
     jogoDto.setLocalDto(localNovoTeste);
     jogoDto.setDiaEHora(dataTeste);
 
-    List<ArbitroDto> arbitros = createSamplesArbitrosDuplicados();
+    List<ArbitroPostDto> arbitros = createSamplesArbitrosDuplicados();
     jogoDto.setEquipaDeArbitros(arbitros);
 
     ArbitroDto arbitroOcupado =
         assertDoesNotThrow(() -> arbitroHandler.verificarArbitro(101010101));
 
     arbitros.remove(0);
-    arbitros.add(0, arbitroOcupado);
+    arbitros.add(0, new ArbitroPostDto(arbitroOcupado.getUtilizador(), arbitroOcupado.getCertificado()));
 
     Exception exception =
         assertThrows(
@@ -534,24 +536,24 @@ public class JogoHandlerTest {
     return s1;
   }
 
-  private List<ArbitroDto> createSamplesArbitros() {
-    List<ArbitroDto> arbitrosDto = new ArrayList<>();
+  private List<ArbitroPostDto> createSamplesArbitros() {
+    List<ArbitroPostDto> arbitrosDto = new ArrayList<>();
     arbitrosDto.add(a1);
     arbitrosDto.add(a2);
     List<Arbitro> arbitros =
-        arbitrosDto.stream().map(ArbitroMapper::dtoToArbitro).collect(Collectors.toList());
+        arbitrosDto.stream().map(ArbitroPostMapper::dtoToArbitro).collect(Collectors.toList());
     List<Arbitro> saved = arbitroRepository.saveAllAndFlush(arbitros);
-    return saved.stream().map(ArbitroMapper::arbitroToDto).collect(Collectors.toList());
+    return saved.stream().map(ArbitroPostMapper::arbitroToDto).collect(Collectors.toList());
   }
 
-  private List<ArbitroDto> createSamplesArbitrosDuplicados() {
-    List<ArbitroDto> arbitrosDto = new ArrayList<>();
+  private List<ArbitroPostDto> createSamplesArbitrosDuplicados() {
+    List<ArbitroPostDto> arbitrosDto = new ArrayList<>();
     arbitrosDto.add(adup1);
     arbitrosDto.add(adup2);
     List<Arbitro> arbitros =
-        arbitrosDto.stream().map(ArbitroMapper::dtoToArbitro).collect(Collectors.toList());
+        arbitrosDto.stream().map(ArbitroPostMapper::dtoToArbitro).collect(Collectors.toList());
     List<Arbitro> saved = arbitroRepository.saveAllAndFlush(arbitros);
-    return saved.stream().map(ArbitroMapper::arbitroToDto).collect(Collectors.toList());
+    return saved.stream().map(ArbitroPostMapper::arbitroToDto).collect(Collectors.toList());
   }
 
   private Long createSampleEquipa1(List<Long> jogadores) {
