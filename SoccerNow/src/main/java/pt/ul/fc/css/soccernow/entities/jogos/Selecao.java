@@ -1,14 +1,16 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
-import java.util.EnumMap;
-import java.util.Map;
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
@@ -24,32 +26,32 @@ public class Selecao {
   @JoinColumn(name = "jogo_id", nullable = false)
   private Jogo jogo;
 
-  @ManyToOne
-  @JoinColumn(name = "equipa1")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "equipa")
   private Equipa equipa;
 
-  @ManyToOne
-  @JoinColumn(name = "capitao1")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "capitao")
   private Jogador capitao;
 
-  @ManyToOne
-  @JoinColumn(name = "guardaRedes1")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "guardaRedes")
   private Jogador guardaRedes;
 
-  @ManyToOne
-  @JoinColumn(name = "fixo1")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "fixo")
   private Jogador fixo;
 
-  @ManyToOne
-  @JoinColumn(name = "alaEsquerda1")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "alaEsquerda")
   private Jogador alaEsquerda;
 
-  @ManyToOne
-  @JoinColumn(name = "alaDireita1")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "alaDireita")
   private Jogador alaDireita;
 
-  @ManyToOne
-  @JoinColumn(name = "pivot1")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "pivot")
   private Jogador pivot;
 
   public Selecao(Equipa e, Jogador capitao, Map<Posicao, Jogador> jogadores) {
@@ -77,6 +79,16 @@ public class Selecao {
     jogadores.put(Posicao.ALA_ESQUERDA, alaEsquerda);
     jogadores.put(Posicao.ALA_DIREITA, alaDireita);
     jogadores.put(Posicao.PIVO, pivot);
+    return jogadores;
+  }
+
+  public Set<Long> getJogadoresIds() {
+    Set<Long> jogadores = new HashSet<>();
+    jogadores.add(guardaRedes.getId());
+    jogadores.add(fixo.getId());
+    jogadores.add(alaEsquerda.getId());
+    jogadores.add(alaDireita.getId());
+    jogadores.add(pivot.getId());
     return jogadores;
   }
 
@@ -144,5 +156,32 @@ public class Selecao {
 
   public void setPivot(Jogador pivot) {
     this.pivot = pivot;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  @Override
+  public String toString() {
+    return "Selecao [id="
+        + id
+        + ", jogo="
+        + jogo.getId()
+        + ", equipa="
+        + equipa.getId()
+        + ", capitao="
+        + capitao.getId()
+        + ", guardaRedes="
+        + guardaRedes.getId()
+        + ", fixo="
+        + fixo.getId()
+        + ", alaEsquerda="
+        + alaEsquerda.getId()
+        + ", alaDireita="
+        + alaDireita.getId()
+        + ", pivot="
+        + pivot.getId()
+        + "]";
   }
 }
