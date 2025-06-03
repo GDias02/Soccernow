@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:controller="pt.ul.fc.di.css.javafxexample.controller.jogos.InitJogoController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar>
         <menus>
@@ -55,13 +55,13 @@
       </AnchorPane>
       <AnchorPane prefHeight="250.0" prefWidth="600.0">
          <children>
-            <Button layoutX="33.0" layoutY="143.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="133.0" text="Registar Resultado de um Jogo" textAlignment="CENTER" wrapText="true" />
-            <Button layoutX="33.0" layoutY="210.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="133.0" text="Registar um Local" />
-            <Button layoutX="33.0" layoutY="77.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="133.0" text="Registar Novo Jogo" />
+            <Button fx:id="registarResultadoBtn" layoutX="33.0" layoutY="143.0" mnemonicParsing="false" onAction="#registarResultado" prefHeight="50.0" prefWidth="133.0" text="Registar Resultado de um Jogo" textAlignment="CENTER" wrapText="true" />
+            <Button fx:id="registarLocalBtn" layoutX="33.0" layoutY="210.0" mnemonicParsing="false" onAction="#registarLocal" prefHeight="50.0" prefWidth="133.0" text="Registar um Local" />
+            <Button fx:id="registarJogoBtn" layoutX="33.0" layoutY="77.0" mnemonicParsing="false" onAction="#registarJogo" prefHeight="50.0" prefWidth="133.0" text="Registar Novo Jogo" />
             <Label layoutX="179.0" layoutY="65.0" mnemonicParsing="true" prefHeight="74.0" prefWidth="264.0" text="Quer jogar um jogo de Futsal? Aconselha-se que antes proceda ao registo de pelo menos dez Jogadores, um Árbitro e duas Equipas." textAlignment="JUSTIFY" wrapText="true" />
             <Label layoutX="179.0" layoutY="139.0" mnemonicParsing="true" prefHeight="58.0" prefWidth="264.0" text="Terminou um jogo? Aponte aqui os principais acontecimentos!" textAlignment="JUSTIFY" wrapText="true" />
             <Label layoutX="179.0" layoutY="206.0" mnemonicParsing="true" prefHeight="58.0" prefWidth="264.0" text="Tem um jogo planeado? Registe aqui o local. (TODO)" textAlignment="JUSTIFY" wrapText="true" />
-            <MenuButton layoutX="482.0" layoutY="90.0" mnemonicParsing="false" text="Esqueci-me!">
+            <MenuButton fx:id="esquecimeBtn" layoutX="482.0" layoutY="90.0" mnemonicParsing="false" text="Esqueci-me!">
               <items>
                 <MenuItem mnemonicParsing="false" text="Registar Jogador" />
                 <MenuItem mnemonicParsing="false" text="Registar Árbitro" />

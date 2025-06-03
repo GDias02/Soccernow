@@ -1,5 +1,6 @@
 package pt.ul.fc.css.soccernow.entities.jogos;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +14,9 @@ public class Local {
   @GeneratedValue(strategy = GenerationType.AUTO)
   Long id;
 
+  @Column(unique = true, nullable = false)
   String nome;
+
   String proprietario;
   int capacidade;
   @Embedded Morada morada;

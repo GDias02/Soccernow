@@ -1,20 +1,19 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import jakarta.persistence.EntityNotFoundException;
 import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
@@ -91,6 +90,49 @@ public class JogoHandler implements IJogoHandler {
   @Transactional
   public JogoDto saveJogo(Jogo jogo) {
     return JogoMapper.jogoToDto(jogoRepository.save(jogo));
+  }
+
+  @Transactional
+  public Boolean localDisponivel(JogoDto jogodto) {
+    LocalDto localdto = jogodto.getLocalDto();
+    Local local = getLocalFromRepository(localdto);
+    if (local == null) return true;
+    LocalDateTime diaEHora = jogodto.getDiaEHora();
+    LocalDateTime start = diaEHora.minus(2, ChronoUnit.HOURS);
+    LocalDateTime end = diaEHora.plus(2, ChronoUnit.HOURS);
+    return !jogoRepository.existsLocalAtSameIntervalContainedIn(local.getId(), start, end);
+  }
+
+  @Transactional
+  public Boolean arbitrosDisponiveis(JogoDto jogodto) {
+    LocalDateTime diaEHora = jogodto.getDiaEHora();
+    LocalDateTime start = diaEHora.minus(2, ChronoUnit.HOURS);
+    LocalDateTime end = diaEHora.plus(2, ChronoUnit.HOURS);
+    List<Arbitro> arbitros = getArbitroFromDto(jogodto.getEquipaDeArbitros());
+    List<Jogo> result =
+        jogoRepository.existsArbitroOcupadoAtSameIntervalContainedIn(start, end, arbitros);
+    return result.size() == 0;
+  }
+
+  @Transactional
+  public Boolean jogadoresDisponiveis(JogoDto jogodto) {
+    LocalDateTime diaEHora = jogodto.getDiaEHora();
+    LocalDateTime start = diaEHora.minus(2, ChronoUnit.HOURS);
+    LocalDateTime end = diaEHora.plus(2, ChronoUnit.HOURS);
+    SelecaoDto s1dto = jogodto.getS1();
+    SelecaoDto s2dto = jogodto.getS2();
+    Set<Long> jogs = new HashSet<>();
+    if (s1dto != null) {
+      jogs.addAll(s1dto.getJogadoresIds());
+    }
+    if (s2dto != null) {
+      jogs.addAll(s2dto.getJogadoresIds());
+    }
+    if (!jogs.isEmpty()) {
+      return !selecaoRepository.existsJogoAtSameIntervalContainedIn(start, end, jogs);
+    } else {
+      return true;
+    }
   }
 
   @Transactional(rollbackFor = CriarJogoException.class)
@@ -213,15 +255,29 @@ public class JogoHandler implements IJogoHandler {
 
   @Transactional(rollbackFor = JogoLocalException.class)
   public Local createLocal(LocalDto localdto) throws JogoLocalException {
+    Local local = getLocalFromRepository(localdto);
+    if (local != null) return local;
+    Local novolocal = LocalMapper.dtoToLocal(localdto);
+    return localRepository.saveAndFlush(novolocal);
+  }
+
+  @Transactional(rollbackFor = JogoLocalException.class)
+  public Local getLocalFromRepository(LocalDto localdto) throws JogoLocalException {
+    Optional<Local> maybelocal;
     if (localdto.getId() > 0) {
-      Optional<Local> maybelocal = localRepository.findById(localdto.getId());
+      maybelocal = localRepository.findById(localdto.getId());
       if (maybelocal.isPresent()) {
         return maybelocal.get();
       } else throw new JogoLocalException("Não existe nenhum Local guardado com esse ID.");
-    } else {
-      Local novolocal = LocalMapper.dtoToLocal(localdto);
-      return localRepository.saveAndFlush(novolocal);
     }
+    if (localdto.getNome().isBlank()) {
+      throw new JogoLocalException("Um Local tem de ter um nome.");
+    }
+    maybelocal = localRepository.findByNome(localdto.getNome());
+    if (maybelocal.isPresent()) {
+      return maybelocal.get();
+    }
+    return null;
   }
 
   @Transactional

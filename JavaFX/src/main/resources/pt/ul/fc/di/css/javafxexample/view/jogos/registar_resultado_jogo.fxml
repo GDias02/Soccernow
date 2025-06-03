@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox fx:controller="pt.ul.fc.di.css.javafxexample.controller.jogos.RegistarResultadoJogoController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="484.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Registar Novo Jogo" />
+                  <MenuItem mnemonicParsing="false" text="Registar Resultado" />
+                  <MenuItem mnemonicParsing="false" text="Registar Local" />
+                  <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="About SoccerNow">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <AnchorPane prefHeight="26.0" prefWidth="600.0">
+         <children>
+            <Text layoutX="461.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SoccerNow" textAlignment="CENTER" wrappingWidth="124.619140625">
+               <font>
+                  <Font name="Berlin Sans FB" size="24.0" />
+               </font>
+            </Text>
+            <Line endX="445.619140625" endY="-0.125" layoutX="140.0" layoutY="38.0" startX="-63.0" startY="-0.125" />
+            <ImageView fitHeight="35.0" fitWidth="37.0" layoutX="26.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../image-assets/soccer-ball.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <TabPane fx:id="tabPane" prefHeight="401.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab text="Selecionar Jogo">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="14.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccionar Jogo para Registar Resultado">
+                           <font>
+                              <Font name="Berlin Sans FB" size="22.0" />
+                           </font>
+                        </Text>
+                        <ButtonBar layoutY="332.0" prefHeight="40.0" prefWidth="322.0">
+                           <buttons>
+                              <Button fx:id="voltarAoMenuBtn" mnemonicParsing="false" onAction="#voltarAoMenu" text="Voltar ao Menu" />
+                              <Button fx:id="passo1AvancarBtn1" mnemonicParsing="false" onAction="#passo1Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo" />
+                           </buttons>
+                        </ButtonBar>
+                        <TableView fx:id="tabelaJogos" layoutX="7.0" layoutY="58.0" prefHeight="244.0" prefWidth="586.0">
+                          <columns>
+                              <TableColumn prefWidth="46.0" text="Id" />
+                            <TableColumn prefWidth="73.0" text="Data" />
+                            <TableColumn prefWidth="151.0" text="Local" />
+                              <TableColumn prefWidth="117.0" text="Equipa 1" />
+                              <TableColumn prefWidth="115.0" text="Equipa 2" />
+                              <TableColumn prefWidth="77.0" text="Campeonato" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Cartões">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tabelaArbitros" layoutX="32.0" layoutY="194.0" prefHeight="114.0" prefWidth="526.0">
+                          <columns>
+                            <TableColumn prefWidth="159.0" text="Jogador" />
+                              <TableColumn prefWidth="93.0" text="Equipa" />
+                            <TableColumn prefWidth="67.0" text="Cor" />
+                              <TableColumn prefWidth="124.0" text="Árbitro" />
+                              <TableColumn prefWidth="82.0" text="Tempo" />
+                          </columns>
+                        </TableView>
+                        <ComboBox fx:id="selecionarArbitro" layoutX="32.0" layoutY="83.0" onAction="#loadArbitroSelecionado" prefHeight="25.0" prefWidth="155.0" promptText="Selecione um Árbitro" />
+                        <Button fx:id="addCartaoListaBtn" layoutX="387.0" layoutY="122.0" mnemonicParsing="false" onAction="#addCartaoLista" prefHeight="64.0" prefWidth="76.0" text="Adicionar à lista" textAlignment="CENTER" wrapText="true" />
+                        <Button fx:id="removeCartaoListaBtn" layoutX="480.0" layoutY="143.0" mnemonicParsing="false" onAction="#removeCartaoLista" prefHeight="43.0" prefWidth="78.0" text="Remover da Lista" wrapText="true" />
+                        <ButtonBar layoutY="331.0" prefHeight="40.0" prefWidth="322.0">
+                           <buttons>
+                              <Button fx:id="passo2VoltarBtn" mnemonicParsing="false" onAction="#passo2Voltar" text="Atrás" />
+                              <Button fx:id="passo2AvancarBtn" mnemonicParsing="false" onAction="#passo2Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo Passo" />
+                           </buttons>
+                        </ButtonBar>
+                        <Text layoutX="16.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cartões Atribuídos">
+                           <font>
+                              <Font name="Berlin Sans FB" size="22.0" />
+                           </font>
+                        </Text>
+                        <ComboBox fx:id="selecionarJogador" layoutX="200.0" layoutY="83.0" prefHeight="25.0" prefWidth="162.0" promptText="Selecione um Jogador" />
+                        <ComboBox fx:id="selecionarCor" layoutX="35.0" layoutY="131.0" prefWidth="150.0" promptText="Cor do Cartão" />
+                        <ComboBox fx:id="selecionarHora" layoutX="200.0" layoutY="131.0" prefHeight="25.0" prefWidth="62.0" promptText="HH" />
+                        <ComboBox fx:id="selecionarMinuto" layoutX="264.0" layoutY="131.0" prefHeight="25.0" prefWidth="68.0" promptText="MM" />
+                     </children></AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Golos">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tabelaArbitros1" layoutX="51.0" layoutY="198.0" prefHeight="114.0" prefWidth="498.0">
+                           <columns>
+                              <TableColumn prefWidth="231.0" text="Jogador" />
+                              <TableColumn prefWidth="162.0" text="Equipa" />
+                              <TableColumn prefWidth="106.0" text="Tempo" />
+                           </columns>
+                        </TableView>
+                        <Button fx:id="addCartaoListaBtn1" layoutX="387.0" layoutY="131.0" mnemonicParsing="false" onAction="#addCartaoLista" prefHeight="64.0" prefWidth="76.0" text="Adicionar à lista" textAlignment="CENTER" wrapText="true" />
+                        <Button fx:id="removeCartaoListaBtn1" layoutX="471.0" layoutY="154.0" mnemonicParsing="false" onAction="#removeCartaoLista" prefHeight="43.0" prefWidth="78.0" text="Remover da Lista" wrapText="true" />
+                        <ButtonBar layoutY="331.0" prefHeight="40.0" prefWidth="322.0">
+                           <buttons>
+                              <Button fx:id="passo2VoltarBtn1" mnemonicParsing="false" onAction="#passo2Voltar" text="Atrás" />
+                              <Button fx:id="passo2AvancarBtn1" mnemonicParsing="false" onAction="#passo2Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo Passo" />
+                           </buttons>
+                        </ButtonBar>
+                        <Text layoutX="16.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Golos Marcados">
+                           <font>
+                              <Font name="Berlin Sans FB" size="22.0" />
+                           </font>
+                        </Text>
+                        <ComboBox fx:id="selecionarJogador1" layoutX="46.0" layoutY="84.0" prefHeight="25.0" prefWidth="162.0" promptText="Selecione um Jogador" />
+                        <ComboBox fx:id="selecionarHora1" layoutX="223.0" layoutY="131.0" prefHeight="25.0" prefWidth="62.0" promptText="HH" />
+                        <ComboBox fx:id="selecionarMinuto1" layoutX="293.0" layoutY="131.0" prefHeight="25.0" prefWidth="68.0" promptText="MM" />
+                        <ComboBox layoutX="46.0" layoutY="131.0" prefWidth="150.0" promptText="A favor da Equipa" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Finalizar">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="14.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirmar">
+                           <font>
+                              <Font name="Berlin Sans FB" size="22.0" />
+                           </font>
+                        </Text>
+                        <Button fx:id="passo4VoltarBtn" layoutX="51.0" layoutY="174.0" minWidth="27.0" mnemonicParsing="false" onAction="#passo4Voltar" prefHeight="25.0" text="Atrás" />
+                        <Button fx:id="resultadoJogoSubmitBtn" layoutX="176.0" layoutY="160.0" mnemonicParsing="false" onAction="#resultadoJogoSubmit" prefHeight="52.0" prefWidth="152.0" text="Submeter Resultado" />
+                        <Text fx:id="placarDIsplay" layoutX="51.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;Placar&gt;" wrappingWidth="216.93896484375">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="equipaVencedoraDisplay" layoutX="139.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;Equipa Vencedora&gt;" />
+                        <Label layoutX="46.0" layoutY="118.0" text="Vencedor:" />
+                     </children></AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+    </children>
+</VBox>

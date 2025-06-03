@@ -1,7 +1,8 @@
 package pt.ul.fc.css.soccernow.controllers;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.handlers.JogoHandler;
 
@@ -80,5 +78,30 @@ public class JogoController {
   public ResponseEntity<Set<JogoDto>> buscarJogos() {
     Set<JogoDto> jogosDtos = jogoHandler.buscarJogos();
     return ResponseEntity.ok(jogosDtos);
+  }
+
+  @PostMapping("/local/available")
+  @ApiOperation(value = "Verifica a disponibilidade de um local", notes = "True se disponivel")
+  public ResponseEntity<Boolean> localDisponivel(@RequestBody JogoDto jogo) {
+    Boolean disponivel = jogoHandler.localDisponivel(jogo);
+    return ResponseEntity.ok(disponivel);
+  }
+
+  @PostMapping("/arbitros/available")
+  @ApiOperation(
+      value = "Verifica a disponibilidade de uma lista de arbitros",
+      notes = "True se todos disponiveis")
+  public ResponseEntity<Boolean> arbitrosDisponiveis(@RequestBody JogoDto jogo) {
+    Boolean disponivel = jogoHandler.arbitrosDisponiveis(jogo);
+    return ResponseEntity.ok(disponivel);
+  }
+
+  @PostMapping("jogadores/available")
+  @ApiOperation(
+      value = "Verifica a disponibilidade dos jogadores nas selecoes",
+      notes = "True se todos disponiveis")
+  public ResponseEntity<Boolean> jogadoresDisponiveis(@RequestBody JogoDto jogo) {
+    Boolean disponivel = jogoHandler.jogadoresDisponiveis(jogo);
+    return ResponseEntity.ok(disponivel);
   }
 }

@@ -27,7 +27,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="484.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:controller="pt.ul.fc.di.css.javafxexample.controller.jogos.RegistarJogoController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="484.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar>
         <menus>
@@ -66,7 +66,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <TabPane prefHeight="401.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" prefHeight="401.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Data e Local">
             <content>
@@ -140,8 +140,8 @@
                         </VBox>
                         <ButtonBar layoutY="338.0" prefHeight="40.0" prefWidth="322.0">
                            <buttons>
-                              <Button fx:id="voltarAoMenuBtn" mnemonicParsing="false" onAction="#voltarAoMenu" text="Menu Principal" />
-                              <Button fx:id="passo1AvancarBtn" mnemonicParsing="false" onAction="#passo1Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo Passo" />
+                              <Button fx:id="voltarAoMenuBtn" mnemonicParsing="false" onAction="#voltarAoMenu" text="Voltar ao Menu" />
+                              <Button fx:id="passo1AvancarBtn" mnemonicParsing="false" onAction="#passo1Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo" />
                            </buttons>
                         </ButtonBar>
                         <Separator layoutX="172.0" layoutY="70.0" orientation="VERTICAL" prefHeight="200.0" />
@@ -204,8 +204,8 @@
                         <Button fx:id="loadJogadoresEquipa1Btn" layoutX="102.0" layoutY="146.0" mnemonicParsing="false" onAction="#loadJogadoresEquipa1" text="Carregar Jogadores" />
                         <ButtonBar layoutY="332.0" prefHeight="40.0" prefWidth="322.0">
                           <buttons>
-                            <Button fx:id="passo2VoltarBtn" mnemonicParsing="false" onAction="#passo2Voltar" text="Atrás" />
-                              <Button fx:id="passo2AvancarBtn" mnemonicParsing="false" onAction="#passo2Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo Passo" />
+                            <Button fx:id="passo2VoltarBtn" mnemonicParsing="false" onAction="#passo2Voltar" text="Anterior" />
+                              <Button fx:id="passo2AvancarBtn" mnemonicParsing="false" onAction="#passo2Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo" />
                           </buttons>
                         </ButtonBar>
                      </children></AnchorPane>
@@ -259,8 +259,8 @@
                         <Button fx:id="loadJogadoresEquipa2Btn" layoutX="102.0" layoutY="146.0" mnemonicParsing="false" onAction="#loadJogadoresEquipa2" text="Carregar Jogadores" />
                         <ButtonBar layoutY="332.0" prefHeight="40.0" prefWidth="322.0">
                            <buttons>
-                              <Button fx:id="passo3VoltarBtn" mnemonicParsing="false" onAction="#passo3Voltar" text="Atrás" />
-                              <Button fx:id="passo3AvancarBtn" mnemonicParsing="false" onAction="#passo3Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo Passo" />
+                              <Button fx:id="passo3VoltarBtn" mnemonicParsing="false" onAction="#passo3Voltar" text="Anterior" />
+                              <Button fx:id="passo3AvancarBtn" mnemonicParsing="false" onAction="#passo3Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo" />
                            </buttons>
                         </ButtonBar>
                      </children>
@@ -288,8 +288,8 @@
                         <Label layoutX="14.0" layoutY="139.0" text="Informação do Árbitro Selecionado:" />
                         <ButtonBar layoutY="331.0" prefHeight="40.0" prefWidth="322.0">
                            <buttons>
-                              <Button fx:id="passo4VoltarBtn" mnemonicParsing="false" onAction="#passo4Voltar" text="Atrás" />
-                              <Button fx:id="passo4AvancarBtn" mnemonicParsing="false" onAction="#passo4Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo Passo" />
+                              <Button fx:id="passo4VoltarBtn" mnemonicParsing="false" onAction="#passo4Voltar" text="Anterior" />
+                              <Button fx:id="passo4AvancarBtn" mnemonicParsing="false" onAction="#passo4Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo" />
                            </buttons>
                         </ButtonBar>
                         <Text layoutX="16.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Equipa de Arbitragem">
@@ -311,7 +311,7 @@
                               <Font name="Berlin Sans FB" size="22.0" />
                            </font>
                         </Text>
-                        <Button fx:id="passo5VoltarBtn" layoutX="51.0" layoutY="174.0" minWidth="27.0" mnemonicParsing="false" onAction="#passo5Voltar" prefHeight="25.0" text="Atrás" />
+                        <Button fx:id="passo5VoltarBtn" layoutX="51.0" layoutY="174.0" minWidth="27.0" mnemonicParsing="false" onAction="#passo5Voltar" prefHeight="25.0" text="Anterior" />
                         <Button fx:id="criarJogoSubmitBtn" layoutX="176.0" layoutY="160.0" mnemonicParsing="false" onAction="#criarJogoSubmit" prefHeight="52.0" prefWidth="152.0" text="Submeter" />
                      </children></AnchorPane>
                </content>
