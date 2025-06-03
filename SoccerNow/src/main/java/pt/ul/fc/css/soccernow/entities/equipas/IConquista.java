@@ -12,6 +12,12 @@ import pt.ul.fc.css.soccernow.entities.campeonatos.Campeonato;
 public interface IConquista {
 
     /**
+     * Sets Id
+     * 
+     */
+    public void setId(Long id);
+
+    /**
      * Gets the ID of the Conquista.
      *
      * @return the ID of the Conquista

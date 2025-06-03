@@ -75,6 +75,7 @@ public class CampeonatoHandler implements ICampeonatoHandler {
    * @param campeonatoDto Updated details
    * @return Updated CampeonatoDto, null if not found, or with id -1 if conflict
    */
+  @Transactional
   public CampeonatoDto atualizarCampeonato(Long id, CampeonatoDto campeonatoDto) {
     if (!validatorAtualizarCampeonato(id, campeonatoDto)) {
       campeonatoDto.setId(-1L);
@@ -88,7 +89,7 @@ public class CampeonatoHandler implements ICampeonatoHandler {
 
   private boolean validatorAtualizarCampeonato(Long id, CampeonatoDto campeonatoDto) {
     // TODO Keep on adding more business rules
-    if (!(id == campeonatoDto.getId())) return false;
+    if (id != campeonatoDto.getId()) return false;
     return true;
   }
 
@@ -98,10 +99,11 @@ public class CampeonatoHandler implements ICampeonatoHandler {
    * @param id Campeonato id
    * @return Deleted CampeonatoDto, null if not found, or with id -1 if conflict
    */
+  @Transactional
   public CampeonatoDto removerCampeonato(Long id) {
     Campeonato campeonato = campeonatoRepository.findById(id).get();
     if (campeonato == null) return null;
-    if (!validatorRemoverCampeonato(id, campeonato)) {
+    if (validatorRemoverCampeonato(id, campeonato)) {
       campeonatoRepository.deleteById(id);
     } else {
       campeonato.setId(-1L);

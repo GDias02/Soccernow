@@ -49,7 +49,7 @@ public class CampeonatoController {
     return ResponseEntity.status(HttpStatus.CREATED).body(campeonato);
   }
 
-  @PutMapping
+  @PutMapping("{id}")
   @ApiOperation(
       value = "Updates an existing campeonato",
       notes = "Updates the details of an existing campeonato")

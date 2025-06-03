@@ -2,6 +2,7 @@ package pt.ul.fc.css.soccernow.handlers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +24,18 @@ import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroPostDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.CertificadoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.UtilizadorDto;
+import pt.ul.fc.css.soccernow.entities.campeonatos.CampeonatoPontos;
+import pt.ul.fc.css.soccernow.entities.campeonatos.EstadoCampeonato;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
+import pt.ul.fc.css.soccernow.entities.jogos.JogoCampeonato;
 import pt.ul.fc.css.soccernow.entities.jogos.Local;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
+import pt.ul.fc.css.soccernow.mappers.campeonatos.CampeonatoMapper;
 import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
+import pt.ul.fc.css.soccernow.mappers.jogos.JogoMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.LocalMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroPostMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
@@ -306,7 +312,7 @@ public class InitHandler {
             null,
             EstadoDeJogo.AGENDADO,
             LocalMapper.localToDto(local1),
-            d1,
+            d3,
             s1,
             s2,
             savedArbitrosDto); // Usa o mesmo local que o jogo 1
@@ -319,7 +325,8 @@ public class InitHandler {
     jogosDto.add(j4);
 
     JogoDto teste1 = jogoHandler.createJogo(j1);
-
+    JogoDto teste2 = jogoHandler.createJogo(j2);
+    JogoDto teste3 = jogoHandler.createJogo(j3);
     System.out.println(teste1);
     // jogoRepository.save(teste1);
     /*
@@ -391,5 +398,11 @@ public class InitHandler {
     jogador1Dto.setEstatisticas(estatisticaJogadorDto);
     estatisticasHandler.updateEstatisticaJogador(jogador1Dto);
     */
+
+    /** Campeonatos */
+    List<JogoCampeonato> jogosCampeonato1 = new ArrayList<>();
+    CampeonatoPontos campeonato1 = new CampeonatoPontos(1L,"UEFA", EstadoCampeonato.AGENDADO, new Date(), jogosCampeonato1, equipas);
+    campeonatoRepository.save(campeonato1);
+    
   }
 }

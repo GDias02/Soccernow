@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -16,7 +18,10 @@ import pt.ul.fc.css.soccernow.entities.jogos.JogoCampeonato;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Campeonato implements ICampeonato {
 
-  @Id protected Long id;
+  
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO) 
+  protected Long id;
 
   protected String nome;
   protected EstadoCampeonato estado;

@@ -2,9 +2,12 @@ package pt.ul.fc.css.soccernow.entities.campeonatos;
 
 import java.util.Date;
 import java.util.List;
+
+import jakarta.persistence.Entity;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.JogoCampeonato;
 
+@Entity
 public class CampeonatoEliminatoria extends Campeonato {
   // TODO
   public CampeonatoEliminatoria(){}

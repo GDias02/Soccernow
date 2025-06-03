@@ -18,7 +18,7 @@ public class Conquista implements IConquista {
 
   private String descricao;
 
-  private int posicaoDePodio;
+  private Integer posicaoDePodio;
 
   @ManyToOne
   @JoinColumn(name = "equipa_id", nullable = false)
@@ -28,6 +28,7 @@ public class Conquista implements IConquista {
   @JoinColumn(name = "campeonato_id", nullable = false)
   private Campeonato campeonato;
 
+  @Override
   public Long getId() {
     return id;
   }
@@ -71,4 +72,10 @@ public class Conquista implements IConquista {
   public void setCampeonato(Campeonato campeonato) {
     this.campeonato = campeonato;
   }
+
+  @Override
+  public void setId(Long id) {
+    this.id = id;
+  }
+
 }

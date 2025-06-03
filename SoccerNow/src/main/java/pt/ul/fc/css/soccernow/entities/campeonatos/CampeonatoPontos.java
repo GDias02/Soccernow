@@ -4,11 +4,28 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.MapKeyJoinColumn;
+import jakarta.persistence.OneToMany;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.JogoCampeonato;
 
+@Entity
 public class CampeonatoPontos extends Campeonato {
     
+    @ElementCollection //Porque os pontos são apenas Longs e não Entidades
+    @CollectionTable(
+        name = "tabela_pontos",
+        joinColumns = @JoinColumn(name = "campeonato_id")
+    )
+    @MapKeyJoinColumn(name = "equipa_id") //Mapeamento relativo à chave, entidade
+    @Column(name = "pontos")
     private Map<Equipa, Long> tabela;
 
     public CampeonatoPontos(){

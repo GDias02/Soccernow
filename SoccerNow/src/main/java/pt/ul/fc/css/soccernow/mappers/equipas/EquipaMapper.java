@@ -2,12 +2,9 @@ package pt.ul.fc.css.soccernow.mappers.equipas;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
-import pt.ul.fc.css.soccernow.entities.jogos.IJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
-import pt.ul.fc.css.soccernow.entities.utilizadores.IJogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.repositories.JogadorRepository;
 import pt.ul.fc.css.soccernow.repositories.JogoRepository;
@@ -17,10 +14,6 @@ import pt.ul.fc.css.soccernow.repositories.JogoRepository;
  * objects and lists in both directions.
  */
 public class EquipaMapper {
-
-  //@Autowired private static JogadorRepository jogadorRepository;
-
-  //@Autowired private static JogoRepository jogoRepository;
 
   /**
    * Converts an Equipa entity to an EquipaDto.

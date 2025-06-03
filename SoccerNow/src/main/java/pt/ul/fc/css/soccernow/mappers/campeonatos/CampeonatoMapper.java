@@ -62,7 +62,7 @@ public class CampeonatoMapper {
         jogoRepository.findAllById(campeonatoDto.getJogos()).stream()
             .map(jogo -> (JogoCampeonato) jogo)
             .collect(Collectors.toList());
-    if (campeonatoDto.getTipo() == "pontos") {
+    if (campeonatoDto.getTipo().equals("pontos")) {
       campeonato =
           new CampeonatoPontos(
               campeonatoDto.getId(),
@@ -72,7 +72,7 @@ public class CampeonatoMapper {
               jogos,
               equipas);
 
-    } else if (campeonatoDto.getTipo() == "eliminatoria") {
+    } else if (campeonatoDto.getTipo().equals("eliminatoria")) {
 
       campeonato =
           new CampeonatoEliminatoria(
