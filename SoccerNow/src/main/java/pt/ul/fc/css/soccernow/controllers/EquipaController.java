@@ -13,6 +13,7 @@ import pt.ul.fc.css.soccernow.handlers.ConquistaHandler;
 import pt.ul.fc.css.soccernow.handlers.EquipaHandler;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/equipas")
@@ -86,30 +87,14 @@ public class EquipaController {
 
     /** FILTROS - FILTROS - FILTROS - FILTROS */
 
-    @GetMapping("equipas")
+    @GetMapping("/search")
     @ApiOperation(value="Get equipas by filter", notes="Gets a list of equipas with the given that respect the given filters")
-    public ResponseEntity<List<EquipaDto>> getEquipasByFilter(
-        @RequestParam(required = false) String nome, 
-        @RequestParam(required = false) Long numDeJogadores,
-        @RequestParam(required = false) Long numDeGolos,
-        @RequestParam(required = false) Long numCartores,
-        @RequestParam(required = false) Long numDeJogos
-    ) {
-        
-        return null;
+    public ResponseEntity<List<EquipaDto>> search(@RequestParam(value ="search") String search){
+        List<EquipaDto> equipas = equipaHandler.search(search);
+        if (search == null || equipas.isEmpty()) 
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(equipas); 
     }
-/**
- 
--  Filtro por nome.
-– Filtro por n ́umero de jogadores.
-– Filtro por n ́umero de vit ́orias, empates ou derrotas.
-– Filtro por conquistas.
-– Filtro por ausˆencia de jogadores numa posi ̧c ̃ao espec ́ıfica
- */
-
-
-
-
 
     /** IN REFERENCE TO CONQUISTA */ 
 

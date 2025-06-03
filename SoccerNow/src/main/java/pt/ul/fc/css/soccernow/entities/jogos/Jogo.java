@@ -15,6 +15,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -56,7 +57,6 @@ public abstract class Jogo implements IJogo {
 
   @Column
   private Placar placar; // para acesso mais rapido ao resultado de um jogo, sem necessidade de
-
   // carregar todas as suas estatisticas
 
   @Transient private EstatisticaJogo stats;
