@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Registar Novo Jogo" />
+                  <MenuItem mnemonicParsing="false" text="Registar Resultado" />
+                  <MenuItem mnemonicParsing="false" text="Registar Local" />
+                  <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="About SoccerNow">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <AnchorPane prefHeight="26.0" prefWidth="600.0">
+         <children>
+            <Text layoutX="461.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SoccerNow" textAlignment="CENTER" wrappingWidth="124.619140625">
+               <font>
+                  <Font name="Berlin Sans FB" size="24.0" />
+               </font>
+            </Text>
+            <Line endX="445.619140625" endY="-0.125" layoutX="140.0" layoutY="38.0" startX="-63.0" startY="-0.125" />
+            <ImageView fitHeight="35.0" fitWidth="37.0" layoutX="26.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../image-assets/soccer-ball.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="250.0" prefWidth="600.0">
+         <children>
+            <Button layoutX="33.0" layoutY="143.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="133.0" text="Registar Resultado de um Jogo" textAlignment="CENTER" wrapText="true" />
+            <Button layoutX="33.0" layoutY="210.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="133.0" text="Registar um Local" />
+            <Button layoutX="33.0" layoutY="77.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="133.0" text="Registar Novo Jogo" />
+            <Label layoutX="179.0" layoutY="65.0" mnemonicParsing="true" prefHeight="74.0" prefWidth="264.0" text="Quer jogar um jogo de Futsal? Aconselha-se que antes proceda ao registo de pelo menos dez Jogadores, um Árbitro e duas Equipas." textAlignment="JUSTIFY" wrapText="true" />
+            <Label layoutX="179.0" layoutY="139.0" mnemonicParsing="true" prefHeight="58.0" prefWidth="264.0" text="Terminou um jogo? Aponte aqui os principais acontecimentos!" textAlignment="JUSTIFY" wrapText="true" />
+            <Label layoutX="179.0" layoutY="206.0" mnemonicParsing="true" prefHeight="58.0" prefWidth="264.0" text="Tem um jogo planeado? Registe aqui o local. (TODO)" textAlignment="JUSTIFY" wrapText="true" />
+            <MenuButton layoutX="482.0" layoutY="90.0" mnemonicParsing="false" text="Esqueci-me!">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Registar Jogador" />
+                <MenuItem mnemonicParsing="false" text="Registar Árbitro" />
+                  <MenuItem mnemonicParsing="false" text="Registar Equipa" />
+              </items>
+            </MenuButton>
+            <Text layoutX="234.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gerir Jogos" wrappingWidth="133.0">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
