@@ -11,7 +11,9 @@ import com.querydsl.jpa.JPQLQuery;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.equipas.QConquista;
 import pt.ul.fc.css.soccernow.entities.equipas.QEquipa;
+import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.QJogo;
+import pt.ul.fc.css.soccernow.entities.jogos.QSelecao;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
 import pt.ul.fc.css.soccernow.entities.utilizadores.QJogador;
 import pt.ul.fc.css.soccernow.filters.AbstractPredicate;
@@ -27,7 +29,7 @@ public class EquipaPredicate extends AbstractPredicate<Equipa>{
     public BooleanExpression getPredicate() {
         PathBuilder<Equipa> entityPath = new PathBuilder<>(getEntityClass(), getAlias());
 
-        // TRATAMENTO ESPECIAL PARA "numJogadores"
+        /**  Número de Jogadores */
         if ("numJogadores".equals(criteria.getKey())) {
             QEquipa equipa = QEquipa.equipa;
             return switch (criteria.getOperation()) {
@@ -49,7 +51,7 @@ public class EquipaPredicate extends AbstractPredicate<Equipa>{
             JPQLQuery<Long> countSubquery = JPAExpressions
                 .select(jogo.count())
                 .from(jogo)
-                .where(jogo.equipaVencedora.eq(equipa));
+                .where(jogo.placar.equipaVencedora.eq(equipa.id));
 
             return switch (criteria.getOperation()) {
                 case ":" -> countSubquery.eq((long) valor);
@@ -64,12 +66,16 @@ public class EquipaPredicate extends AbstractPredicate<Equipa>{
 
             QEquipa equipa = QEquipa.equipa;
             QJogo jogo = QJogo.jogo;
+            QSelecao selecao = QSelecao.selecao;
 
             // Subquery: SELECT COUNT(*) FROM jogo WHERE equipaVencedora = equipa
             JPQLQuery<Long> countSubquery = JPAExpressions
                 .select(jogo.count())
                 .from(jogo)
-                .where(jogo.equipaVencedora.eq(0));
+                .join(jogo.selecoes, selecao)
+                .where(jogo.placar.equipaVencedora.eq(0L)
+                    .and(jogo.estadoDeJogo.eq(EstadoDeJogo.TERMINADO)),
+                    selecao.equipa.id.eq(equipa.id));
 
             return switch (criteria.getOperation()) {
                 case ":" -> countSubquery.eq((long) valor);
@@ -84,13 +90,17 @@ public class EquipaPredicate extends AbstractPredicate<Equipa>{
 
             QEquipa equipa = QEquipa.equipa;
             QJogo jogo = QJogo.jogo;
+            QSelecao selecao = QSelecao.selecao;
 
             // Subquery: SELECT COUNT(*) FROM jogo WHERE equipaVencedora = equipa
             JPQLQuery<Long> countSubquery = JPAExpressions
                 .select(jogo.count())
                 .from(jogo)
-                .where(jogo.equipaVencedora.neq(equipa)
-                    .and(jogo.equipaVencedora.neq(0)));
+                .join(jogo.selecoes, selecao)
+                .where(jogo.placar.equipaVencedora.ne(equipa.id)
+                    .and(jogo.placar.equipaVencedora.ne(0L))
+                    .and(jogo.estadoDeJogo.eq(EstadoDeJogo.TERMINADO)),
+                    selecao.equipa.id.eq(equipa.id));
 
             return switch (criteria.getOperation()) {
                 case ":" -> countSubquery.eq((long) valor);
@@ -113,6 +123,7 @@ public class EquipaPredicate extends AbstractPredicate<Equipa>{
                 .exists();
         }
 
+        /** Get Equipas que não têm determinadas posições no plantel */
         if ("semPosicao".equals(criteria.getKey())){
             Posicao pos = Posicao.valueOf(criteria.getValue().toString());
 
