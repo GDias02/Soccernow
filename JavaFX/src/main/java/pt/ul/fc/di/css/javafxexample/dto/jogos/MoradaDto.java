@@ -14,10 +14,22 @@ public class MoradaDto {
 
   public MoradaDto() {}
 
-  public MoradaDto(String codigoPostal, String rua, String localidade, String cidade, String estado, String pais) {
+  public MoradaDto(
+      String codigoPostal,
+      String rua,
+      String localidade,
+      String cidade,
+      String estado,
+      String pais) {
     this.codigoPostal = codigoPostal;
     this.rua = rua;
     this.localidade = localidade;
+    this.cidade = cidade;
+    this.estado = estado;
+    this.pais = pais;
+  }
+
+  public MoradaDto(String cidade, String estado, String pais) {
     this.cidade = cidade;
     this.estado = estado;
     this.pais = pais;

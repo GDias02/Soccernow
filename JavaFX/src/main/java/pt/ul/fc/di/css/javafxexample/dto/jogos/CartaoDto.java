@@ -10,6 +10,16 @@ public class CartaoDto {
   private Long equipa;
   private Cor cor;
 
+  public CartaoDto(
+      LocalDateTime quando, Long jogo, Long atribuidoA, Long arbitro, Long equipa, Cor cor) {
+    this.quando = quando;
+    this.jogo = jogo;
+    this.atribuidoA = atribuidoA;
+    this.arbitro = arbitro;
+    this.equipa = equipa;
+    this.cor = cor;
+  }
+
   public CartaoDto() {}
 
   public LocalDateTime getQuando() {
@@ -58,5 +68,22 @@ public class CartaoDto {
 
   public void setEquipa(Long equipa) {
     this.equipa = equipa;
+  }
+
+  @Override
+  public String toString() {
+    return "CartaoDto [quando="
+        + quando
+        + ", jogo="
+        + jogo
+        + ", atribuidoA="
+        + atribuidoA
+        + ", arbitro="
+        + arbitro
+        + ", equipa="
+        + equipa
+        + ", cor="
+        + cor
+        + "]";
   }
 }
