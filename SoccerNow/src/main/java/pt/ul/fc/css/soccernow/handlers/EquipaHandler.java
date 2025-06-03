@@ -18,7 +18,6 @@ import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
-import pt.ul.fc.css.soccernow.filters.PredicateFactory;
 import pt.ul.fc.css.soccernow.filters.equipas.EquipaPredicate;
 import pt.ul.fc.css.soccernow.filters.equipas.EquipaPredicatesBuilder;
 import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
@@ -115,6 +114,8 @@ public class EquipaHandler implements IEquipaHandler {
   @Transactional
   public EquipaDto registarEquipa(EquipaDto equipaDto) {
     boolean valid = validatorRegistarEquipa(equipaDto);
+    System.out.println("IS THIS A VALID EQUIPADTO?");
+    System.out.print(valid);
     Equipa savedEquipa = null;
     if (valid) {
       Equipa equipa = EquipaMapper.dtoToEquipa(equipaDto, this.jogadorRepository, this.jogoRepository);

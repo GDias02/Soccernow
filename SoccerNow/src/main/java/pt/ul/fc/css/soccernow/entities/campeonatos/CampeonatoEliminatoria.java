@@ -7,6 +7,8 @@ import pt.ul.fc.css.soccernow.entities.jogos.JogoCampeonato;
 
 public class CampeonatoEliminatoria extends Campeonato {
   // TODO
+  public CampeonatoEliminatoria(){}
+
   public CampeonatoEliminatoria(
       Long id,
       String nome,
