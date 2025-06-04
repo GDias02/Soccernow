@@ -26,29 +26,16 @@ public class InitEquipaController extends Controller {
     private Button criarButton;
 
     @FXML
-    private MenuItem menuCampeonatos;
-
-    @FXML
-    private MenuItem menuEquipas;
-
-    @FXML
-    private MenuItem menuJogos;
-
-    @FXML
-    private MenuItem menuQuit;
-
-    @FXML
-    private MenuItem menuUtilizadores;
-
-    @FXML
     private Button removerButton;
 
     @FXML
-    private Button voltarButton;
+    private Button backrButton;
 
     @FXML
     void goBack(ActionEvent event) {
-
+        Util.switchScene(getStage(),
+                "/pt/ul/fc/di/css/javafxexample/view/init.fxml",
+                "SoccerNow");
     }
 
     @FXML
@@ -73,29 +60,6 @@ public class InitEquipaController extends Controller {
 
     }
 
-    @FXML
-    void initCampeonatos(ActionEvent event) {
 
-    }
-
-    @FXML
-    void initEquipas(ActionEvent event) {
-
-    }
-
-    @FXML
-    void initJogos(ActionEvent event) {
-
-    }
-
-    @FXML
-    void initUtilizadores(ActionEvent event) {
-
-    }
-
-    @FXML
-    void quit(ActionEvent event) {
-
-    }
 
 }

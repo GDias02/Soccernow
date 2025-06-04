@@ -12,7 +12,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import pt.ul.fc.di.css.javafxexample.api.ApiEquipa;
+import pt.ul.fc.di.css.javafxexample.api.ApiJogador;
 import pt.ul.fc.di.css.javafxexample.controller.Controller;
+import pt.ul.fc.di.css.javafxexample.controller.Util;
 import pt.ul.fc.di.css.javafxexample.dto.equipas.EquipaDto;
 import pt.ul.fc.di.css.javafxexample.dto.jogos.EstatisticaJogadorDto;
 import pt.ul.fc.di.css.javafxexample.dto.utilizadores.JogadorDto;
@@ -33,20 +35,6 @@ public class RegistarEquipaController extends Controller {
     @FXML
     private ListView<JogadorDto> jogadoresSelecionados;
 
-    @FXML
-    private MenuItem menuCampeonatos;
-
-    @FXML
-    private MenuItem menuEquipas;
-
-    @FXML
-    private MenuItem menuJogos;
-
-    @FXML
-    private MenuItem menuQuit;
-
-    @FXML
-    private MenuItem menuUtilizadores;
 
     @FXML
     private TextField nomeInput;
@@ -79,15 +67,16 @@ public class RegistarEquipaController extends Controller {
             return;
         }
 
-        // TODO: Chamar o serviço de backend para criar equipa com nomeEquipa e jogadores
-        System.out.println("Equipa '" + nomeEquipa + "' registada com " + jogadores.size() + " jogador(es).");
         List<Long> idJogadores = jogadores.stream()
             .filter(j -> j.getUtilizador() != null)
             .map(j -> j.getUtilizador().getId())
             .toList();
         EquipaDto equipa = new EquipaDto(0L, nomeEquipa, idJogadores);
+
         try {
             ApiEquipa.createEquipa(equipa);
+            messageArea.setText(nomeEquipa + " foi criada com sucesso");
+            goBack(event);
         } catch (Exception e) {
             messageArea.setText("Erro ao criar equipa: " + e.getMessage());
         } 
@@ -95,33 +84,12 @@ public class RegistarEquipaController extends Controller {
 
     @FXML
     void goBack(ActionEvent event) {
-
+        Util.switchScene(getStage(), 
+                        "/pt/ul/fc/di/css/javafxexample/view/equipas/init_equipa.fxml",
+                        "Equipas");
     }
 
-    @FXML
-    void initCampeonatos(ActionEvent event) {
 
-    }
-
-    @FXML
-    void initEquipas(ActionEvent event) {
-
-    }
-
-    @FXML
-    void initJogos(ActionEvent event) {
-
-    }
-
-    @FXML
-    void initUtilizadores(ActionEvent event) {
-
-    }
-
-    @FXML
-    void quit(ActionEvent event) {
-
-    }
 
     @FXML
     void removerJogador(ActionEvent event) {
@@ -133,11 +101,16 @@ public class RegistarEquipaController extends Controller {
     @FXML
     public void initialize() {
         var jogadoresDisponiveis = FXCollections.observableArrayList(
-            new JogadorDto(new UtilizadorDto(null, 123456789, "Cristiano", "Ronaldo"), Posicao.PIVO, new EstatisticaJogadorDto()),
-            new JogadorDto(new UtilizadorDto(null, 987654321, "João", "Mário"), Posicao.ALA_ESQUERDA, new EstatisticaJogadorDto()),
-            new JogadorDto(new UtilizadorDto(null, 192837465, "Pepe", "Ferreira"), Posicao.FIXO, new EstatisticaJogadorDto())
+            new JogadorDto(new UtilizadorDto(null, 123456789, "MockCristiano", "Ronaldo"), Posicao.PIVO, new EstatisticaJogadorDto()),
+            new JogadorDto(new UtilizadorDto(null, 987654321, "MockJoão", "Mário"), Posicao.ALA_ESQUERDA, new EstatisticaJogadorDto()),
+            new JogadorDto(new UtilizadorDto(null, 192837465, "MockPepe", "Ferreira"), Posicao.FIXO, new EstatisticaJogadorDto())
         );
-
+        try {
+            jogadoresDisponiveis = FXCollections.observableArrayList(ApiJogador.buscarJogadores());
+        } catch (Exception e) {
+            //Do nothing
+            messageArea.setText("Houve um erro ao tentar buscar pelos jogadores");
+        }
         listaDeJogadores.setItems(jogadoresDisponiveis);
         jogadoresSelecionados.setItems(FXCollections.observableArrayList());
     }

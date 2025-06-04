@@ -45,7 +45,7 @@
                   <Font size="24.0" />
                </font>
             </Text>
-            <Button fx:id="CampeonatosButton1" layoutX="252.0" layoutY="296.0" mnemonicParsing="false" onAction="#initCampeonatos" prefHeight="17.0" prefWidth="68.0" text="voltar" />
+            <Button fx:id="backButton" layoutX="252.0" layoutY="296.0" mnemonicParsing="false" onAction="#goBack" prefHeight="17.0" prefWidth="68.0" text="voltar" />
       </children>
     </AnchorPane>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" />

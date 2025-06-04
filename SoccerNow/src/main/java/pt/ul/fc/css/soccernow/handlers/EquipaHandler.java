@@ -114,8 +114,6 @@ public class EquipaHandler implements IEquipaHandler {
   @Transactional
   public EquipaDto registarEquipa(EquipaDto equipaDto) {
     boolean valid = validatorRegistarEquipa(equipaDto);
-    System.out.println("IS THIS A VALID EQUIPADTO?");
-    System.out.print(valid);
     Equipa savedEquipa = null;
     if (valid) {
       Equipa equipa = EquipaMapper.dtoToEquipa(equipaDto, this.jogadorRepository, this.jogoRepository);
