@@ -71,4 +71,44 @@ public class ApiJogo {
     System.out.println(response.body());
     return mapper.readValue(response.body(), Boolean.class);
   }
+
+  public static Boolean arbitrosDisponiveis(JogoDto jogo) throws Exception {
+    mapper.registerModule(new JavaTimeModule());
+    String json = mapper.writeValueAsString(jogo);
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL + "/arbitros/available"))
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(json))
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() != 200 && response.statusCode() != 201) {
+      throw new RuntimeException("Failed to get jogos. HTTP code: " + response.statusCode());
+    }
+
+    System.out.println(response.body());
+    return mapper.readValue(response.body(), Boolean.class);
+  }
+
+  public static Boolean jogadoresDisponiveis(JogoDto jogo) throws Exception {
+    mapper.registerModule(new JavaTimeModule());
+    String json = mapper.writeValueAsString(jogo);
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL + "/jogadores/available"))
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(json))
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() != 200 && response.statusCode() != 201) {
+      throw new RuntimeException("Failed to get jogos. HTTP code: " + response.statusCode());
+    }
+
+    System.out.println(response.body());
+    return mapper.readValue(response.body(), Boolean.class);
+  }
 }

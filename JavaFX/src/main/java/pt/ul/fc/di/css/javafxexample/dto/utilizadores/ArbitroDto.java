@@ -4,36 +4,38 @@ import pt.ul.fc.di.css.javafxexample.dto.jogos.EstatisticaArbitroDto;
 
 public class ArbitroDto {
     
-    private UtilizadorDto utilizador;
-    private CertificadoDto certificado;
-    private EstatisticaArbitroDto estatisticas;
+  private UtilizadorDto utilizador;
+  private CertificadoDto certificado;
+  private EstatisticaArbitroDto estatisticas;
 
-    public ArbitroDto() {}
+  public ArbitroDto() {}
 
-    public ArbitroDto(UtilizadorDto utilizador, CertificadoDto certificado, EstatisticaArbitroDto estatisticas) {
-        this.utilizador = utilizador;
-        this.certificado = certificado;
-        this.estatisticas = estatisticas;
-    }
+  public ArbitroDto(UtilizadorDto utilizador, CertificadoDto certificado) {
+    this.utilizador = utilizador;
+    this.certificado = certificado;
+  }
 
-    public UtilizadorDto getUtilizador() {
-        return utilizador;
-    }
-    public void setUtilizador(UtilizadorDto utilizador) {
-        this.utilizador = utilizador;
-    }
-    public CertificadoDto getCertificado() {
-        return certificado;
-    }
-    public void setCertificado(CertificadoDto certificado) {
-        this.certificado = certificado;
-    }
+  public UtilizadorDto getUtilizador() {
+    return utilizador;
+  }
 
-    public EstatisticaArbitroDto getEstatisticas() {
-        return estatisticas;
-    }
+  public void setUtilizador(UtilizadorDto utilizador) {
+    this.utilizador = utilizador;
+  }
 
-    public void setEstatisticas(EstatisticaArbitroDto estatisticas) {
-        this.estatisticas = estatisticas;
-    }
+  public CertificadoDto getCertificado() {
+    return certificado;
+  }
+
+  public void setCertificado(CertificadoDto certificado) {
+    this.certificado = certificado;
+  }
+
+  public EstatisticaArbitroDto getEstatisticas() {
+    return estatisticas;
+  }
+
+  public void setEstatisticas(EstatisticaArbitroDto estatisticas) {
+    this.estatisticas = estatisticas;
+  }
 }

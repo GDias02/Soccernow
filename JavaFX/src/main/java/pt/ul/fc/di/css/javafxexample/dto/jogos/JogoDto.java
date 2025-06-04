@@ -3,6 +3,7 @@ package pt.ul.fc.di.css.javafxexample.dto.jogos;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import pt.ul.fc.di.css.javafxexample.dto.utilizadores.ArbitroDto;
 import pt.ul.fc.di.css.javafxexample.dto.utilizadores.ArbitroPostDto;
 
 /**
@@ -22,7 +23,7 @@ public class JogoDto {
   private LocalDateTime diaEHora;
   private SelecaoDto s1;
   private SelecaoDto s2;
-  private List<ArbitroPostDto> equipaDeArbitros;
+  private List<ArbitroDto> equipaDeArbitros;
   private EstatisticaJogoDto stats;
   private Long equipaVencedora;
   private Long campeonato;
@@ -36,7 +37,7 @@ public class JogoDto {
       LocalDateTime diaEHora,
       SelecaoDto s1,
       SelecaoDto s2,
-      List<ArbitroPostDto> equipaDeArbitros) {
+      List<ArbitroDto> equipaDeArbitros) {
     this.id = id;
     this.estadoDeJogo = estadoDeJogo;
     this.localDto = localDto;
@@ -53,7 +54,7 @@ public class JogoDto {
       LocalDateTime diaEHora,
       SelecaoDto s1,
       SelecaoDto s2,
-      List<ArbitroPostDto> equipaDeArbitros,
+      List<ArbitroDto> equipaDeArbitros,
       Long campeonato) {
     this.id = id;
     this.estadoDeJogo = estadoDeJogo;
@@ -115,11 +116,11 @@ public class JogoDto {
     this.s2 = s2;
   }
 
-  public List<ArbitroPostDto> getEquipaDeArbitros() {
+  public List<ArbitroDto> getEquipaDeArbitros() {
     return equipaDeArbitros;
   }
 
-  public void setEquipaDeArbitros(List<ArbitroPostDto> equipaDeArbitros) {
+  public void setEquipaDeArbitros(List<ArbitroDto> equipaDeArbitros) {
     this.equipaDeArbitros = equipaDeArbitros;
   }
 
@@ -189,7 +190,7 @@ public class JogoDto {
     return result;
   }
 
-  private boolean matchListaArbitros(List<ArbitroPostDto> mine, List<ArbitroPostDto> other) {
+  private boolean matchListaArbitros(List<ArbitroDto> mine, List<ArbitroDto> other) {
     if (mine == null) {
       if (other != null) return false;
     }
