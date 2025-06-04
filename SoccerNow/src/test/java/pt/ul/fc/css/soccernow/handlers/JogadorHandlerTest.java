@@ -1,4 +1,5 @@
 package pt.ul.fc.css.soccernow.handlers;
+import java.util.Iterator;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -106,7 +107,7 @@ public class JogadorHandlerTest {
     @DisplayName("Update Jogador nif and posicao")
     @Transactional
     public void testUpdateJogador() {
-        Long id = 1L;
+        Long id = 2L;
         int nif = 222222222;
         String nome = "Ana";
         String contacto = "911111111";
@@ -132,7 +133,7 @@ public class JogadorHandlerTest {
     @DisplayName("Update Jogador to have invalid nif")
     @Transactional
     public void testUpdateInvalidNifJogador() {
-        Long id = 1L;
+        Long id = 2L;
         int nif = 222;
         String nome = "Ana";
         String contacto = "911111111";
@@ -149,7 +150,7 @@ public class JogadorHandlerTest {
     @DisplayName("Get Jogador by nif")
     @Transactional
     public void testGetJogador() {
-        Long id = 1L;
+        Long id = 2L;
         int nif = 222222222;
         String nome = "Ana";
         String contacto = "911111111";
@@ -189,7 +190,7 @@ public class JogadorHandlerTest {
     @DisplayName("Get all Jogadores")
     @Transactional
     public void testGetAllJogador() {
-        Long id = 1L;
+        Long id = 2L;
         int nif = 222222222;
         String nome = "Ana";
         String contacto = "911111111";
@@ -197,9 +198,11 @@ public class JogadorHandlerTest {
 
         Set<JogadorDto> responseDtos = jogadorHandler.buscarJogadores();
 
-        assertEquals(1, responseDtos.size());
+        assertEquals(2, responseDtos.size());
 
-        JogadorDto responseDto = responseDtos.iterator().next();
+        Iterator<JogadorDto> iter = responseDtos.iterator();
+        iter.next();
+        JogadorDto responseDto = iter.next();
 
         UtilizadorDto responseUtilizador = responseDto.getUtilizador();
         assertNotNull(responseUtilizador);

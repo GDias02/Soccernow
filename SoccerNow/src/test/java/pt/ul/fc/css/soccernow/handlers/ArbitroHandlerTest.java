@@ -103,7 +103,7 @@ public class ArbitroHandlerTest {
     @DisplayName("Update Arbitro nif and certificado")
     @Transactional
     public void testUpdateArbitro() {
-        Long id = 2L;
+        Long id = 3L;
         int nif = 333333333;
         String nome = "Ana";
         String contacto = "911111111";
@@ -131,7 +131,7 @@ public class ArbitroHandlerTest {
     @DisplayName("Update Arbitro to have invalid nif")
     @Transactional
     public void testUpdateInvalidNifArbitro() {
-        Long id = 2L;
+        Long id = 3L;
         int nif = 333;
         String nome = "Ana";
         String contacto = "911111111";
@@ -148,7 +148,7 @@ public class ArbitroHandlerTest {
     @DisplayName("Get Arbitro by nif")
     @Transactional
     public void testGetArbitro() {
-        Long id = 2L;
+        Long id = 3L;
         int nif = 333333333;
         String nome = "Ana";
         String contacto = "911111111";
