@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="696.0" prefWidth="502.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.equipas.DetalhesEquipaController">
+<VBox prefHeight="696.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.equipas.DetalhesEquipaController">
   <children>
     <MenuBar prefHeight="5.0" prefWidth="553.0" VBox.vgrow="NEVER">
       <menus>
@@ -76,15 +76,21 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Button fx:id="removerEquipaButton" layoutX="67.0" layoutY="455.0" mnemonicParsing="false" onAction="#removerEquipa" prefHeight="42.0" prefWidth="183.0" text="Remover Equipa" />
-                        <Button fx:id="atualizarEquipaButton" layoutX="314.0" layoutY="455.0" mnemonicParsing="false" onAction="#atualizarEquipa" prefHeight="42.0" prefWidth="183.0" text="Atualizar Equipa" />
+                        <Button fx:id="removerEquipaButton" layoutX="57.0" layoutY="455.0" mnemonicParsing="false" onAction="#removerEquipa" prefHeight="42.0" prefWidth="193.0" text="Remover Equipa" />
+                        <Button fx:id="atualizarEquipaButton" layoutX="305.0" layoutY="455.0" mnemonicParsing="false" onAction="#atualizarEquipa" prefHeight="42.0" prefWidth="202.0" text="Atualizar Equipa" />
+                        <ListView fx:id="listaDeJogos" layoutX="528.0" layoutY="107.0" prefHeight="389.0" prefWidth="245.0" />
+                        <Label layoutX="528.0" layoutY="74.0" style="-fx-font-weight: bold;" text="Jogos da Equipa">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
                </center>
                <bottom>
                   <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="551.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="voltarAtras" layoutX="17.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="517.0" text="Voltar atrás" />
+                        <Button fx:id="voltarAtras" layoutX="17.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="756.0" text="Voltar atrás" />
                      </children>
                   </AnchorPane>
                </bottom>

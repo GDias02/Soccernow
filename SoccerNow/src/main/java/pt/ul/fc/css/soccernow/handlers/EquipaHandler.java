@@ -151,14 +151,18 @@ public class EquipaHandler implements IEquipaHandler {
   }
 
   @Transactional(readOnly = true)
-  public Set<JogadorDto> buscarJogadoresDeEquipa(Long equipa_id) {
-    Optional<Equipa> e = equipaRepository.findById(equipa_id);
+  public Set<JogadorDto> buscarJogadoresDeEquipa(Long equipaId) {
+    Optional<Equipa> e = equipaRepository.findById(equipaId);
     if (e.isEmpty()) return new HashSet<>();
-    ;
-    Set<JogadorDto> jogadores =
-        e.get().getJogadores().stream()
+    return e.get().getJogadores().stream()
             .map(JogadorMapper::jogadorToDto)
             .collect(Collectors.toSet());
-    return jogadores;
+  }
+
+  @Transactional(readOnly = true)
+  public List<Jogo> buscarJogosDeEquipa(Long equipaId) {
+    Optional<Equipa> e = equipaRepository.findById(equipaId);
+    if (e.isEmpty()) return new ArrayList<>();
+    return e.get().getHistoricoDeJogos();
   }
 }

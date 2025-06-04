@@ -138,23 +138,9 @@ public class JogoDto {
 
   @Override
   public String toString() {
-    return "JogoDto [id="
-        + id
-        + ", estadoDeJogo="
-        + estadoDeJogo
-        + ", localDto="
-        + localDto
-        + ", diaEHora="
-        + diaEHora
-        + ", s1="
-        + s1
-        + ", s2="
-        + s2
-        + ", equipaDeArbitros="
-        + equipaDeArbitros
-        + ", stats="
-        + stats
-        + "]";
+    return this.diaEHora  + " - "
+        + this.s1 + " vs "
+        + this.s2 + " - " + this.estadoDeJogo;
   }
 
   public Long getEquipaVencedora() {

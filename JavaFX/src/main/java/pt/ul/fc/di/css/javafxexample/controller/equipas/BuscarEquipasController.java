@@ -51,12 +51,11 @@ public class BuscarEquipasController extends Controller{
             //Do nothing
         }
         listaDeEquipas.setItems(equipasDisponiveis);
-
         listaDeEquipas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 Util.switchScene(getStage(), 
                     "/pt/ul/fc/di/css/javafxexample/view/equipas/detalhes_equipa.fxml",
-                    observable.getValue().getId().toString());
+                    newValue.getId().toString());
             }
         });
     }
