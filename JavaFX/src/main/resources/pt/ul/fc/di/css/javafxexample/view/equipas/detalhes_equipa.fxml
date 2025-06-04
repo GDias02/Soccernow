@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="696.0" prefWidth="502.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.equipas.DetalhesEquipaController">
+  <children>
+    <MenuBar prefHeight="5.0" prefWidth="553.0" VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem fx:id="menuUtilizadores" mnemonicParsing="false" onAction="#initUtilizadores" text="Utilizadores" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menuEquipas" mnemonicParsing="false" onAction="#initEquipas" text="Equipas" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menuJogos" mnemonicParsing="false" onAction="#initJogos" text="Jogos" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menuCampeonatos" mnemonicParsing="false" onAction="#initCampeonatos" text="Campeonatos" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menuQuit" mnemonicParsing="false" onAction="#quit" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About SoccerNow" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="634.0" prefWidth="551.0" VBox.vgrow="ALWAYS">
+         <children>
+            <BorderPane layoutY="14.0" prefHeight="563.0" prefWidth="551.0" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
+               <top>
+                  <AnchorPane prefHeight="75.0" prefWidth="551.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <TextArea fx:id="messageArea" editable="false" layoutX="170.0" prefHeight="89.0" prefWidth="361.0" text="Aqui pode atualizar ou remover a sua equipa.&#10;Basta colocar um nome diferente, adicionar ou remover jogadores e clicar em atualizar, ou clicar em remover  para apagar a equipa" wrapText="true" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0" />
+                        <Label layoutX="41.0" layoutY="30.0" style="-fx-font-weight: bold;" text="Equipa">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </top>
+               <center>
+                  <AnchorPane prefHeight="228.0" prefWidth="386.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <TextField fx:id="nomeInput" layoutX="123.0" layoutY="74.0" prefHeight="25.0" prefWidth="350.0" promptText="Nome da equipa" />
+                        <Label layoutX="65.0" layoutY="74.0" style="-fx-font-weight: bold;" text="Nome">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="26.0" layoutY="122.0" style="-fx-font-weight: bold;" text="Jogadores Disponíveis">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="adicionarJogadorButton" layoutX="145.0" layoutY="392.0" mnemonicParsing="false" onAction="#adicionarJogador" prefHeight="25.0" prefWidth="113.0" text="Adicionar jogador" />
+                        <Button fx:id="removerJogadorButton" layoutX="382.0" layoutY="392.0" mnemonicParsing="false" onAction="#removerJogador" prefHeight="25.0" prefWidth="123.0" text="Remover jogador" />
+                        <ListView fx:id="listaDeJogadores" layoutX="58.0" layoutY="147.0" prefHeight="235.0" prefWidth="200.0" />
+                        <ListView fx:id="jogadoresSelecionados" layoutX="305.0" layoutY="147.0" prefHeight="237.0" prefWidth="200.0" />
+                        <Label layoutX="276.0" layoutY="122.0" style="-fx-font-weight: bold;" text="Jogadores Selecionados">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="removerEquipaButton" layoutX="67.0" layoutY="455.0" mnemonicParsing="false" onAction="#removerEquipa" prefHeight="42.0" prefWidth="183.0" text="Remover Equipa" />
+                        <Button fx:id="atualizarEquipaButton" layoutX="314.0" layoutY="455.0" mnemonicParsing="false" onAction="#atualizarEquipa" prefHeight="42.0" prefWidth="183.0" text="Atualizar Equipa" />
+                     </children>
+                  </AnchorPane>
+               </center>
+               <bottom>
+                  <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="551.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="voltarAtras" layoutX="17.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="517.0" text="Voltar atrás" />
+                     </children>
+                  </AnchorPane>
+               </bottom>
+            </BorderPane>
+         </children>
+    </AnchorPane>
+  </children>
+</VBox>

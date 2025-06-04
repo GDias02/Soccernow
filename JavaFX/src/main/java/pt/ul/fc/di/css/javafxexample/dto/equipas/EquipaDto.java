@@ -112,14 +112,9 @@ public class EquipaDto {
 
   @Override
   public String toString() {
-    return "EquipaDto [id="
+    return "id="
         + id
         + ", nome="
-        + nome
-        + ", historicoDeJogos="
-        + historicoDeJogos
-        + ", jogadores="
-        + jogadores
-        + "]";
+        + nome;
   }
 }

@@ -45,7 +45,9 @@ public class InitEquipaController extends Controller {
 
     @FXML
     void openBuscarEquipas(ActionEvent event) {
-
+        Util.switchScene(getStage(), 
+            "/pt/ul/fc/di/css/javafxexample/view/equipas/buscar_equipa.fxml",
+            "Buscar por Equipa");
     }
 
     @FXML

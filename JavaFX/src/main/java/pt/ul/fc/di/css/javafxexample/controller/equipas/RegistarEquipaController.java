@@ -76,7 +76,7 @@ public class RegistarEquipaController extends Controller {
         try {
             ApiEquipa.createEquipa(equipa);
             messageArea.setText(nomeEquipa + " foi criada com sucesso");
-            goBack(event);
+            //goBack(event);
         } catch (Exception e) {
             messageArea.setText("Erro ao criar equipa: " + e.getMessage());
         } 
