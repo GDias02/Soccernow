@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="381.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.campeonatos.InitCampeonatoController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Registar Novo Jogo" />
+                  <MenuItem mnemonicParsing="false" text="Registar Resultado" />
+                  <MenuItem mnemonicParsing="false" text="Registar Local" />
+                  <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="About SoccerNow">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <AnchorPane prefHeight="26.0" prefWidth="600.0">
+         <children>
+            <Text layoutX="461.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SoccerNow" textAlignment="CENTER" wrappingWidth="124.619140625">
+               <font>
+                  <Font name="Berlin Sans FB" size="24.0" />
+               </font>
+            </Text>
+            <Line endX="445.619140625" endY="-0.125" layoutX="140.0" layoutY="38.0" startX="-63.0" startY="-0.125" />
+            <ImageView fitHeight="35.0" fitWidth="37.0" layoutX="26.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../image-assets/soccer-ball.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="250.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="buscarCampeonatoBtn" layoutX="33.0" layoutY="143.0" mnemonicParsing="false" onAction="#buscarCampeonatos" prefHeight="50.0" prefWidth="168.0" text="Verificar Campeonatos Existentes" textAlignment="CENTER" wrapText="true" />
+            <Button fx:id="cancelarCampeonatoBtn" layoutX="33.0" layoutY="210.0" mnemonicParsing="false" onAction="#cancelarCampeonato" prefHeight="50.0" prefWidth="168.0" text="Cancelar um Campeonato" />
+            <Button fx:id="registarCampeonatoBtn" layoutX="33.0" layoutY="77.0" mnemonicParsing="false" onAction="#registarCampeonato" prefHeight="50.0" prefWidth="168.0" text="Registar Novo Campeonato" />
+            <Label layoutX="241.0" layoutY="65.0" mnemonicParsing="true" prefHeight="74.0" prefWidth="264.0" text="Registe aqui um novo campeonato" textAlignment="JUSTIFY" wrapText="true" />
+            <Label layoutX="241.0" layoutY="139.0" mnemonicParsing="true" prefHeight="58.0" prefWidth="264.0" text="Aqui pode verificar todos os campeonatos no sistema. Pode também atualizar os seus dados, assim como remover determinados campeonatos." textAlignment="JUSTIFY" wrapText="true" />
+            <Label layoutX="241.0" layoutY="206.0" mnemonicParsing="true" prefHeight="58.0" prefWidth="264.0" text="Ocorreu algum imprevisto? Cancele aqui um jogo de um campeonato." textAlignment="JUSTIFY" wrapText="true" />
+            <Text layoutX="182.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gerir Campeonatos" wrappingWidth="258.0">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="22.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="voltarButton" layoutX="453.0" layoutY="9.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="133.0" text="voltar" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pt.ul.fc.css.soccernow.dto.campeonatos.CampeonatoDto;
+import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.handlers.CampeonatoHandler;
 
 @RestController
@@ -69,4 +71,14 @@ public class CampeonatoController {
     if (campeonato.getId() == -1) return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     return ResponseEntity.ok(campeonato);
   }
+/*
+  @GetMapping("/search")
+  @ApiOperation(
+    value = "Get campeonatos by filter",
+    notes = "Gets a list of Campeonatos that respect the given filters")
+  public ResponseEntity<List<CampeonatoDto>> search(@RequestParam(value = "search") String search){
+    List<CampeonatoDto> campeonatos = campeonatoHandler.search(search);
+    if (search == null || campeonatos.isEmpty()) return ResponseEntity.noContent().build();
+    return ResponseEntity.ok(campeonatos);
+  } */
 }
