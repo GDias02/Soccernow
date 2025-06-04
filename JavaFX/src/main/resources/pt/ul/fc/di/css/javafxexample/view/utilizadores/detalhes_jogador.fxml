@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="300.0" prefWidth="304.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.utilizadores.DetalhesJogadorController">
+<VBox prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.utilizadores.DetalhesJogadorController">
    <children>
       <MenuBar prefHeight="5.0" prefWidth="323.0">
          <menus>
@@ -56,7 +56,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="355.0" prefWidth="587.0">
+      <AnchorPane prefHeight="425.0" prefWidth="600.0">
          <children>
             <VBox alignment="CENTER" layoutX="170.0" layoutY="58.0" prefHeight="35.0" prefWidth="247.0">
                <children>
@@ -94,14 +94,14 @@
                   <ChoiceBox fx:id="fieldPosicao" prefHeight="26.0" prefWidth="588.0" />
                </children>
             </VBox>
-            <Button fx:id="atualizarButton" layoutX="383.0" layoutY="320.0" mnemonicParsing="false" onAction="#atualizar" prefHeight="67.0" prefWidth="203.0" text="Atualizar" />
+            <Button fx:id="atualizarButton" layoutX="395.0" layoutY="363.0" mnemonicParsing="false" onAction="#atualizar" prefHeight="67.0" prefWidth="203.0" text="Atualizar" />
             <Text layoutX="209.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Detalhes Jogador" wrappingWidth="203.39996337890625">
                <font>
                   <Font size="26.0" />
                </font>
             </Text>
-            <Button fx:id="backButton" layoutY="345.0" mnemonicParsing="false" onAction="#back" prefHeight="42.0" prefWidth="125.0" text="Voltar" />
-            <Button fx:id="removerButton" layoutX="179.0" layoutY="320.0" mnemonicParsing="false" onAction="#remover" prefHeight="67.0" prefWidth="203.0" text="Remover" />
+            <Button fx:id="backButton" layoutY="389.0" mnemonicParsing="false" onAction="#back" prefHeight="42.0" prefWidth="125.0" text="Voltar" />
+            <Button fx:id="removerButton" layoutX="192.0" layoutY="363.0" mnemonicParsing="false" onAction="#remover" prefHeight="67.0" prefWidth="203.0" text="Remover" />
             <Button fx:id="verificarButton" layoutX="443.0" layoutY="65.0" mnemonicParsing="false" onAction="#verificar" prefHeight="42.0" prefWidth="125.0" text="Verificar" />
             <VBox layoutX="428.0" layoutY="191.0" prefHeight="91.0" prefWidth="155.0">
                <children>

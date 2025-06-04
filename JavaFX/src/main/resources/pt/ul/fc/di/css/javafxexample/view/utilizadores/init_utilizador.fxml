@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="439.0" prefWidth="587.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.utilizadores.InitUtilizadorController">
+<VBox prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.utilizadores.InitUtilizadorController">
   <children>
     <MenuBar prefHeight="5.0" prefWidth="323.0" VBox.vgrow="NEVER">
       <menus>
@@ -53,7 +53,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="355.0" prefWidth="587.0">
+      <AnchorPane prefHeight="426.0" prefWidth="600.0">
          <children>
             <Button fx:id="detalhesJogadorButton" layoutX="33.0" layoutY="143.0" mnemonicParsing="false" onAction="#detalhesJogador" prefHeight="50.0" prefWidth="150.0" text="Detalhes de um Jogador" textAlignment="CENTER" wrapText="true" />
             <Button fx:id="registarArbitroButton" layoutX="33.0" layoutY="210.0" mnemonicParsing="false" onAction="#registarArbitro" prefHeight="50.0" prefWidth="150.0" text="Registar Novo Árbitro" />
@@ -68,7 +68,7 @@
                   <Font size="26.0" />
                </font>
             </Text>
-            <Button fx:id="backButton" layoutY="345.0" mnemonicParsing="false" onAction="#back" prefHeight="42.0" prefWidth="125.0" text="Voltar" />
+            <Button fx:id="backButton" layoutY="382.0" mnemonicParsing="false" onAction="#back" prefHeight="42.0" prefWidth="125.0" text="Voltar" />
          </children>
       </AnchorPane>
   </children>

@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="363.0" prefWidth="334.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.equipas.InitEquipaController">
+<VBox prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.equipas.InitEquipaController">
   <children>
     <MenuBar prefHeight="5.0" prefWidth="323.0" VBox.vgrow="NEVER">
       <menus>
@@ -36,14 +36,14 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="334.0" prefWidth="230.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button fx:id="criarButton" layoutX="93.0" layoutY="123.0" mnemonicParsing="false" onAction="#openCriarEquipa" prefHeight="51.0" prefWidth="147.0" text="Criar uma Equipa" />
-            <Button fx:id="buscarButton" layoutX="93.0" layoutY="182.0" mnemonicParsing="false" onAction="#openBuscarEquipas" prefHeight="51.0" prefWidth="147.0" text="Buscar por Equipas" />
-            <Text layoutX="125.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Equipas" wrappingWidth="83.0859375">
+            <Button fx:id="criarButton" layoutX="226.0" layoutY="174.0" mnemonicParsing="false" onAction="#openCriarEquipa" prefHeight="51.0" prefWidth="147.0" text="Criar uma Equipa" />
+            <Button fx:id="buscarButton" layoutX="226.0" layoutY="233.0" mnemonicParsing="false" onAction="#openBuscarEquipas" prefHeight="51.0" prefWidth="147.0" text="Buscar por Equipas" />
+            <Text layoutX="258.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Equipas" wrappingWidth="83.0859375">
                <font>
                   <Font size="24.0" />
                </font>
             </Text>
-            <Button fx:id="backButton" layoutX="252.0" layoutY="296.0" mnemonicParsing="false" onAction="#goBack" prefHeight="17.0" prefWidth="68.0" text="voltar" />
+            <Button fx:id="backButton" layoutX="491.0" layoutY="394.0" mnemonicParsing="false" onAction="#goBack" prefHeight="17.0" prefWidth="68.0" text="voltar" />
       </children>
     </AnchorPane>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" />
