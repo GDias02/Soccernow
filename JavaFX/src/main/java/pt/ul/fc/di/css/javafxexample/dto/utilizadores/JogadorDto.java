@@ -53,4 +53,9 @@ public class JogadorDto {
     public void setEstatisticas(EstatisticaJogadorDto estatisticas) {
         this.estatisticas = estatisticas;
     }
+
+    @Override
+    public String toString() {
+        return utilizador + " | " + posicaoPreferida;
+    }
 }

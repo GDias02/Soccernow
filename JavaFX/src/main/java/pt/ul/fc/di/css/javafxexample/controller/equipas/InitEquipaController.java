@@ -2,9 +2,16 @@ package pt.ul.fc.di.css.javafxexample.controller.equipas;
 
 import pt.ul.fc.di.css.javafxexample.controller.Controller;
 import pt.ul.fc.di.css.javafxexample.controller.Util;
+import pt.ul.fc.di.css.javafxexample.dto.jogos.EstatisticaDto;
+import pt.ul.fc.di.css.javafxexample.dto.jogos.EstatisticaJogadorDto;
+import pt.ul.fc.di.css.javafxexample.dto.utilizadores.JogadorDto;
+import pt.ul.fc.di.css.javafxexample.dto.utilizadores.Posicao;
+import pt.ul.fc.di.css.javafxexample.dto.utilizadores.UtilizadorDto;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 
 public class InitEquipaController extends Controller {
