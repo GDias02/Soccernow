@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}">
+
+<body>
+    <section>
+        <h2>Login</h2>
+        <form action="#" th:action="@{/leaf}" th:object=${auth} method="get">
+
+            <label for="nif">NIF: </label>
+            <input type="number" placeholder="111111111" th:field="*{nif}" />
+
+            <label for="password">PASSWORD: </label>
+            <input type="password" placeholder="password" th:field="*{password}" />
+
+            <p><input type="submit" value="Login" /> <input type="reset" value="Limpar Campos" /></p>
+            <p th:text="${erro}"></p>
+        </form>
+    </section>
+</body>
+
+</html>

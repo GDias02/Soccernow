@@ -3,6 +3,9 @@
 
 <body>
     <section>
+        <nav th:replace="~{main-page :: router}"></nav>
+        <hr>
+        <h2>Árbitros</h2>
         <form action="#" th:action="@{/leaf/api/arbitros/arbitro}" th:object=${filtros} method="get">
 
             <label for="nome">NOME: </label>
@@ -16,7 +19,7 @@
 
             <p><input type="submit" value="Filtrar" /> <input type="reset" value="Limpar Campos" /></p>
         </form>
-        <h2>Arbitros:</h2>
+        <h4>Árbitros:</h4>
         <table>
             <thead>
                 <tr>

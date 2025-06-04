@@ -3,6 +3,9 @@
 
 <body>
     <section>
+        <nav th:replace="~{main-page :: router}"></nav>
+        <hr>
+        <h2>Jogadores</h2>
         <form action="#" th:action="@{/leaf/api/jogadores/jogador}" th:object=${filtros} method="get">
 
             <label for="nome">NOME: </label>
@@ -27,9 +30,8 @@
             <input type="number" placeholder="0" th:field="*{jogos}" />
 
             <p><input type="submit" value="Filtrar" /> <input type="reset" value="Limpar Campos" /></p>
-            <!-- th:onclick="del(this, [[${filtros.nome}]])" -->
         </form>
-        <h2>Jogadores:</h2>
+        <h4>Jogadores:</h4>
         <table>
             <thead>
                 <tr>

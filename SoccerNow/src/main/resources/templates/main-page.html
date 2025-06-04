@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::nav})}">
+    <nav th:fragment="router">
+        <a th:href="@{/leaf/api/jogadores}">Jogadores</a>
+        <a th:href="@{/leaf/api/arbitros}">Árbitros</a>
+    </nav>
+</html>
