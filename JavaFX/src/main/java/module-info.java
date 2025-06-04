@@ -6,6 +6,7 @@ module pt.ul.fc.di.css.javafxexample {
   requires com.fasterxml.jackson.databind;
   requires java.net.http;
   requires jackson.datatype.jsr310;
+  requires javafx.base;
 
   opens pt.ul.fc.di.css.javafxexample to
       javafx.fxml,

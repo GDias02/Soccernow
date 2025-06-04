@@ -264,7 +264,7 @@ public class JogoHandler implements IJogoHandler {
   @Transactional(rollbackFor = JogoLocalException.class)
   public Local getLocalFromRepository(LocalDto localdto) throws JogoLocalException {
     Optional<Local> maybelocal;
-    if (localdto.getId() > 0) {
+    if (localdto.getId() != null && localdto.getId() > 0) {
       maybelocal = localRepository.findById(localdto.getId());
       if (maybelocal.isPresent()) {
         return maybelocal.get();
