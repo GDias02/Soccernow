@@ -273,11 +273,11 @@
                      <children>
                         <TableView fx:id="tabelaArbitros" layoutX="351.0" layoutY="69.0" prefHeight="217.0" prefWidth="235.0">
                           <columns>
-                            <TableColumn prefWidth="156.0" text="Nome" />
-                            <TableColumn prefWidth="72.0" text="Certificado" />
+                            <TableColumn fx:id="columnNome" prefWidth="156.0" text="Nome" />
+                            <TableColumn fx:id="columnCertificado" prefWidth="72.0" text="Certificado" />
                           </columns>
                         </TableView>
-                        <ComboBox fx:id="selecionarArbitro" layoutX="14.0" layoutY="82.0" onAction="#loadArbitroSelecionado" prefHeight="25.0" prefWidth="196.0" promptText="Selecione um Árbitro" />
+                        <ComboBox fx:id="selecionarArbitro" layoutX="14.0" layoutY="82.0" prefHeight="25.0" prefWidth="196.0" promptText="Selecione um Árbitro" />
                         <Text fx:id="infoArbitroSelecionado" layoutX="14.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;desconhecido&gt;" wrappingWidth="210.890625" />
                         <Button fx:id="addArbitroListaBtn" layoutX="262.0" layoutY="116.0" mnemonicParsing="false" onAction="#addArbitroLista" prefHeight="64.0" prefWidth="76.0" text="Adicionar à lista &gt;" textAlignment="CENTER" wrapText="true" />
                         <Button fx:id="disponibilidadeArbitroBtn" layoutX="390.0" layoutY="292.0" mnemonicParsing="false" onAction="#verificarDisponibilidadeArbitro" prefHeight="50.0" prefWidth="100.0" text="Verificar Disponibilidade" textAlignment="CENTER" wrapText="true" />

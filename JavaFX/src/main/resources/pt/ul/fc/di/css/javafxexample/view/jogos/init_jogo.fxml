@@ -14,16 +14,16 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:controller="pt.ul.fc.di.css.javafxexample.controller.jogos.InitJogoController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.jogos.InitJogoController">
    <children>
       <MenuBar>
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
               <MenuItem mnemonicParsing="false" text="Registar Novo Jogo" />
-                  <MenuItem mnemonicParsing="false" text="Registar Resultado" />
+                  <MenuItem mnemonicParsing="false" onAction="#registarResultado" text="Registar Resultado" />
                   <MenuItem mnemonicParsing="false" text="Registar Local" />
-                  <MenuItem mnemonicParsing="false" text="Close" />
+                  <MenuItem mnemonicParsing="false" onAction="#goBack"  text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -63,9 +63,9 @@
             <Label layoutX="179.0" layoutY="206.0" mnemonicParsing="true" prefHeight="58.0" prefWidth="264.0" text="Tem um jogo planeado? Registe aqui o local. (TODO)" textAlignment="JUSTIFY" wrapText="true" />
             <MenuButton fx:id="esquecimeBtn" layoutX="482.0" layoutY="90.0" mnemonicParsing="false" text="Esqueci-me!">
               <items>
-                <MenuItem mnemonicParsing="false" text="Registar Jogador" />
-                <MenuItem mnemonicParsing="false" text="Registar Árbitro" />
-                  <MenuItem mnemonicParsing="false" text="Registar Equipa" />
+                <MenuItem mnemonicParsing="false" onAction="#goRegistarJogador" text="Registar Jogador" />
+                <MenuItem mnemonicParsing="false" onAction="#goRegistarArbitro" text="Registar Árbitro" />
+                  <MenuItem mnemonicParsing="false" onAction="#goRegistarEquipa" text="Registar Equipa" />
               </items>
             </MenuButton>
             <Text layoutX="234.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gerir Jogos" wrappingWidth="133.0">
@@ -73,6 +73,7 @@
                   <Font size="26.0" />
                </font>
             </Text>
+            <Button fx:id="backButton" layoutX="488.0" layoutY="254.0" mnemonicParsing="false" onAction="#goBack" prefHeight="35.0" prefWidth="86.0" text="Voltar" />
          </children>
       </AnchorPane>
    </children>

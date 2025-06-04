@@ -33,4 +33,33 @@ public class InitJogoController extends Controller {
         "/pt/ul/fc/di/css/javafxexample/view/jogos/registar_resultado_jogo.fxml",
         "Resultado de Jogo");
   }
+
+  @FXML
+  void goRegistarJogador(ActionEvent event) {
+    Util.switchScene(
+        getStage(),
+        "/pt/ul/fc/di/css/javafxexample/view/utilizadores/registar_jogador.fxml",
+        "Novo Jogador");
+  }
+
+  @FXML
+  void goRegistarArbitro(ActionEvent event) {
+    Util.switchScene(
+        getStage(),
+        "/pt/ul/fc/di/css/javafxexample/view/utilizadores/registar_arbitro.fxml",
+        "Novo Arbitro");
+  }
+
+  @FXML
+  void goRegistarEquipa(ActionEvent event) {
+    Util.switchScene(
+        getStage(),
+        "/pt/ul/fc/di/css/javafxexample/view/equipas/registar_equipa.fxml",
+        "Novo Arbitro");
+  }
+
+  @FXML
+  void goBack(ActionEvent event) {
+    Util.switchScene(getStage(), "/pt/ul/fc/di/css/javafxexample/view/init.fxml", "SoccerNow");
+  }
 }

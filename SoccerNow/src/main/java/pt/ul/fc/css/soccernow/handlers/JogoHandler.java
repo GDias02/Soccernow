@@ -95,6 +95,7 @@ public class JogoHandler implements IJogoHandler {
   @Transactional
   public Boolean localDisponivel(JogoDto jogodto) {
     LocalDto localdto = jogodto.getLocalDto();
+    if (localdto == null) return false;
     Local local = getLocalFromRepository(localdto);
     if (local == null) return true;
     LocalDateTime diaEHora = jogodto.getDiaEHora();
