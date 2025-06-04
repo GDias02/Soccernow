@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +18,7 @@ public class ApiArbitro {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final HttpClient client = HttpClient.newHttpClient();
 
-    public static ArbitroPostDto registarArbitro(ArbitroPostDto arbitro) throws Exception {
+    public static ArbitroDto registarArbitro(ArbitroPostDto arbitro) throws Exception {
         String json = mapper.writeValueAsString(arbitro);
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -32,7 +33,7 @@ public class ApiArbitro {
             throw new RuntimeException(response.body());
         }
 
-        return mapper.readValue(response.body(), new TypeReference<ArbitroPostDto>() {
+        return mapper.readValue(response.body(), new TypeReference<ArbitroDto>() {
         });
     }
 
@@ -67,7 +68,7 @@ public class ApiArbitro {
         }
     }
 
-    public static ArbitroPostDto verificarArbitro(ArbitroPostDto arbitro) throws Exception {
+    public static ArbitroPostDto atualizarArbitro(ArbitroPostDto arbitro) throws Exception {
         String json = mapper.writeValueAsString(arbitro);
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -83,6 +84,23 @@ public class ApiArbitro {
         }
 
         return mapper.readValue(response.body(), new TypeReference<ArbitroPostDto>() {
+        });
+    }
+
+    public static Set<ArbitroDto> buscarArbitros() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(response.body());
+        }
+
+        return mapper.readValue(response.body(), new TypeReference<Set<ArbitroDto>>() {
         });
     }
 }

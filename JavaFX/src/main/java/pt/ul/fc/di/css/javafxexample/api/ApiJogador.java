@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +18,7 @@ public class ApiJogador {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final HttpClient client = HttpClient.newHttpClient();
 
-    public static JogadorPostDto registarJogador(JogadorPostDto jogador) throws Exception {
+    public static JogadorDto registarJogador(JogadorPostDto jogador) throws Exception {
         String json = mapper.writeValueAsString(jogador);
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -32,7 +33,7 @@ public class ApiJogador {
             throw new RuntimeException(response.body());
         }
 
-        return mapper.readValue(response.body(), new TypeReference<JogadorPostDto>() {
+        return mapper.readValue(response.body(), new TypeReference<JogadorDto>() {
         });
     }
 
@@ -67,7 +68,7 @@ public class ApiJogador {
         }
     }
 
-    public static JogadorPostDto verificarJogador(JogadorPostDto jogador) throws Exception {
+    public static JogadorPostDto atualizarJogador(JogadorPostDto jogador) throws Exception {
         String json = mapper.writeValueAsString(jogador);
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -83,6 +84,23 @@ public class ApiJogador {
         }
 
         return mapper.readValue(response.body(), new TypeReference<JogadorPostDto>() {
+        });
+    }
+
+    public static Set<JogadorDto> buscarJogadores() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(response.body());
+        }
+
+        return mapper.readValue(response.body(), new TypeReference<Set<JogadorDto>>() {
         });
     }
 }

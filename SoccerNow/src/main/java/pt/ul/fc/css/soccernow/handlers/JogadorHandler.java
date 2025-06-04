@@ -68,7 +68,7 @@ public class JogadorHandler implements IJogadorHandler {
 
         int nif = utilizadorDto.getNif();
         if (!jogadorRepository.findByNif(nif).isEmpty() || !arbitroRepository.findByNif(nif).isEmpty())
-            throw new RegistarJogadorException("Já existe um utilizador com esse nif");
+            throw new RegistarJogadorException("Já existe/existiu um utilizador com esse nif");
 
         Jogador jogador = JogadorMapper.dtoToJogador(jogadorDto);
         jogador.setId(0L);
@@ -135,7 +135,7 @@ public class JogadorHandler implements IJogadorHandler {
         int nif = utilizador.getNif();
         Optional<Jogador> maybeDuplicate = jogadorRepository.findByNif(nif);
         if ((!maybeDuplicate.isEmpty() && !id.equals(maybeDuplicate.get().getId())) || !arbitroRepository.findByNif(nif).isEmpty())
-            throw new AtualizarJogadorException("Já existe um utilizador com esse nif");
+            throw new AtualizarJogadorException("Já existe/existiu um utilizador com esse nif");
 
         Jogador jogador = maybeJogador.get();
         jogador.setNif(utilizador.getNif());
