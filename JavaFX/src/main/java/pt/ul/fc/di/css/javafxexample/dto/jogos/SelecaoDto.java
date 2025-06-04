@@ -1,7 +1,9 @@
 package pt.ul.fc.di.css.javafxexample.dto.jogos;
 
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import pt.ul.fc.di.css.javafxexample.dto.utilizadores.Posicao;
 
@@ -13,6 +15,9 @@ import pt.ul.fc.di.css.javafxexample.dto.utilizadores.Posicao;
  * setSelecao(Map<Posicao,JogadorDto>).
  */
 public class SelecaoDto {
+
+  private Long id;
+  private Long jogo;
   private Long equipa;
   private Long capitao;
   private Long guardaRedes;
@@ -20,6 +25,29 @@ public class SelecaoDto {
   private Long alaEsquerda;
   private Long alaDireita;
   private Long pivot;
+
+  public SelecaoDto() {}
+
+  public SelecaoDto(Long equipa, Long capitao) {
+    this.equipa = equipa;
+    this.capitao = capitao;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Long getJogo() {
+    return jogo;
+  }
+
+  public void setJogo(Long jogo) {
+    this.jogo = jogo;
+  }
 
   public Long getEquipa() {
     return equipa;
@@ -95,6 +123,16 @@ public class SelecaoDto {
     return jogadores;
   }
 
+  public Set<Long> getJogadoresIds() {
+    Set<Long> jogadores = new HashSet<>();
+    jogadores.add(guardaRedes);
+    jogadores.add(fixo);
+    jogadores.add(alaEsquerda);
+    jogadores.add(alaDireita);
+    jogadores.add(pivot);
+    return jogadores;
+  }
+
   @Override
   public String toString() {
     return "SelecaoDto [equipa="
@@ -112,5 +150,49 @@ public class SelecaoDto {
         + ", pivot="
         + pivot
         + "]";
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((equipa == null) ? 0 : equipa.hashCode());
+    result = prime * result + ((capitao == null) ? 0 : capitao.hashCode());
+    result = prime * result + ((guardaRedes == null) ? 0 : guardaRedes.hashCode());
+    result = prime * result + ((fixo == null) ? 0 : fixo.hashCode());
+    result = prime * result + ((alaEsquerda == null) ? 0 : alaEsquerda.hashCode());
+    result = prime * result + ((alaDireita == null) ? 0 : alaDireita.hashCode());
+    result = prime * result + ((pivot == null) ? 0 : pivot.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    SelecaoDto other = (SelecaoDto) obj;
+    if (equipa == null) {
+      if (other.equipa != null) return false;
+    } else if (!equipa.equals(other.equipa)) return false;
+    if (capitao == null) {
+      if (other.capitao != null) return false;
+    } else if (!capitao.equals(other.capitao)) return false;
+    if (guardaRedes == null) {
+      if (other.guardaRedes != null) return false;
+    } else if (!guardaRedes.equals(other.guardaRedes)) return false;
+    if (fixo == null) {
+      if (other.fixo != null) return false;
+    } else if (!fixo.equals(other.fixo)) return false;
+    if (alaEsquerda == null) {
+      if (other.alaEsquerda != null) return false;
+    } else if (!alaEsquerda.equals(other.alaEsquerda)) return false;
+    if (alaDireita == null) {
+      if (other.alaDireita != null) return false;
+    } else if (!alaDireita.equals(other.alaDireita)) return false;
+    if (pivot == null) {
+      if (other.pivot != null) return false;
+    } else if (!pivot.equals(other.pivot)) return false;
+    return true;
   }
 }

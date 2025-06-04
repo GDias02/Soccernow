@@ -1,19 +1,14 @@
 package pt.ul.fc.di.css.javafxexample.dto.utilizadores;
 
-import pt.ul.fc.di.css.javafxexample.dto.jogos.EstatisticaArbitroDto;
-
-public class ArbitroDto {
-    
+public class ArbitroPostDto {
     private UtilizadorDto utilizador;
     private CertificadoDto certificado;
-    private EstatisticaArbitroDto estatisticas;
 
-    public ArbitroDto() {}
+    public ArbitroPostDto() {}
 
-    public ArbitroDto(UtilizadorDto utilizador, CertificadoDto certificado, EstatisticaArbitroDto estatisticas) {
+    public ArbitroPostDto(UtilizadorDto utilizador, CertificadoDto certificado) {
         this.utilizador = utilizador;
         this.certificado = certificado;
-        this.estatisticas = estatisticas;
     }
 
     public UtilizadorDto getUtilizador() {
@@ -27,13 +22,5 @@ public class ArbitroDto {
     }
     public void setCertificado(CertificadoDto certificado) {
         this.certificado = certificado;
-    }
-
-    public EstatisticaArbitroDto getEstatisticas() {
-        return estatisticas;
-    }
-
-    public void setEstatisticas(EstatisticaArbitroDto estatisticas) {
-        this.estatisticas = estatisticas;
     }
 }

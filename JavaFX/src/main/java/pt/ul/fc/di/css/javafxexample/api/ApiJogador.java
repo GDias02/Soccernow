@@ -4,77 +4,103 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Set;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import pt.ul.fc.di.css.javafxexample.dto.utilizadores.JogadorDto;
 import pt.ul.fc.di.css.javafxexample.dto.utilizadores.JogadorPostDto;
 
 public class ApiJogador {
 
-    private static final String BASE_URL = "http://localhost:8080";
+    private static final String BASE_URL = "http://localhost:8080/api/jogadores";
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final HttpClient client = HttpClient.newHttpClient();
 
-    public static void createCustomer(JogadorPostDto jogador) throws Exception {
+    public static JogadorDto registarJogador(JogadorPostDto jogador) throws Exception {
         String json = mapper.writeValueAsString(jogador);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/customers"))
+                .uri(URI.create(BASE_URL + "/create"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() != 200 && response.statusCode() != 201) {
-            throw new RuntimeException("Failed to create customer. HTTP code: " + response.statusCode());
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(response.body());
+        }
+
+        return mapper.readValue(response.body(), new TypeReference<JogadorDto>() {
+        });
+    }
+
+    public static JogadorDto verificarJogador(int nif) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + nif))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(response.body());
+        }
+
+        return mapper.readValue(response.body(), new TypeReference<JogadorDto>() {
+        });
+    }
+
+    public static void removerJogador(int nif) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + nif))
+                .header("Content-Type", "application/json")
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(response.body());
         }
     }
 
-    /* public static List<CustomerDto> getAllCustomers() throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/customers"))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() != 200) {
-            throw new RuntimeException("Failed to get customers. HTTP code: " + response.statusCode());
-        }
-
-        return mapper.readValue(response.body(), new TypeReference<List<CustomerDto>>() {
-        });
-    } */
-
-    /* public static List<SaleProductDto> getProductByVat(String vat) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/sales/products/" + vat))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() != 200) {
-            throw new RuntimeException("Failed to get sales. HTTP code: " + response.statusCode());
-        }
-
-        return mapper.readValue(response.body(), new TypeReference<List<SaleProductDto>>() {
-        });
-    } */
-
-    /* public static void createSale(String vat) throws Exception {
+    public static JogadorPostDto atualizarJogador(JogadorPostDto jogador) throws Exception {
+        String json = mapper.writeValueAsString(jogador);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/sales/create"))
+                .uri(URI.create(BASE_URL + "/update"))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(vat))
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() != 201 && response.statusCode() != 200) {
-            throw new RuntimeException("Failed to create sale. HTTP code: " + response.statusCode());
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(response.body());
         }
-    } */
+
+        return mapper.readValue(response.body(), new TypeReference<JogadorPostDto>() {
+        });
+    }
+
+    public static Set<JogadorDto> buscarJogadores() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(response.body());
+        }
+
+        return mapper.readValue(response.body(), new TypeReference<Set<JogadorDto>>() {
+        });
+    }
 }

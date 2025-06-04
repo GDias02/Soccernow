@@ -59,7 +59,7 @@ public class ArbitroHandler implements IArbitroHandler {
     UtilizadorDto utilizadorDto = arbitroDto.getUtilizador();
     int nif = utilizadorDto.getNif();
     if (!jogadorRepository.findByNif(nif).isEmpty() || !arbitroRepository.findByNif(nif).isEmpty())
-      throw new RegistarArbitroException("Já existe um utilizador com esse nif");
+      throw new RegistarArbitroException("Já existe/existiu um utilizador com esse nif");
 
     Arbitro arbitro = ArbitroPostMapper.dtoToArbitro(arbitroDto);
     arbitro.setId(0L);
@@ -126,7 +126,7 @@ public class ArbitroHandler implements IArbitroHandler {
     Optional<Arbitro> maybeDuplicate = arbitroRepository.findByNif(nif);
     if ((!maybeDuplicate.isEmpty() && !id.equals(maybeDuplicate.get().getId()))
         || !jogadorRepository.findByNif(nif).isEmpty())
-      throw new AtualizarArbitroException("Já existe um utilizador com esse nif");
+      throw new AtualizarArbitroException("Já existe/existiu um utilizador com esse nif");
 
     Arbitro arbitro = maybeArbitro.get();
     arbitro.setNif(utilizador.getNif());

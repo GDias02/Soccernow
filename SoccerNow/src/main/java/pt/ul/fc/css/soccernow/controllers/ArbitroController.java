@@ -1,5 +1,7 @@
 package pt.ul.fc.css.soccernow.controllers;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -79,5 +81,12 @@ public class ArbitroController {
         } catch (NotFoundException e) {
             return new ResponseEntity(e.getMessage(), HttpStatusCode.valueOf(404));
         }
+    }
+
+    @GetMapping
+    @ApiOperation(value = "Get all arbitros", notes = "Returns all arbitros.")
+    public ResponseEntity<Set<ArbitroDto>> buscarArbitros() {
+        Set<ArbitroDto> arbitroDtos = arbitroHandler.buscarArbitros();
+        return ResponseEntity.ok(arbitroDtos);
     }
 }

@@ -5,6 +5,7 @@ module pt.ul.fc.di.css.javafxexample {
     requires transitive javafx.graphics;
     requires com.fasterxml.jackson.databind;
     requires java.net.http;
+    requires com.fasterxml.jackson.core;
 
     opens pt.ul.fc.di.css.javafxexample to javafx.fxml, javafx.web;
     opens pt.ul.fc.di.css.javafxexample.controller to javafx.fxml;

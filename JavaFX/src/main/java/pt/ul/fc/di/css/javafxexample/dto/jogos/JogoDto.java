@@ -3,7 +3,7 @@ package pt.ul.fc.di.css.javafxexample.dto.jogos;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import pt.ul.fc.di.css.javafxexample.dto.utilizadores.ArbitroDto;
+import pt.ul.fc.di.css.javafxexample.dto.utilizadores.ArbitroPostDto;
 
 /**
  * Classe Dto para representar um local usado para jogos. Para: - Criar um novo jogo: - - O atributo
@@ -22,7 +22,7 @@ public class JogoDto {
   private LocalDateTime diaEHora;
   private SelecaoDto s1;
   private SelecaoDto s2;
-  private List<ArbitroDto> equipaDeArbitros;
+  private List<ArbitroPostDto> equipaDeArbitros;
   private EstatisticaJogoDto stats;
   private Long equipaVencedora;
   private Long campeonato;
@@ -36,7 +36,7 @@ public class JogoDto {
       LocalDateTime diaEHora,
       SelecaoDto s1,
       SelecaoDto s2,
-      List<ArbitroDto> equipaDeArbitros) {
+      List<ArbitroPostDto> equipaDeArbitros) {
     this.id = id;
     this.estadoDeJogo = estadoDeJogo;
     this.localDto = localDto;
@@ -53,7 +53,7 @@ public class JogoDto {
       LocalDateTime diaEHora,
       SelecaoDto s1,
       SelecaoDto s2,
-      List<ArbitroDto> equipaDeArbitros,
+      List<ArbitroPostDto> equipaDeArbitros,
       Long campeonato) {
     this.id = id;
     this.estadoDeJogo = estadoDeJogo;
@@ -75,6 +75,12 @@ public class JogoDto {
 
   public void setId(Long id) {
     this.id = id;
+    if (this.s1 != null) {
+      s1.setId(id);
+    }
+    if (this.s2 != null) {
+      s2.setId(id);
+    }
   }
 
   public EstadoDeJogo getEstadoDeJogo() {
@@ -109,11 +115,11 @@ public class JogoDto {
     this.s2 = s2;
   }
 
-  public List<ArbitroDto> getEquipaDeArbitros() {
+  public List<ArbitroPostDto> getEquipaDeArbitros() {
     return equipaDeArbitros;
   }
 
-  public void setEquipaDeArbitros(List<ArbitroDto> equipaDeArbitros) {
+  public void setEquipaDeArbitros(List<ArbitroPostDto> equipaDeArbitros) {
     this.equipaDeArbitros = equipaDeArbitros;
   }
 
@@ -164,5 +170,75 @@ public class JogoDto {
 
   public void setCampeonato(Long campeonato) {
     this.campeonato = campeonato;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((estadoDeJogo == null) ? 0 : estadoDeJogo.hashCode());
+    result = prime * result + ((localDto == null) ? 0 : localDto.hashCode());
+    result = prime * result + ((diaEHora == null) ? 0 : diaEHora.hashCode());
+    result = prime * result + ((s1 == null) ? 0 : s1.hashCode());
+    result = prime * result + ((s2 == null) ? 0 : s2.hashCode());
+    result = prime * result + ((equipaDeArbitros == null) ? 0 : equipaDeArbitros.hashCode());
+    result = prime * result + ((stats == null) ? 0 : stats.hashCode());
+    result = prime * result + ((equipaVencedora == null) ? 0 : equipaVencedora.hashCode());
+    result = prime * result + ((campeonato == null) ? 0 : campeonato.hashCode());
+    return result;
+  }
+
+  private boolean matchListaArbitros(List<ArbitroPostDto> mine, List<ArbitroPostDto> other) {
+    if (mine == null) {
+      if (other != null) return false;
+    }
+    if (other == null) {
+      return false;
+    }
+    if (mine.size() != other.size()) {
+      return false;
+    }
+
+    for (int i = 0; i < mine.size(); i++) {
+      if (mine.get(i).getUtilizador().getId().equals(other.get(i).getUtilizador().getId())) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    JogoDto other = (JogoDto) obj;
+    if (estadoDeJogo != other.estadoDeJogo) return false;
+    if (localDto == null) {
+      if (other.localDto != null) return false;
+    } else if (!localDto.equals(other.localDto)) return false;
+    if (diaEHora == null) {
+      if (other.diaEHora != null) return false;
+    } else if (!diaEHora.equals(other.diaEHora)) return false;
+    if (s1 == null) {
+      if (other.s1 != null) return false;
+    } else if (!s1.equals(other.s1)) return false;
+    if (s2 == null) {
+      if (other.s2 != null) return false;
+    } else if (!s2.equals(other.s2)) return false;
+    if (equipaDeArbitros == null) {
+      if (other.equipaDeArbitros != null) return false;
+    } else if (!matchListaArbitros(equipaDeArbitros, other.equipaDeArbitros)) return false;
+    if (stats == null) {
+      if (other.stats != null) return false;
+    } else if (!stats.equals(other.stats)) return false;
+    if (equipaVencedora == null) {
+      if (other.equipaVencedora != null) return false;
+    } else if (!equipaVencedora.equals(other.equipaVencedora)) return false;
+    if (campeonato == null) {
+      if (other.campeonato != null) return false;
+    } else if (!campeonato.equals(other.campeonato)) return false;
+    return true;
   }
 }

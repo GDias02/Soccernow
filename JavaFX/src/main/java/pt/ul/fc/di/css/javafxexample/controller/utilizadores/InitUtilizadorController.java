@@ -3,56 +3,52 @@ package pt.ul.fc.di.css.javafxexample.controller.utilizadores;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 import pt.ul.fc.di.css.javafxexample.controller.Controller;
 import pt.ul.fc.di.css.javafxexample.controller.Util;
 
 public class InitUtilizadorController extends Controller {
 
     @FXML
+    private Button registarJogadorButton;
+
+    @FXML
+    private Button detalhesJogadorButton;
+
+    @FXML
+    private Button registarArbitroButton;
+
+    @FXML
+    private Button detalhesArbitroButton;
+
+    @FXML
     private Button backButton;
 
     @FXML
-    private MenuItem menuUtilizadores;
-
-    @FXML
-    private MenuItem menuEquipas;
-
-    @FXML
-    private MenuItem menuJogos;
-
-    @FXML
-    private MenuItem menuCampeonatos;
-
-    @FXML
-    private MenuItem menuQuit;
-
-    @FXML
-    void initUtilizadores(ActionEvent event) {
+    void registarJogador(ActionEvent event) {
         Util.switchScene(getStage(), 
-                "/pt/ul/fc/di/css/javafxexample/view/utilizadores/init_utilizador.fxml",
-                "Utilizadores");
+                "/pt/ul/fc/di/css/javafxexample/view/utilizadores/registar_jogador.fxml",
+                "Registar Jogador");
     }
 
     @FXML
-    void initEquipas(ActionEvent event) {
+    void detalhesJogador(ActionEvent event) {
         Util.switchScene(getStage(), 
-                "/pt/ul/fc/di/css/javafxexample/view/equipas/init_equipa.fxml",
-                "Equipas");
+                "/pt/ul/fc/di/css/javafxexample/view/utilizadores/detalhes_jogador.fxml",
+                "Detalhes Jogador");
     }
 
     @FXML
-    void initJogos(ActionEvent event) {
+    void registarArbitro(ActionEvent event) {
         Util.switchScene(getStage(), 
-                "/pt/ul/fc/di/css/javafxexample/view/jogos/init_jogo.fxml",
-                "Jogos");
+                "/pt/ul/fc/di/css/javafxexample/view/utilizadores/registar_arbitro.fxml",
+                "Registar Arbitro");
     }
 
     @FXML
-    void initCampeonatos(ActionEvent event) {
+    void detalhesArbitro(ActionEvent event) {
         Util.switchScene(getStage(), 
-                "/pt/ul/fc/di/css/javafxexample/view/campeonatos/init_campeonato.fxml",
-                "Campeonatos");
+                "/pt/ul/fc/di/css/javafxexample/view/utilizadores/detalhes_arbitro.fxml",
+                "Detalhes Arbitro");
     }
 
     @FXML
@@ -60,10 +56,5 @@ public class InitUtilizadorController extends Controller {
         Util.switchScene(getStage(),
                 "/pt/ul/fc/di/css/javafxexample/view/init.fxml",
                 "SoccerNow");
-    }
-
-    @FXML
-    void quit(ActionEvent event) {
-        System.exit(0);
     }
 }
