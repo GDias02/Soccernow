@@ -8,7 +8,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Set;
 import pt.ul.fc.di.css.javafxexample.dto.equipas.EquipaDto;
+import pt.ul.fc.di.css.javafxexample.dto.utilizadores.JogadorDto;
 
 public class ApiEquipa {
   private static final String BASE_URL = "http://localhost:8080/api/equipas";
@@ -16,6 +18,8 @@ public class ApiEquipa {
   private static final HttpClient client = HttpClient.newHttpClient();
   private static final CollectionType listReference =
       TypeFactory.defaultInstance().constructCollectionType(List.class, EquipaDto.class);
+  private static final CollectionType setJogadoresReference =
+      TypeFactory.defaultInstance().constructCollectionType(Set.class, JogadorDto.class);
 
   public static List<EquipaDto> verificarEquipas() throws Exception {
     HttpRequest request =
@@ -32,5 +36,22 @@ public class ApiEquipa {
     }
 
     return mapper.readValue(response.body(), listReference);
+  }
+
+  public static Set<JogadorDto> buscarJogadoresDeEquipa(Long id) throws Exception {
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL + "/" + id + "/jogadores"))
+            .header("Content-Type", "application/json")
+            .GET()
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() != 200) {
+      throw new RuntimeException(response.body());
+    }
+
+    return mapper.readValue(response.body(), setJogadoresReference);
   }
 }

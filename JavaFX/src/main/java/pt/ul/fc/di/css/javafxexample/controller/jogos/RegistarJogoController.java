@@ -284,6 +284,39 @@ public class RegistarJogoController extends Controller {
   @FXML
   void loadJogadoresEquipa1(ActionEvent event) {
     EquipaDto e = selecionarEquipa1Btn.getSelectionModel().getSelectedItem();
+    Set<JogadorDto> jogsDaEquipa = new HashSet<>();
+    try {
+      jogsDaEquipa = ApiEquipa.buscarJogadoresDeEquipa(e.getId());
+    } catch (Exception e1) {
+      System.err.println(e1.getMessage());
+    }
+    ObservableList<JogadorDto> listaJogsE1 = FXCollections.observableArrayList(jogsDaEquipa);
+    StringConverter<JogadorDto> converterJogadores =
+        new StringConverter<>() {
+          @Override
+          public String toString(JogadorDto e) {
+            return (e != null && e.getUtilizador().getNome() != null)
+                ? e.getUtilizador().getNome()
+                : "";
+          }
+
+          @Override
+          public JogadorDto fromString(String string) {
+            return null;
+          }
+        };
+    pickGuardaRedes1.setItems(listaJogsE1);
+    pickFixo1.setItems(listaJogsE1);
+    pickAlaD1.setItems(listaJogsE1);
+    pickAlaE1.setItems(listaJogsE1);
+    pickPivot1.setItems(listaJogsE1);
+    pickGuardaRedes1.setConverter(converterJogadores);
+    pickFixo1.setConverter(converterJogadores);
+    pickAlaD1.setConverter(converterJogadores);
+    pickAlaE1.setConverter(converterJogadores);
+    pickPivot1.setConverter(converterJogadores);
+
+    selecao1Posicoes.setDisable(false);
   }
 
   @FXML
