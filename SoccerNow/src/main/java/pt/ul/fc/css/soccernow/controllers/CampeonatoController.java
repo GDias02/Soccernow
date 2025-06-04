@@ -71,14 +71,15 @@ public class CampeonatoController {
     if (campeonato.getId() == -1) return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     return ResponseEntity.ok(campeonato);
   }
-/*
+
   @GetMapping("/search")
   @ApiOperation(
     value = "Get campeonatos by filter",
     notes = "Gets a list of Campeonatos that respect the given filters")
   public ResponseEntity<List<CampeonatoDto>> search(@RequestParam(value = "search") String search){
+    System.out.println(search);
     List<CampeonatoDto> campeonatos = campeonatoHandler.search(search);
     if (search == null || campeonatos.isEmpty()) return ResponseEntity.noContent().build();
     return ResponseEntity.ok(campeonatos);
-  } */
+  }
 }

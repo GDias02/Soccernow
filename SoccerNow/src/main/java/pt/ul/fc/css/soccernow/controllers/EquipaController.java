@@ -116,7 +116,7 @@ public class EquipaController {
   @GetMapping("/search")
   @ApiOperation(
       value = "Get equipas by filter",
-      notes = "Gets a list of equipas with the given that respect the given filters")
+      notes = "Gets a list of equipas that respect the given filters")
   public ResponseEntity<List<EquipaDto>> search(@RequestParam(value = "search") String search) {
     List<EquipaDto> equipas = equipaHandler.search(search);
     if (search == null || equipas.isEmpty()) return ResponseEntity.noContent().build();
