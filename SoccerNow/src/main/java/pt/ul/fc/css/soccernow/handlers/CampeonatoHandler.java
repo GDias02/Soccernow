@@ -1,27 +1,19 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.querydsl.core.types.dsl.BooleanExpression;
-
 import pt.ul.fc.css.soccernow.dto.campeonatos.CampeonatoDto;
-import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
 import pt.ul.fc.css.soccernow.entities.campeonatos.Campeonato;
-import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.filters.campeonatos.CampeonatoPredicate;
 import pt.ul.fc.css.soccernow.filters.campeonatos.CampeonatoPredicatesBuilder;
-import pt.ul.fc.css.soccernow.filters.equipas.EquipaPredicate;
-import pt.ul.fc.css.soccernow.filters.equipas.EquipaPredicatesBuilder;
 import pt.ul.fc.css.soccernow.mappers.campeonatos.CampeonatoMapper;
-import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
 import pt.ul.fc.css.soccernow.repositories.CampeonatoRepository;
 import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
 import pt.ul.fc.css.soccernow.repositories.JogoRepository;
@@ -138,6 +130,7 @@ public class CampeonatoHandler implements ICampeonatoHandler {
         builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
       }
     }
+
     BooleanExpression exp = builder.build(CampeonatoPredicate::new);
 
     List<Campeonato> campeonatos = new ArrayList<>();
