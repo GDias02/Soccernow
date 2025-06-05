@@ -10,9 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.ul.fc.css.soccernow.dto.equipas.ConquistaDto;
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
+import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
+import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.handlers.ConquistaHandler;
 import pt.ul.fc.css.soccernow.handlers.EquipaHandler;
+import pt.ul.fc.css.soccernow.mappers.jogos.JogoMapper;
 
 @RestController
 @RequestMapping("/api/equipas")
@@ -87,11 +90,33 @@ public class EquipaController {
     return ResponseEntity.ok(equipa);
   }
 
+  @GetMapping("{id}/jogadores")
+  @ApiOperation(
+      value = "Get all jogadores from equipa",
+      notes = "Returns all jogadores from this equipa.")
+  public ResponseEntity<Set<JogadorDto>> buscarJogadoresDeEquipa(@PathVariable("id") Long id) {
+    Set<JogadorDto> jogadorDtos = equipaHandler.buscarJogadoresDeEquipa(id);
+    return ResponseEntity.ok(jogadorDtos);
+  }
+
+  @GetMapping("{id}/jogos")
+  @ApiOperation(
+      value = "Get all jogos from equipa",
+      notes = "Returns all jogos from this equipa.")
+  public ResponseEntity<List<JogoDto>> buscarJogosDeEquipa(@PathVariable("id") Long id) {
+    List<Jogo> jogos = equipaHandler.buscarJogosDeEquipa(id);
+    if (jogos == null || jogos.isEmpty()) {
+      return ResponseEntity.noContent().build();
+    }
+    List<JogoDto> content = jogos.stream().map(JogoMapper::jogoToDto).toList();
+    return ResponseEntity.ok(content);
+  }
+
   /** FILTROS - FILTROS - FILTROS - FILTROS */
   @GetMapping("/search")
   @ApiOperation(
       value = "Get equipas by filter",
-      notes = "Gets a list of equipas with the given that respect the given filters")
+      notes = "Gets a list of equipas that respect the given filters")
   public ResponseEntity<List<EquipaDto>> search(@RequestParam(value = "search") String search) {
     List<EquipaDto> equipas = equipaHandler.search(search);
     if (search == null || equipas.isEmpty()) return ResponseEntity.noContent().build();
@@ -169,14 +194,5 @@ public class EquipaController {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
     return ResponseEntity.ok(conquista);
-  }
-
-  @GetMapping("{id}/jogadores")
-  @ApiOperation(
-      value = "Get all jogadores from equipa",
-      notes = "Returns all jogadores from this equipa.")
-  public ResponseEntity<Set<JogadorDto>> buscarJogadoresDeEquipa(@PathVariable("id") Long id) {
-    Set<JogadorDto> jogadorDtos = equipaHandler.buscarJogadoresDeEquipa(id);
-    return ResponseEntity.ok(jogadorDtos);
   }
 }

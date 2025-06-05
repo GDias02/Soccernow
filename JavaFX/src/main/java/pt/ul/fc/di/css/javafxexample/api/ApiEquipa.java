@@ -9,16 +9,15 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Set;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import pt.ul.fc.di.css.javafxexample.dto.equipas.EquipaDto;
+import pt.ul.fc.di.css.javafxexample.dto.jogos.JogoDto;
 import pt.ul.fc.di.css.javafxexample.dto.utilizadores.JogadorDto;
 
 public class ApiEquipa {
 
     private static final String BASE_URL = "http://localhost:8080/api/equipas";
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper()
+        .registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
     private static final HttpClient client = HttpClient.newHttpClient();
     private static final CollectionType listReference =
         TypeFactory.defaultInstance().constructCollectionType(List.class, EquipaDto.class);
@@ -129,5 +128,25 @@ public class ApiEquipa {
     }
 
     return mapper.readValue(response.body(), setJogadoresReference);
+  }
+
+  public static List<JogoDto> buscarJogosDeEquipa(Long id) throws Exception {
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL + "/" + id + "/jogos"))
+            .header("Content-Type", "application/json")
+            .GET()
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() == 204) return List.of(); // Return an empty list if no games are found
+    
+
+    if (response.statusCode() != 200 && response.statusCode() != 201 ) {
+      throw new RuntimeException(response.body());
+    }
+
+    return mapper.readValue(response.body(), mapper.getTypeFactory().constructCollectionType(List.class, JogoDto.class));
   }
 }

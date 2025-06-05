@@ -111,16 +111,6 @@ public class CampeonatoDto {
 
   @Override
   public String toString() {
-    return "CampeonatoDto [id="
-        + id
-        + ", nome="
-        + nome
-        + ", estado="
-        + estado
-        + ", dataInicio="
-        + dataInicio
-        + ", tipo="
-        + tipo
-        + "]";
+    return nome + " - " + dataInicio.toString();
   }
 }

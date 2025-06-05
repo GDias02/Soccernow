@@ -28,27 +28,24 @@ public class BuscarEquipasController extends Controller {
         getStage(), "/pt/ul/fc/di/css/javafxexample/view/equipas/init_equipa.fxml", "Equipas");
   }
 
-  @FXML
-  public void initialize() {
-    var equipasDisponiveis = FXCollections.observableArrayList(new EquipaDto(null, "Mock", null));
-    try {
-      equipasDisponiveis = FXCollections.observableArrayList(ApiEquipa.buscarEquipas());
-    } catch (Exception e) {
-      // Do nothing
-    }
-    listaDeEquipas.setItems(equipasDisponiveis);
-
-    listaDeEquipas
-        .getSelectionModel()
-        .selectedItemProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              if (newValue != null) {
-                Util.switchScene(
-                    getStage(),
+    @FXML
+    public void initialize() {
+        var equipasDisponiveis = FXCollections.observableArrayList(
+            new EquipaDto(null, "Mock", null)
+        );
+        try {
+            equipasDisponiveis = FXCollections.observableArrayList(ApiEquipa.buscarEquipas());
+        } catch (Exception e) {
+            //Do nothing
+        }
+        listaDeEquipas.setItems(equipasDisponiveis);
+        listaDeEquipas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                Util.switchScene(getStage(), 
                     "/pt/ul/fc/di/css/javafxexample/view/equipas/detalhes_equipa.fxml",
-                    observable.getValue().getId().toString());
-              }
-            });
-  }
+                    newValue.getId().toString());
+            }
+        });
+    }
+
 }

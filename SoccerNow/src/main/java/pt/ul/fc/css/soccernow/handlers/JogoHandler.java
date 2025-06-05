@@ -226,6 +226,15 @@ public class JogoHandler implements IJogoHandler {
 
     Jogo savedJogo = jogoRepository.saveAndFlush(jogo);
     jogodto.setId(savedJogo.getId());
+
+    // Para manter a base de dados consistente é necessário adicionar
+    // o jogo às equipas que jogaram.
+    Equipa equipa1 = savedJogo.getS1().getEquipa();
+    Equipa equipa2 = savedJogo.getS2().getEquipa();
+    equipa1.addJogo(savedJogo);
+    equipa2.addJogo(savedJogo);
+    equipaRepository.saveAll(List.of(equipa1, equipa2));
+    
     return jogodto;
   }
 

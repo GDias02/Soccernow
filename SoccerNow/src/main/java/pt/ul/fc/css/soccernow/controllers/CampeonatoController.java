@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pt.ul.fc.css.soccernow.dto.campeonatos.CampeonatoDto;
+import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
+import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.handlers.CampeonatoHandler;
 
 @RestController
@@ -68,5 +71,26 @@ public class CampeonatoController {
     if (campeonato == null) return ResponseEntity.notFound().build();
     if (campeonato.getId() == -1) return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     return ResponseEntity.ok(campeonato);
+  }
+
+  @GetMapping("/search")
+  @ApiOperation(
+    value = "Get campeonatos by filter",
+    notes = "Gets a list of Campeonatos that respect the given filters")
+  public ResponseEntity<List<CampeonatoDto>> search(@RequestParam(value = "search") String search){
+    System.out.println(search);
+    List<CampeonatoDto> campeonatos = campeonatoHandler.search(search);
+    if (search == null || campeonatos.isEmpty()) return ResponseEntity.noContent().build();
+    return ResponseEntity.ok(campeonatos);
+  }
+
+  @GetMapping("/{id}/jogos")
+  @ApiOperation(
+    value = "Gets jogos from a given campeonato",
+    notes = "Gets a list of jogos from a given campeonato")
+  public ResponseEntity<List<JogoDto>> getJogadoresByCampeonatoId(@PathVariable("id") Long id){
+    List<JogoDto> jogos = campeonatoHandler.getJogadoresByCampeonatoId(id);
+    if (jogos == null) return ResponseEntity.notFound().build();
+    return ResponseEntity.ok(jogos);
   }
 }

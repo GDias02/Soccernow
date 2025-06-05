@@ -9,6 +9,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Map;
+
+import pt.ul.fc.di.css.javafxexample.dto.campeonatos.CampeonatoDto;
 import pt.ul.fc.di.css.javafxexample.dto.jogos.JogoDto;
 import pt.ul.fc.di.css.javafxexample.dto.jogos.SelecaoDto;
 import pt.ul.fc.di.css.javafxexample.dto.utilizadores.JogadorDto;
