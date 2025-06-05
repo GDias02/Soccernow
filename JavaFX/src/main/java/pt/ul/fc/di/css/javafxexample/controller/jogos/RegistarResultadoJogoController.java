@@ -192,7 +192,7 @@ public class RegistarResultadoJogoController extends Controller {
 
     ObservableList<JogoDto> jogos = FXCollections.observableArrayList();
     try {
-      jogos.addAll(ApiJogo.getAllJogos());
+      jogos.addAll(ApiJogo.getAllJogosPorTerminar());
     } catch (Exception e) {
       System.err.println(e.getMessage());
     }
@@ -434,7 +434,8 @@ public class RegistarResultadoJogoController extends Controller {
     EstatisticaJogoDto ej = new EstatisticaJogoDto();
     ej.setCartoes(new HashSet<CartaoDto>(tabelaCartoes.getItems()));
     ej.setGolos(new HashSet<GoloDto>(tabelaGolos.getItems()));
-    System.out.println(ej.getCartoes());
+    System.out.println("Registados cartoes: " + ej.getCartoes());
+    System.out.println("Registados golos: " + ej.getCartoes());
     JogoDto fimDoJogo = new JogoDto();
     fimDoJogo.setId(jogoSelecionado.getId());
     fimDoJogo.setEstadoDeJogo(EstadoDeJogo.TERMINADO);

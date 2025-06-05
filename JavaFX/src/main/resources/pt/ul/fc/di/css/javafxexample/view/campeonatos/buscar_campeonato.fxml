@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="502.0" prefWidth="426.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.equipas.BuscarEquipasController">
+<VBox prefHeight="630.0" prefWidth="344.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.campeonatos.BuscarCampeonatoController">
   <children>
     <MenuBar prefHeight="5.0" prefWidth="323.0" VBox.vgrow="NEVER">
       <menus>
@@ -41,39 +41,33 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="477.0" prefWidth="437.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="336.0" prefWidth="281.0" VBox.vgrow="ALWAYS">
          <children>
-            <ListView fx:id="listaDeEquipas" layoutX="60.0" layoutY="188.0" prefHeight="238.0" prefWidth="306.0" />
-            <Button fx:id="goBack" layoutX="214.0" layoutY="438.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="153.0" text="voltar atrás" />
-            <Label layoutX="105.0" layoutY="83.0" style="-fx-font-weight: bold;" text="Buscar por uma Equipa">
+            <ListView fx:id="listaDeCampeonatos" layoutX="19.0" layoutY="194.0" prefHeight="365.0" prefWidth="306.0" />
+            <Button fx:id="goBack" layoutX="172.0" layoutY="566.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="153.0" text="voltar atrás" />
+            <Label layoutX="42.0" layoutY="72.0" style="-fx-font-weight: bold;" text="Buscar por um Campeonato">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="input" layoutX="60.0" layoutY="147.0" prefHeight="25.0" prefWidth="306.0" />
-            <MenuButton fx:id="tipoDePesquisa" layoutX="60.0" layoutY="122.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="306.0" text="Tipo de Pesquisa">
+            <TextField fx:id="input" layoutX="20.0" layoutY="147.0" prefHeight="25.0" prefWidth="306.0" promptText="mock search" />
+            <MenuButton fx:id="tipoDePesquisa" layoutX="19.0" layoutY="122.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="306.0" text="Tipo de Pesquisa">
               <items>
                 <MenuItem mnemonicParsing="false" text="Nome" />
                 <MenuItem mnemonicParsing="false" text="Id" />
-                  <MenuItem mnemonicParsing="false" text="Número de Jogadores" />
-                  <MenuItem mnemonicParsing="false" text="Número de Vitórias" />
-                  <MenuItem mnemonicParsing="false" text="Número de Empates" />
-                  <MenuItem mnemonicParsing="false" text="Número de Derrotas" />
-                  <MenuItem mnemonicParsing="false" text="Id de uma Conquista" />
-                  <MenuItem mnemonicParsing="false" text="Sem jogador de determinada posição" />
               </items>
             </MenuButton>
-            <ImageView fitHeight="35.0" fitWidth="37.0" layoutX="26.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../image-assets/soccer-ball.png" />
-               </image>
-            </ImageView>
-            <Line endX="301.0" endY="-0.125" layoutX="107.0" layoutY="53.0" startX="-63.0" startY="-0.125" />
-            <Text layoutX="284.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SoccerNow" textAlignment="CENTER" wrappingWidth="124.619140625">
+            <Line endX="240.2928924560547" endY="-0.746320366859436" layoutX="84.0" layoutY="52.0" startX="-63.0" startY="-0.125" />
+            <Text layoutX="200.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SoccerNow" textAlignment="CENTER" wrappingWidth="124.619140625">
                <font>
                   <Font name="Berlin Sans FB" size="24.0" />
                </font>
             </Text>
+            <ImageView fitHeight="30.0" fitWidth="36.0" layoutX="27.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../image-assets/soccer-ball.png" />
+               </image>
+            </ImageView>
          </children>
         </AnchorPane>
   </children>

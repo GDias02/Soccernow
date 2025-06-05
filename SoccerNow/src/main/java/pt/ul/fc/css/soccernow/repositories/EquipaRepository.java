@@ -23,4 +23,5 @@ public interface EquipaRepository extends JpaRepository<Equipa, Long>,
         bindings.bind(String.class)
           .first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
     }
+    
 }

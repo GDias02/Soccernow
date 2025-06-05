@@ -1,106 +1,110 @@
 package pt.ul.fc.di.css.javafxexample.api;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Set;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import pt.ul.fc.di.css.javafxexample.dto.utilizadores.JogadorDto;
 import pt.ul.fc.di.css.javafxexample.dto.utilizadores.JogadorPostDto;
 
 public class ApiJogador {
 
-    private static final String BASE_URL = "http://localhost:8080/api/jogadores";
-    private static final ObjectMapper mapper = new ObjectMapper();
-    private static final HttpClient client = HttpClient.newHttpClient();
+  private static final String BASE_URL = "http://localhost:8080/api/jogadores";
+  private static final ObjectMapper mapper = new ObjectMapper();
+  private static final HttpClient client = HttpClient.newHttpClient();
 
-    public static JogadorDto registarJogador(JogadorPostDto jogador) throws Exception {
-        String json = mapper.writeValueAsString(jogador);
+  public static JogadorDto registarJogador(JogadorPostDto jogador) throws Exception {
+    mapper.registerModule(new JavaTimeModule());
+    String json = mapper.writeValueAsString(jogador);
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/create"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL + "/create"))
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(json))
+            .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() != 200) {
-            throw new RuntimeException(response.body());
-        }
-
-        return mapper.readValue(response.body(), new TypeReference<JogadorDto>() {
-        });
+    if (response.statusCode() != 200) {
+      throw new RuntimeException(response.body());
     }
 
-    public static JogadorDto verificarJogador(int nif) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/" + nif))
-                .header("Content-Type", "application/json")
-                .GET()
-                .build();
+    return mapper.readValue(response.body(), new TypeReference<JogadorDto>() {});
+  }
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+  public static JogadorDto verificarJogador(int nif) throws Exception {
+    mapper.registerModule(new JavaTimeModule());
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL + "/" + nif))
+            .header("Content-Type", "application/json")
+            .GET()
+            .build();
 
-        if (response.statusCode() != 200) {
-            throw new RuntimeException(response.body());
-        }
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return mapper.readValue(response.body(), new TypeReference<JogadorDto>() {
-        });
+    if (response.statusCode() != 200) {
+      throw new RuntimeException(response.body());
     }
 
-    public static void removerJogador(int nif) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/" + nif))
-                .header("Content-Type", "application/json")
-                .DELETE()
-                .build();
+    return mapper.readValue(response.body(), new TypeReference<JogadorDto>() {});
+  }
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+  public static void removerJogador(int nif) throws Exception {
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL + "/" + nif))
+            .header("Content-Type", "application/json")
+            .DELETE()
+            .build();
 
-        if (response.statusCode() != 200) {
-            throw new RuntimeException(response.body());
-        }
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() != 200) {
+      throw new RuntimeException(response.body());
+    }
+  }
+
+  public static JogadorPostDto atualizarJogador(JogadorPostDto jogador) throws Exception {
+    mapper.registerModule(new JavaTimeModule());
+    String json = mapper.writeValueAsString(jogador);
+
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL + "/update"))
+            .header("Content-Type", "application/json")
+            .PUT(HttpRequest.BodyPublishers.ofString(json))
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() != 200) {
+      throw new RuntimeException(response.body());
     }
 
-    public static JogadorPostDto atualizarJogador(JogadorPostDto jogador) throws Exception {
-        String json = mapper.writeValueAsString(jogador);
+    return mapper.readValue(response.body(), new TypeReference<JogadorPostDto>() {});
+  }
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/update"))
-                .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString(json))
-                .build();
+  public static Set<JogadorDto> buscarJogadores() throws Exception {
+    mapper.registerModule(new JavaTimeModule());
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL))
+            .header("Content-Type", "application/json")
+            .GET()
+            .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() != 200) {
-            throw new RuntimeException(response.body());
-        }
-
-        return mapper.readValue(response.body(), new TypeReference<JogadorPostDto>() {
-        });
+    if (response.statusCode() != 200) {
+      throw new RuntimeException(response.body());
     }
 
-    public static Set<JogadorDto> buscarJogadores() throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
-                .header("Content-Type", "application/json")
-                .GET()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() != 200) {
-            throw new RuntimeException(response.body());
-        }
-
-        return mapper.readValue(response.body(), new TypeReference<Set<JogadorDto>>() {
-        });
-    }
+    return mapper.readValue(response.body(), new TypeReference<Set<JogadorDto>>() {});
+  }
 }

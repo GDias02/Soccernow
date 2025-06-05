@@ -75,6 +75,16 @@ public class JogoController {
     else return ResponseEntity.badRequest().build();
   }
 
+  @PutMapping("/cancel/{jogoId}")
+  @ApiOperation(
+      value = "Cancela um jogo que não esteja terminado",
+      notes = "Muda o estado de jogo para CANCELADO")
+  public ResponseEntity<JogoDto> cancelJogo(@PathVariable("jogoId") long jogoId) {
+    JogoDto jogoDto = jogoHandler.cancelJogo(jogoId);
+    if (jogoDto != null) return ResponseEntity.ok(jogoDto);
+    else return ResponseEntity.badRequest().build();
+  }
+
   @GetMapping
   @ApiOperation(value = "Get all jogos", notes = "Returns all jogos.")
   public ResponseEntity<Set<JogoDto>> buscarJogos() {
@@ -82,8 +92,17 @@ public class JogoController {
     return ResponseEntity.ok(jogosDtos);
   }
 
+  @GetMapping("/unfinished")
+  @ApiOperation(
+      value = "Get all jogos por terminar",
+      notes = "Devolve todos os jogos que nao estejam terminados ou cancelados.")
+  public ResponseEntity<Set<JogoDto>> buscarJogosPorJogar() {
+    Set<JogoDto> jogosDtos = jogoHandler.getJogosPorTerminar();
+    return ResponseEntity.ok(jogosDtos);
+  }
+
   @GetMapping("/selecao/{selecaoId}/jogadores")
-  @ApiOperation(value = "Get all jogos", notes = "Returns all jogadores.")
+  @ApiOperation(value = "Get all jogadores from selecao", notes = "Returns all jogadores.")
   public ResponseEntity<List<JogadorDto>> buscarJogadoresDeSelecao(
       @PathVariable("selecaoId") long selecaoId) {
     List<JogadorDto> jogosDtos = jogoHandler.buscarJogadoresDeSelecao(selecaoId);

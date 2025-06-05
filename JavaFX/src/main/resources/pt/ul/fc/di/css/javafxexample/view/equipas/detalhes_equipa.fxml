@@ -12,9 +12,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.equipas.DetalhesEquipaController">
+<VBox prefHeight="696.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.equipas.DetalhesEquipaController">
   <children>
     <MenuBar prefHeight="5.0" prefWidth="553.0" VBox.vgrow="NEVER">
       <menus>
@@ -45,11 +47,17 @@
                   <AnchorPane prefHeight="75.0" prefWidth="551.0" BorderPane.alignment="CENTER">
                      <children>
                         <TextArea fx:id="messageArea" editable="false" layoutX="170.0" prefHeight="89.0" prefWidth="361.0" text="Aqui pode atualizar ou remover a sua equipa.&#10;Basta colocar um nome diferente, adicionar ou remover jogadores e clicar em atualizar, ou clicar em remover  para apagar a equipa" wrapText="true" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0" />
-                        <Label layoutX="41.0" layoutY="30.0" style="-fx-font-weight: bold;" text="Equipa">
+                        <Label layoutX="42.0" layoutY="30.0" style="-fx-font-weight: bold;" text="Equipa">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
+                        <Text layoutX="12.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SoccerNow" textAlignment="CENTER" wrappingWidth="124.619140625">
+                           <font>
+                              <Font name="Berlin Sans FB" size="24.0" />
+                           </font>
+                        </Text>
+                        <Line endX="-2.0" layoutX="133.0" layoutY="23.0" startX="-113.0" />
                      </children>
                   </AnchorPane>
                </top>
@@ -67,24 +75,30 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Button fx:id="adicionarJogadorButton" layoutX="177.0" layoutY="286.0" mnemonicParsing="false" onAction="#adicionarJogador" prefHeight="25.0" prefWidth="113.0" text="Adicionar jogador" />
-                        <Button fx:id="removerJogadorButton" layoutX="414.0" layoutY="286.0" mnemonicParsing="false" onAction="#removerJogador" prefHeight="25.0" prefWidth="123.0" text="Remover jogador" />
+                        <Button fx:id="adicionarJogadorButton" layoutX="179.0" layoutY="289.0" mnemonicParsing="false" onAction="#adicionarJogador" prefHeight="25.0" prefWidth="113.0" text="Adicionar jogador" />
+                        <Button fx:id="removerJogadorButton" layoutX="395.0" layoutY="289.0" mnemonicParsing="false" onAction="#removerJogador" prefHeight="25.0" prefWidth="123.0" text="Remover jogador" />
                         <ListView fx:id="listaDeJogadores" layoutX="92.0" layoutY="110.0" prefHeight="176.0" prefWidth="200.0" />
-                        <ListView fx:id="jogadoresSelecionados" layoutX="339.0" layoutY="110.0" prefHeight="176.0" prefWidth="200.0" />
+                        <ListView fx:id="jogadoresSelecionados" layoutX="320.0" layoutY="110.0" prefHeight="176.0" prefWidth="200.0" />
                         <Label layoutX="310.0" layoutY="85.0" style="-fx-font-weight: bold;" text="Jogadores Selecionados">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Button fx:id="removerEquipaButton" layoutX="99.0" layoutY="326.0" mnemonicParsing="false" onAction="#removerEquipa" prefHeight="42.0" prefWidth="183.0" text="Remover Equipa" />
-                        <Button fx:id="atualizarEquipaButton" layoutX="346.0" layoutY="326.0" mnemonicParsing="false" onAction="#atualizarEquipa" prefHeight="42.0" prefWidth="183.0" text="Atualizar Equipa" />
+                        <Button fx:id="removerEquipaButton" layoutX="57.0" layoutY="455.0" mnemonicParsing="false" onAction="#removerEquipa" prefHeight="42.0" prefWidth="193.0" text="Remover Equipa" />
+                        <Button fx:id="atualizarEquipaButton" layoutX="305.0" layoutY="455.0" mnemonicParsing="false" onAction="#atualizarEquipa" prefHeight="42.0" prefWidth="202.0" text="Atualizar Equipa" />
+                        <ListView fx:id="listaDeJogos" layoutX="528.0" layoutY="107.0" prefHeight="389.0" prefWidth="245.0" />
+                        <Label layoutX="528.0" layoutY="74.0" style="-fx-font-weight: bold;" text="Jogos da Equipa">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
                </center>
                <bottom>
                   <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="551.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="voltarAtras" layoutX="41.0" layoutY="5.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="517.0" text="Voltar atrás" />
+                        <Button fx:id="voltarAtras" layoutX="17.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="756.0" text="Voltar atrás" />
                      </children>
                   </AnchorPane>
                </bottom>

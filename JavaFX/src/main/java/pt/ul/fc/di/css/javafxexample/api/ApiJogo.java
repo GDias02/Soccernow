@@ -9,6 +9,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Map;
+
+import pt.ul.fc.di.css.javafxexample.dto.campeonatos.CampeonatoDto;
 import pt.ul.fc.di.css.javafxexample.dto.jogos.JogoDto;
 import pt.ul.fc.di.css.javafxexample.dto.jogos.SelecaoDto;
 import pt.ul.fc.di.css.javafxexample.dto.utilizadores.JogadorDto;
@@ -71,6 +74,20 @@ public class ApiJogo {
     return mapper.readValue(response.body(), jogoListReference);
   }
 
+  public static List<JogoDto> getAllJogosPorTerminar() throws Exception {
+    mapper.registerModule(new JavaTimeModule());
+    HttpRequest request =
+        HttpRequest.newBuilder().uri(URI.create(BASE_URL + "/unfinished")).GET().build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() != 200) {
+      throw new RuntimeException("Failed to get jogos. HTTP code: " + response.statusCode());
+    }
+
+    return mapper.readValue(response.body(), jogoListReference);
+  }
+
   public static Boolean localDisponivel(JogoDto jogo) throws Exception {
     mapper.registerModule(new JavaTimeModule());
     String json = mapper.writeValueAsString(jogo);
@@ -104,7 +121,7 @@ public class ApiJogo {
     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() != 200 && response.statusCode() != 201) {
-      throw new RuntimeException("Failed to get jogos. HTTP code: " + response.statusCode());
+      throw new RuntimeException("Failed to get arbitros. HTTP code: " + response.statusCode());
     }
 
     System.out.println(response.body());
@@ -144,5 +161,23 @@ public class ApiJogo {
           "Failed to get jogadores from Selecao. HTTP code: " + response.statusCode());
     }
     return mapper.readValue(response.body(), jogadorListReference);
+  }
+
+  public static void cancelarJogo(JogoDto jogo, Long jogoId) throws Exception {
+    mapper.registerModule(new JavaTimeModule());
+    String json = mapper.writeValueAsString(jogo);
+
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL + "/cancel/"+ jogoId))
+            .header("Content-Type", "application/json")
+            .PUT(HttpRequest.BodyPublishers.ofString(json))
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() != 200 && response.statusCode() != 201) {
+      throw new RuntimeException("Failed to cancel jogo. HTTP code: " + response.statusCode());
+    }
   }
 }
