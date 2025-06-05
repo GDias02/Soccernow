@@ -215,7 +215,6 @@ public class JogoDto {
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
     JogoDto other = (JogoDto) obj;
-    if (estadoDeJogo != other.estadoDeJogo) return false;
     if (localDto == null) {
       if (other.localDto != null) return false;
     } else if (!localDto.equals(other.localDto)) return false;

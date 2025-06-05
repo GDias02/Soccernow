@@ -1,6 +1,5 @@
 package pt.ul.fc.css.soccernow.handlers;
 
-import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumMap;
@@ -10,10 +9,22 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.querydsl.core.support.FetchableQueryBase;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.DateTimePath;
+import com.querydsl.core.types.dsl.EnumPath;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
@@ -28,6 +39,7 @@ import pt.ul.fc.css.soccernow.entities.jogos.EstatisticaJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Golo;
 import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Local;
+import pt.ul.fc.css.soccernow.entities.jogos.QJogo;
 import pt.ul.fc.css.soccernow.entities.jogos.Selecao;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
@@ -73,6 +85,8 @@ public class JogoHandler implements IJogoHandler {
   @Autowired private CampeonatoRepository campeonatoRepository;
 
   @Autowired private EstatisticasHandler estatisticasHandler;
+
+  @PersistenceContext private EntityManager entityManager;
 
   @Transactional
   public JogoDto getJogo(long id) {
@@ -399,5 +413,61 @@ public class JogoHandler implements IJogoHandler {
               return jogoDto;
             })
         .collect(Collectors.toSet());
+  }
+
+  public Set<JogoDto> filtrarJogos(String jogosEstado, String golos, String local, String turno) {
+    if (jogosEstado == null) jogosEstado = "";
+    if (golos == null) golos = "";
+    if (local == null) local = "";
+    if (turno == null) turno = "";
+
+    QJogo jogo = QJogo.jogo;
+    JPAQuery<Jogo> query = new JPAQuery<>(entityManager);
+
+    FetchableQueryBase<Jogo, JPAQuery<Jogo>> fetchable = 
+        (FetchableQueryBase<Jogo, JPAQuery<Jogo>>) query.from(jogo)
+            .where(
+              filtroJogoEstado(jogo.estadoDeJogo, jogosEstado),
+              jogo.local.nome.containsIgnoreCase(local),
+              filtroJogoTurno(jogo.diaEHora, turno)
+            )
+            .distinct()
+            .orderBy(jogo.id.asc());
+
+    List<Jogo> jogos = fetchable.fetch();
+
+    Set<JogoDto> jogoDtos = jogos.stream().map(JogoMapper::jogoToDto).collect(Collectors.toSet());
+    Set<JogoDto> jogosFinaisDtos = new HashSet<>();
+    for (JogoDto jogoDto : jogoDtos) {
+        EstatisticaJogo estatisticas = estatisticasHandler.criarEstatisticaJogo(jogoDto);
+        if (filtroEstatisticas(estatisticas, golos)) {
+            jogoDto.setStats(EstatisticaMapper.estatisticaJogoToDto(estatisticas));
+            jogosFinaisDtos.add(jogoDto);
+        }
+    }
+    return jogosFinaisDtos;
+  }
+
+  private BooleanExpression filtroJogoEstado(EnumPath<EstadoDeJogo> estado, String jogosEstado) {
+    if (jogosEstado.isEmpty()) return Expressions.asBoolean(true).isTrue();
+    return estado.eq(Enum.valueOf(EstadoDeJogo.class, jogosEstado));
+  }
+
+  private BooleanExpression filtroJogoTurno(DateTimePath<LocalDateTime> data, String turno) {
+    if (turno.isEmpty()) return Expressions.asBoolean(true).isTrue();
+    switch (turno) {
+      case "MANHA" -> {return data.hour().between(6, 11);}
+      case "TARDE" -> {return data.hour().between(12, 19);}
+      case "NOITE" -> {return data.hour().between(20, 23).or(data.hour().between(0, 5));}
+    }
+    return Expressions.asBoolean(true).isTrue();
+  }
+
+  private boolean filtroEstatisticas(EstatisticaJogo estatisticas, String golosStr) {
+      if (golosStr.matches("\\d+")) {
+          int golos = Integer.parseInt(golosStr);
+          if (estatisticas.getGolos().size() != golos) return false;
+      }
+      return true;
   }
 }

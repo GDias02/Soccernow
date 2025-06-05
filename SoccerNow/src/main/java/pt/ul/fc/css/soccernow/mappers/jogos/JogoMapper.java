@@ -88,8 +88,10 @@ public class JogoMapper {
 
     jogo.setDiaEHora(jogodto.getDiaEHora());
 
-    jogo.setEstadoAtual(
-        EstadoDeJogo.AGENDADO); // Nao importa o que esta no dto, a criacao gera AGENDADO.
+    EstadoDeJogo estado = jogodto.getEstadoDeJogo();
+    if (estado == null) jogo.setEstadoAtual(EstadoDeJogo.AGENDADO);
+    else jogo.setEstadoAtual(jogodto.getEstadoDeJogo());
+        //EstadoDeJogo.AGENDADO); // Nao importa o que esta no dto, a criacao gera AGENDADO.
     Placar p = new Placar(jogodto.getS1().getEquipa(), jogodto.getS2().getEquipa());
     jogo.setPlacar(p);
 

@@ -33,9 +33,7 @@ import pt.ul.fc.css.soccernow.entities.jogos.Local;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Jogador;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Posicao;
-import pt.ul.fc.css.soccernow.mappers.campeonatos.CampeonatoMapper;
 import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
-import pt.ul.fc.css.soccernow.mappers.jogos.JogoMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.LocalMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroPostMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
@@ -292,7 +290,7 @@ public class InitHandler {
     JogoDto j2 =
         new JogoDto(
             null,
-            EstadoDeJogo.AGENDADO,
+            EstadoDeJogo.TERMINADO,
             LocalMapper.localToDto(local2),
             d2,
             s1,
@@ -301,7 +299,7 @@ public class InitHandler {
     JogoDto j3 =
         new JogoDto(
             null,
-            EstadoDeJogo.AGENDADO,
+            EstadoDeJogo.A_DECORRER,
             LocalMapper.localToDto(local3),
             d3,
             s1,

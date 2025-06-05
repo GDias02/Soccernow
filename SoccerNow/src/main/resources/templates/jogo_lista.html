@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}">
+
+<body>
+    <section>
+        <nav th:replace="~{main-page :: router}"></nav>
+        <hr>
+        <h2>Jogos</h2>
+        <form action="#" th:action="@{/leaf/api/jogos/jogo}" th:object=${filtros} method="get">
+
+            <label for="jogosEstado">ESTADO: </label>
+            <select th:field="*{jogosEstado}">
+                <option value="">QUALQUER</option>
+                <option th:each="estado : ${T(pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo).values()}"
+                        th:value="${estado}"
+                        th:text="${estado}">
+                </option>
+            </select>
+
+            <label for="golos">GOLOS MARCADOS: </label>
+            <input type="number" placeholder="0" th:field="*{golos}" />
+
+            <label for="local">LOCAL: </label>
+            <input type="text" placeholder="Estádio" th:field="*{local}" />
+
+            <label for="turno">ESTADO: </label>
+            <select th:field="*{turno}">
+                <option value="">QUALQUER</option>
+                <option th:each="turno : ${T(pt.ul.fc.css.soccernow.entities.jogos.Turno).values()}"
+                        th:value="${turno}"
+                        th:text="${turno}">
+                </option>
+            </select>
+
+            <p><input type="submit" value="Filtrar" /> <input type="reset" value="Limpar Campos" /></p>
+        </form>
+        <h4>Jogos:</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Estado</th>
+                    <th>Golos</th>
+                    <th>Local</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${jogos.empty}">
+                    <td colspan="3">Sem Jogos</td>
+                </tr>
+                <tr th:each="j : ${jogos}">
+                    <td th:text="${j.id}">...</td>
+                    <td th:text="${j.estadoDeJogo}">...</td>
+                    <td th:text="${j.stats.golos.size()}">...</td>
+                    <td th:text="${j.localDto.nome}">...</td>
+                    <td th:text="${j.diaEHora}">...</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+
+</html>
