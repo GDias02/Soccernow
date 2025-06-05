@@ -113,6 +113,7 @@ public class DetalhesEquipaController extends Controller {
             try {
                 String title = this.getStage().getTitle();
                 this.equipa = ApiEquipa.buscarEquipaPorId(Long.parseLong(title));
+                this.getStage().setTitle(equipa.getNome());
                 if (this.equipa != null) {
                     //set nome
                     this.nomeInput.setText(this.equipa.getNome());

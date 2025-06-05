@@ -89,6 +89,12 @@ public class RegistarCampeonatoController extends Controller {
             messageArea.setText("É necessário preencher uma data de início do campeonato e que seja no futuro");
             return;
         }
+
+        if (listaEquipasSelecionadas.getItems().toArray().length < 2){
+            messageArea.setText("É necessário que um campeonato tenha pelo menos duas equipas");
+            return;
+        }
+        
         List<Long> idsJogos = List.of();
         List<Long> idsEquipas = List.of();
         listaEquipasSelecionadas.getItems().stream().map(e->idsEquipas.add(e.getId()));
