@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}">
+
+<body>
+    <section>
+        <nav th:replace="~{main-page :: router}"></nav>
+        <hr>
+        <nav th:replace="~{jogo_gameover_router :: gameover_router}"></nav>
+        <hr>
+        <h2>Selecionar Jogo para Registar Resultado</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Local</th>
+                    <th>Equipa 1</th>
+                    <th>Equipa 2</th>
+                    <th>Campeonato</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${session.jogos.empty}">
+                    <td colspan="3">Sem Jogos</td>
+                </tr>
+                <tr class="selectJogo" th:each="j : ${session.jogos}" onclick="jogoSelecionado(this)">
+                    <td scope="row"><a th:href="@{'/leaf/api/jogos/gameover/selecionar/' + ${j.id}}" th:text="${j.id}"></a></td>
+                    <td th:text="${j.diaEHora}">...</td>
+                    <td th:text="${j.localDto.nome}">...</td>
+                    <td th:text="${j.equipaNome1}">...</td>
+                    <td th:text="${j.equipaNome2}">...</td>
+                    <td th:text="${j.campeonatoTipo}">...</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}">
+
+<body>
+    <section>
+        <nav th:replace="~{main-page :: router}"></nav>
+        <hr>
+        <nav th:replace="~{jogo_gameover_router :: gameover_router}"></nav>
+        <hr>
+        <h2>Golos Marcados</h2>
+
+        <form action="#" th:action="@{/leaf/api/jogos/gameover/golos/create}" th:object=${golo} method="post">
+
+            <label for="marcador">Selecione um Jogador </label>
+            <select th:field="*{marcador}">
+                <option th:each="jog : ${session.jogadores}"
+                        th:value="${jog.utilizador.id}"
+                        th:text="${jog.utilizador.nome}">
+                </option>
+            </select>
+
+            <label for="equipa">A favor da Equipa </label>
+            <select th:field="*{equipa}">
+                <option th:each="equip : ${session.equipas}"
+                        th:value="${equip.id}"
+                        th:text="${equip.nome}">
+                </option>
+            </select>
+
+            <label for="horas">HH </label>
+            <select th:field="*{horas}">
+                <option th:each="hora : ${session.horas}"
+                        th:value="${hora}"
+                        th:text="${hora}">
+                </option>
+            </select>
+
+            <label for="minutos">MM </label>
+            <select th:field="*{minutos}">
+                <option th:each="minuto : ${session.minutos}"
+                        th:value="${minuto}"
+                        th:text="${minuto}">
+                </option>
+            </select>
+
+            <p><input type="submit" value="Adicionar à lista" /></p>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Jogador</th>
+                    <th>Equipa</th>
+                    <th>Horas</th>
+                    <th>Minutos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${session.golos.empty}">
+                    <td colspan="3">Sem Golos</td>
+                </tr>
+                <tr th:each="g : ${session.golos}">
+                    <td th:text="${g.marcadorNome}">...</td>
+                    <td th:text="${g.equipaNome}">...</td>
+                    <td th:text="${g.horas}">...</td>
+                    <td th:text="${g.minutos}">...</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+
+</html>

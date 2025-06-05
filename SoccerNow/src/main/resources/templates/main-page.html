@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 <html th:replace="~{layout :: layout(~{::nav})}">
     <nav th:fragment="router">
-        <a th:href="@{/leaf/api/jogadores}">Jogadores</a>
-        <a th:href="@{/leaf/api/arbitros}">Árbitros</a>
-        <a th:href="@{/leaf/api/jogos}">Jogos</a>
+        <a th:href="@{/leaf/api/jogadores}" role="button">Jogadores</a>
+        <a th:href="@{/leaf/api/arbitros}" role="button">Árbitros</a>
+
+        <div class="dropdown">
+            <button class="dropbtn"><a href="#" role="button">Jogos</a>
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a th:href="@{/leaf/api/jogos}">Buscar Jogos</a>
+                <a th:href="@{/leaf/api/jogos/gameover/selecionar/start}">Registar Resultado de um Jogo</a>
+            </div>
+        </div>
     </nav>
 </html>

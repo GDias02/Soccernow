@@ -93,6 +93,19 @@ public class ArbitroHandler implements IArbitroHandler {
     return arbitroDto;
   }
 
+  @Transactional
+  public ArbitroDto verificarArbitroPorId(Long id) throws VerificarArbitroException, NotFoundException {
+    Optional<Arbitro> maybeArbitro = arbitroRepository.findAliveById(id);
+    if (maybeArbitro.isEmpty()) throw new NotFoundException("O árbitro não existe");
+
+    Arbitro arbitro = maybeArbitro.get();
+    ArbitroDto arbitroDto = ArbitroMapper.arbitroToDto(arbitro);
+    EstatisticaArbitro estatisticas = estatisticasHandler.criarEstatisticaArbitro(arbitroDto);
+    arbitroDto.setEstatisticas(EstatisticaArbitroMapper.estatisticaArbitroToDto(estatisticas));
+    
+    return arbitroDto;
+  }
+
   @Override
   @Transactional
   public void removerArbitro(int nif) throws RemoverArbitroException, NotFoundException {

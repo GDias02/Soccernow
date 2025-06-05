@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}">
+
+<body>
+    <section>
+        <nav th:replace="~{main-page :: router}"></nav>
+        <hr>
+        <nav th:replace="~{jogo_gameover_router :: gameover_router}"></nav>
+        <hr>
+        <h2>Cartões Atribuídos</h2>
+
+        <form action="#" th:action="@{/leaf/api/jogos/gameover/cartoes/create}" th:object=${cartao} method="post">
+
+            <label for="arbitro">Selecione um Árbitro </label>
+            <select th:field="*{arbitro}">
+                <option th:each="arb : ${session.arbitros}"
+                        th:value="${arb.utilizador.id}"
+                        th:text="${arb.utilizador.nome}">
+                </option>
+            </select>
+
+            <label for="atribuidoA">Selecione um Jogador </label>
+            <select th:field="*{atribuidoA}">
+                <option th:each="jog : ${session.jogadores}"
+                        th:value="${jog.utilizador.id}"
+                        th:text="${jog.utilizador.nome}">
+                </option>
+            </select>
+
+            <label for="cor">Cor do Cartão </label>
+            <select th:field="*{cor}">
+                <option th:each="c : ${T(pt.ul.fc.css.soccernow.entities.jogos.Cor).values()}"
+                        th:value="${c}"
+                        th:text="${c.name()}">
+                </option>
+            </select>
+
+            <label for="horas">HH </label>
+            <select th:field="*{horas}">
+                <option th:each="hora : ${session.horas}"
+                        th:value="${hora}"
+                        th:text="${hora}">
+                </option>
+            </select>
+
+            <label for="minutos">MM </label>
+            <select th:field="*{minutos}">
+                <option th:each="minuto : ${session.minutos}"
+                        th:value="${minuto}"
+                        th:text="${minuto}">
+                </option>
+            </select>
+
+            <p><input type="submit" value="Adicionar à lista" /></p>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Jogador</th>
+                    <th>Equipa</th>
+                    <th>Cor</th>
+                    <th>Árbitro</th>
+                    <th>Horas</th>
+                    <th>Minutos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${session.cartoes.empty}">
+                    <td colspan="3">Sem Cartões</td>
+                </tr>
+                <tr th:each="c : ${session.cartoes}">
+                    <td th:text="${c.atribuidoANome}">...</td>
+                    <td th:text="${c.equipaNome}">...</td>
+                    <td th:text="${c.cor}">...</td>
+                    <td th:text="${c.arbitroNome}">...</td>
+                    <td th:text="${c.horas}">...</td>
+                    <td th:text="${c.minutos}">...</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+
+</html>

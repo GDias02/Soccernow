@@ -102,6 +102,19 @@ public class JogadorHandler implements IJogadorHandler {
         return jogadorDto;
     }
 
+    @Transactional
+    public JogadorDto verificarJogadorPorId(Long id) throws VerificarJogadorException, NotFoundException {
+        Optional<Jogador> maybeJogador = jogadorRepository.findAliveById(id);
+        if (maybeJogador.isEmpty()) throw new NotFoundException("O jogador não existe");
+
+        Jogador jogador = maybeJogador.get();
+        JogadorDto jogadorDto = JogadorMapper.jogadorToDto(jogador);
+        EstatisticaJogador estatisticas = estatisticasHandler.criarEstatisticaJogador(jogadorDto);
+        jogadorDto.setEstatisticas(EstatisticaJogadorMapper.estatisticaJogadorToDto(estatisticas));
+
+        return jogadorDto;
+    }
+
     @Override
     @Transactional
     public void removerJogador(int nif) throws RemoverJogadorException, NotFoundException {

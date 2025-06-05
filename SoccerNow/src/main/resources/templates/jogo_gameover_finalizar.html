@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}">
+
+<body>
+    <section>
+        <nav th:replace="~{main-page :: router}"></nav>
+        <hr>
+        <nav th:replace="~{jogo_gameover_router :: gameover_router}"></nav>
+        <hr>
+        <h2>Confirmar</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Placar</th>
+                    <th>Equipa Vencedora</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td th:text="${session.resultados.placar}">...</td>
+                    <td th:text="${session.resultados.equipaVencedora}">...</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <form action="#" th:action="@{/leaf/api/jogos/gameover/finalizar/update}" method="post">
+            <p><input type="submit" value="Submeter Resultado" /></p>
+        </form>
+    </section>
+</body>
+
+</html>
