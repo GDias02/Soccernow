@@ -1,5 +1,14 @@
 package pt.ul.fc.css.soccernow.handlers;
 
+import com.querydsl.core.support.FetchableQueryBase;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.DateTimePath;
+import com.querydsl.core.types.dsl.EnumPath;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumMap;
@@ -9,22 +18,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.querydsl.core.support.FetchableQueryBase;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.DateTimePath;
-import com.querydsl.core.types.dsl.EnumPath;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.impl.JPAQuery;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
 import pt.ul.fc.css.soccernow.dto.jogos.CartaoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.EstatisticaJogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.GoloDto;
@@ -436,26 +433,27 @@ public class JogoHandler implements IJogoHandler {
     QJogo jogo = QJogo.jogo;
     JPAQuery<Jogo> query = new JPAQuery<>(entityManager);
 
-    FetchableQueryBase<Jogo, JPAQuery<Jogo>> fetchable = 
-        (FetchableQueryBase<Jogo, JPAQuery<Jogo>>) query.from(jogo)
-            .where(
-              filtroJogoEstado(jogo.estadoDeJogo, jogosEstado),
-              jogo.local.nome.containsIgnoreCase(local),
-              filtroJogoTurno(jogo.diaEHora, turno)
-            )
-            .distinct()
-            .orderBy(jogo.id.asc());
+    FetchableQueryBase<Jogo, JPAQuery<Jogo>> fetchable =
+        (FetchableQueryBase<Jogo, JPAQuery<Jogo>>)
+            query
+                .from(jogo)
+                .where(
+                    filtroJogoEstado(jogo.estadoDeJogo, jogosEstado),
+                    jogo.local.nome.containsIgnoreCase(local),
+                    filtroJogoTurno(jogo.diaEHora, turno))
+                .distinct()
+                .orderBy(jogo.id.asc());
 
     List<Jogo> jogos = fetchable.fetch();
 
     Set<JogoDto> jogoDtos = jogos.stream().map(JogoMapper::jogoToDto).collect(Collectors.toSet());
     Set<JogoDto> jogosFinaisDtos = new HashSet<>();
     for (JogoDto jogoDto : jogoDtos) {
-        EstatisticaJogo estatisticas = estatisticasHandler.criarEstatisticaJogo(jogoDto);
-        if (filtroEstatisticas(estatisticas, golos)) {
-            jogoDto.setStats(EstatisticaMapper.estatisticaJogoToDto(estatisticas));
-            jogosFinaisDtos.add(jogoDto);
-        }
+      EstatisticaJogo estatisticas = estatisticasHandler.criarEstatisticaJogo(jogoDto);
+      if (filtroEstatisticas(estatisticas, golos)) {
+        jogoDto.setStats(EstatisticaMapper.estatisticaJogoToDto(estatisticas));
+        jogosFinaisDtos.add(jogoDto);
+      }
     }
     return jogosFinaisDtos;
   }
@@ -465,12 +463,24 @@ public class JogoHandler implements IJogoHandler {
     return estado.eq(Enum.valueOf(EstadoDeJogo.class, jogosEstado));
   }
 
+  private BooleanExpression filtroJogoNotInEstado(
+      EnumPath<EstadoDeJogo> estado, String jogosEstado) {
+    if (jogosEstado.isEmpty()) return Expressions.asBoolean(true).isTrue();
+    return estado.eq(Enum.valueOf(EstadoDeJogo.class, jogosEstado)).not();
+  }
+
   private BooleanExpression filtroJogoTurno(DateTimePath<LocalDateTime> data, String turno) {
     if (turno.isEmpty()) return Expressions.asBoolean(true).isTrue();
     switch (turno) {
-      case "MANHA" -> {return data.hour().between(6, 11);}
-      case "TARDE" -> {return data.hour().between(12, 19);}
-      case "NOITE" -> {return data.hour().between(20, 23).or(data.hour().between(0, 5));}
+      case "MANHA" -> {
+        return data.hour().between(6, 11);
+      }
+      case "TARDE" -> {
+        return data.hour().between(12, 19);
+      }
+      case "NOITE" -> {
+        return data.hour().between(20, 23).or(data.hour().between(0, 5));
+      }
     }
     return Expressions.asBoolean(true).isTrue();
   }
@@ -481,5 +491,36 @@ public class JogoHandler implements IJogoHandler {
       if (estatisticas.getGolos().size() != golos) return false;
     }
     return true;
+  }
+
+  public JogoDto cancelJogo(Long id) throws AtualizarJogoException {
+    Optional<Jogo> maybeJogo = jogoRepository.findById(id);
+    if (maybeJogo.isEmpty())
+      throw new AtualizarJogoException("Nao existe nenhum Jogo com esse ID!");
+    Jogo j = maybeJogo.get();
+    if (j.getEstadoDeJogo() == EstadoDeJogo.TERMINADO)
+      throw new AtualizarJogoException("Nao pode cancelar um Jogo ja TERMINADO!");
+    j.setEstadoAtual(EstadoDeJogo.CANCELADO);
+    return saveJogo(j);
+  }
+
+  public Set<JogoDto> getJogosPorTerminar() {
+    QJogo jogo = QJogo.jogo;
+    JPAQuery<Jogo> query = new JPAQuery<>(entityManager);
+
+    FetchableQueryBase<Jogo, JPAQuery<Jogo>> fetchable =
+        (FetchableQueryBase<Jogo, JPAQuery<Jogo>>)
+            query
+                .from(jogo)
+                .where(
+                    filtroJogoNotInEstado(jogo.estadoDeJogo, "TERMINADO"),
+                    filtroJogoNotInEstado(jogo.estadoDeJogo, "CANCELADO"))
+                .distinct()
+                .orderBy(jogo.id.asc());
+
+    List<Jogo> jogos = fetchable.fetch();
+
+    Set<JogoDto> jogoDtos = jogos.stream().map(JogoMapper::jogoToDto).collect(Collectors.toSet());
+    return jogoDtos;
   }
 }
