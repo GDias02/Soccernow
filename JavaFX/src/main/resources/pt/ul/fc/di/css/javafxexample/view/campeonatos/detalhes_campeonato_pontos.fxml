@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="612.0" prefWidth="895.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.campeonatos.DetalhesCampeonatoPontosController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="612.0" prefWidth="1122.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.campeonatos.DetalhesCampeonatoPontosController">
   <children>
     <MenuBar prefHeight="5.0" prefWidth="323.0" VBox.vgrow="NEVER">
       <menus>
@@ -42,7 +42,7 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="587.0" prefWidth="944.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="587.0" prefWidth="1162.0" VBox.vgrow="ALWAYS">
          <children>
             <BorderPane prefHeight="587.0" prefWidth="870.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="0.0">
                <top>
@@ -130,6 +130,18 @@
                      </children>
                   </AnchorPane>
                </left>
+               <right>
+                  <AnchorPane prefHeight="461.0" prefWidth="222.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ListView fx:id="tabelaDePontos" layoutX="5.0" layoutY="45.0" prefHeight="433.0" prefWidth="213.0" AnchorPane.bottomAnchor="-17.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="45.0" />
+                        <Label layoutX="46.0" layoutY="14.0" style="-fx-font-weight: bold;" text="Tabela de Pontos">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </right>
             </BorderPane>
          </children></AnchorPane>
   </children>

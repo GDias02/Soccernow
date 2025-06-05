@@ -29,53 +29,53 @@ import javafx.scene.control.TextField;
 
 public class DetalhesCampeonatoController extends Controller {
 
-    private CampeonatoDto campeonatoDto;
+    protected CampeonatoDto campeonatoDto;
 
 
     @FXML
-    private Button adicionarEquipa;
+    protected Button adicionarEquipa;
 
     @FXML
-    private Button adicionarJogo;
+    protected Button adicionarJogo;
     
     @FXML
-    private Button removerEquipa;
+    protected Button removerEquipa;
 
     @FXML
-    private Button removerJogo;
+    protected Button removerJogo;
 
     @FXML
-    private Button atualizarCampeonato;
+    protected Button atualizarCampeonato;
 
     @FXML
-    private Button confirmarbutton1;
+    protected Button confirmarbutton1;
 
     @FXML
-    private DatePicker datePicker;
+    protected DatePicker datePicker;
 
     @FXML
-    private ListView<EquipaDto> equipasDisponiveis;
+    protected ListView<EquipaDto> equipasDisponiveis;
 
     @FXML
-    private ListView<EquipaDto> equipasSelecionadas;
+    protected ListView<EquipaDto> equipasSelecionadas;
 
     @FXML
-    private SplitMenuButton estadoCampeontao;
+    protected SplitMenuButton estadoCampeontao;
 
     @FXML
-    private Button goBackButton;
+    protected Button goBackButton;
 
     @FXML
-    private TextField inputNome;
+    protected TextField inputNome;
 
     @FXML
-    private ListView<JogoDto> jogosDisponiveis;
+    protected ListView<JogoDto> jogosDisponiveis;
 
     @FXML
-    private ListView<JogoDto> jogosSelecionados;
+    protected ListView<JogoDto> jogosSelecionados;
 
     @FXML
-    private TextArea messageArea;
+    protected TextArea messageArea;
 
     @FXML
     void goBack(ActionEvent event) {
@@ -97,6 +97,10 @@ public class DetalhesCampeonatoController extends Controller {
         }
         if (this.datePicker.getValue().isBefore(LocalDate.now())){
             this.messageArea.setText("A data precisa de ser depois de hoje");
+            return;
+        }
+        if (campeonatoDto.getTipo().equals("pontos")){
+            atualizarCampeonatoPontos();
             return;
         }
         try {

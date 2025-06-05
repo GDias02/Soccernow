@@ -8,6 +8,7 @@ import pt.ul.fc.di.css.javafxexample.controller.Controller;
 import pt.ul.fc.di.css.javafxexample.controller.Controller;
 import pt.ul.fc.di.css.javafxexample.controller.Util;
 import pt.ul.fc.di.css.javafxexample.dto.campeonatos.CampeonatoDto;
+import pt.ul.fc.di.css.javafxexample.dto.campeonatos.CampeonatoPontosDto;
 import pt.ul.fc.di.css.javafxexample.dto.campeonatos.EstadoCampeonato;
 import pt.ul.fc.di.css.javafxexample.dto.equipas.EquipaDto;
 import pt.ul.fc.di.css.javafxexample.dto.jogos.JogoDto;
@@ -18,7 +19,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -105,6 +108,12 @@ public class RegistarCampeonatoController extends Controller {
         this.campeonatoDto = //Make the campeonato
             new CampeonatoDto(0L, this.inputNome.getText(), EstadoCampeonato.AGENDADO,
                                  idsJogos, idsEquipas, date, tipoCampeonato);
+        if (tipoCampeonato.equals("pontos")) {
+            var pontos = new CampeonatoPontosDto();
+            Map<Long, Long> map = idsEquipas.stream().collect(java.util.stream.Collectors.toMap(id -> id, id -> 0L));
+            pontos.setTabela(map);
+            campeonatoDto.setPontosDto(pontos);
+        }
         try {
             ApiCampeonato.registarCampeonato(campeonatoDto); 
             this.messageArea.setText("O campeonato " + this.campeonatoDto.getNome() + " foi registado com sucesso");                                
