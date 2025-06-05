@@ -1,13 +1,13 @@
 module pt.ul.fc.di.css.javafxexample {
-    requires javafx.controls;
-    requires javafx.fxml;
-    requires javafx.web;
-    requires transitive javafx.graphics;
-    requires com.fasterxml.jackson.databind;
-    requires java.net.http;
-    requires com.fasterxml.jackson.core;
-    requires jackson.datatype.jsr310;
-    requires javafx.base;
+  requires javafx.controls;
+  requires javafx.fxml;
+  requires javafx.web;
+  requires transitive javafx.graphics;
+  requires com.fasterxml.jackson.databind;
+  requires java.net.http;
+  requires com.fasterxml.jackson.core;
+  requires javafx.base;
+  requires com.fasterxml.jackson.datatype.jsr310;
 
   opens pt.ul.fc.di.css.javafxexample to
       javafx.fxml,

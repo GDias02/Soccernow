@@ -2,6 +2,7 @@ package pt.ul.fc.css.soccernow.controllers;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.handlers.JogoHandler;
 
 @RestController
@@ -77,6 +79,14 @@ public class JogoController {
   @ApiOperation(value = "Get all jogos", notes = "Returns all jogos.")
   public ResponseEntity<Set<JogoDto>> buscarJogos() {
     Set<JogoDto> jogosDtos = jogoHandler.buscarJogos();
+    return ResponseEntity.ok(jogosDtos);
+  }
+
+  @GetMapping("/selecao/{selecaoId}/jogadores")
+  @ApiOperation(value = "Get all jogos", notes = "Returns all jogadores.")
+  public ResponseEntity<List<JogadorDto>> buscarJogadoresDeSelecao(
+      @PathVariable("selecaoId") long selecaoId) {
+    List<JogadorDto> jogosDtos = jogoHandler.buscarJogadoresDeSelecao(selecaoId);
     return ResponseEntity.ok(jogosDtos);
   }
 

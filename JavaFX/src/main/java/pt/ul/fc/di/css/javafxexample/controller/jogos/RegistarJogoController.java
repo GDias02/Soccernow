@@ -38,113 +38,59 @@ import pt.ul.fc.di.css.javafxexample.dto.utilizadores.Posicao;
 public class RegistarJogoController extends Controller {
 
   @FXML private Button addArbitroListaBtn;
-
   @FXML private Text arbitroPrincipal;
-
   @FXML private CheckBox campeonatoToggle;
-
   @FXML private TextField capacidadeLocal;
-
   @FXML private TextField cidadeMorada;
-
   @FXML private TextField codigoPostalMorada;
-
   @FXML private Button criarJogoSubmitBtn;
-
   @FXML private DatePicker diaDoJogo;
-
   @FXML private Button disponibilidadeArbitroBtn;
-
   @FXML private Text disponibilidadeArbitros;
-
   @FXML private Text disponibilidadeJogs1;
-
   @FXML private Button disponibilidadeJogs1Btn;
-
   @FXML private Text disponibilidadeJogs2;
-
   @FXML private Button disponibilidadeJogs2Btn;
-
   @FXML private Text disponibilidadeLocal;
-
   @FXML private Button disponibilidadeLocalBtn;
-
   @FXML private TextField estadoMorada;
-
   @FXML private ComboBox<String> horaDoJogo;
-
   @FXML private Text infoArbitroSelecionado;
-
   @FXML private Button loadJogadoresEquipa1Btn;
-
   @FXML private Button loadJogadoresEquipa2Btn;
-
   @FXML private TextField localidadeMorada;
-
   @FXML private ComboBox<String> minutosDoJogo;
-
   @FXML private TextField nomeLocal;
-
   @FXML private TextField paisMorada;
-
   @FXML private Button passo1AvancarBtn;
-
   @FXML private Button passo2AvancarBtn;
-
   @FXML private Button passo2VoltarBtn;
-
   @FXML private Button passo3AvancarBtn;
-
   @FXML private Button passo3VoltarBtn;
-
   @FXML private Button passo4AvancarBtn;
-
   @FXML private Button passo4VoltarBtn;
-
   @FXML private Button passo5VoltarBtn;
-
   @FXML private ComboBox<JogadorDto> pickAlaD1;
-
   @FXML private ComboBox<JogadorDto> pickAlaD2;
-
   @FXML private ComboBox<JogadorDto> pickAlaE1;
-
   @FXML private ComboBox<JogadorDto> pickAlaE2;
-
   @FXML private ComboBox<JogadorDto> pickFixo1;
-
   @FXML private ComboBox<JogadorDto> pickFixo2;
-
   @FXML private ComboBox<JogadorDto> pickGuardaRedes1;
-
   @FXML private ComboBox<JogadorDto> pickGuardaRedes2;
-
   @FXML private ComboBox<JogadorDto> pickPivot1;
-
   @FXML private ComboBox<JogadorDto> pickPivot2;
-
   @FXML private ComboBox<Posicao> posicaoCapitao1;
-
   @FXML private ComboBox<Posicao> posicaoCapitao2;
-
   @FXML private TextField proprietarioLocal;
-
   @FXML private Button removeArbitroListaBtn;
-
   @FXML private TextField ruaMorada;
-
   @FXML private GridPane selecao1Posicoes;
-
   @FXML private GridPane selecao2Posicoes;
-
   @FXML private ComboBox<ArbitroDto> selecionarArbitro;
-
   @FXML private ComboBox<?> selecionarCampeonatoBtn;
-
   @FXML private ComboBox<EquipaDto> selecionarEquipa1Btn;
-
   @FXML private ComboBox<EquipaDto> selecionarEquipa2Btn;
-
   @FXML private TableView<ArbitroDto> tabelaArbitros;
   @FXML private TableColumn<ArbitroDto, String> columnNome;
   @FXML private TableColumn<ArbitroDto, String> columnCertificado;
