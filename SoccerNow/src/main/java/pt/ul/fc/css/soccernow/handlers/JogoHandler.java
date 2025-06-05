@@ -32,6 +32,7 @@ import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.LocalDto;
 import pt.ul.fc.css.soccernow.dto.jogos.SelecaoDto;
 import pt.ul.fc.css.soccernow.dto.utilizadores.ArbitroPostDto;
+import pt.ul.fc.css.soccernow.dto.utilizadores.JogadorDto;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.Cartao;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
@@ -53,6 +54,7 @@ import pt.ul.fc.css.soccernow.mappers.jogos.EstatisticaMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.GoloMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.JogoMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.LocalMapper;
+import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
 import pt.ul.fc.css.soccernow.repositories.CampeonatoRepository;
 import pt.ul.fc.css.soccernow.repositories.CartaoRepository;
@@ -109,6 +111,7 @@ public class JogoHandler implements IJogoHandler {
   @Transactional
   public Boolean localDisponivel(JogoDto jogodto) {
     LocalDto localdto = jogodto.getLocalDto();
+    if (localdto == null) return false;
     Local local = getLocalFromRepository(localdto);
     if (local == null) return true;
     LocalDateTime diaEHora = jogodto.getDiaEHora();
@@ -348,7 +351,7 @@ public class JogoHandler implements IJogoHandler {
   private Golo scoreGoloFromDto(GoloDto golodto, Jogo j) throws AtualizarJogoException {
     if (golodto == null) return null;
     LocalDateTime start = j.getDiaEHora();
-    LocalDateTime end = start.plusHours(1);
+    LocalDateTime end = start.plusHours(2);
     LocalDateTime marcado = golodto.getQuando();
     if (marcado == null || !(marcado.isBefore(end) && marcado.isAfter(start))) {
       throw new AtualizarJogoException("O golo só pode ser marcado durante o periodo de jogo!");
@@ -383,7 +386,7 @@ public class JogoHandler implements IJogoHandler {
       throw new AtualizarJogoException("O cartao tem de ter uma cor.");
     }
     LocalDateTime start = j.getDiaEHora();
-    LocalDateTime end = start.plusHours(1);
+    LocalDateTime end = start.plusHours(2);
     LocalDateTime marcado = cartaodto.getQuando();
     if (marcado == null || !(marcado.isBefore(end) && marcado.isAfter(start))) {
       throw new AtualizarJogoException("O cartão só pode ser atribuido durante o periodo de jogo!");
@@ -398,6 +401,15 @@ public class JogoHandler implements IJogoHandler {
   @Transactional
   public JogoDto updateJogo(long jogoId, JogoDto jogodto) {
     return null;
+  }
+
+  @Transactional
+  public List<JogadorDto> buscarJogadoresDeSelecao(Long id) throws SelecaoException {
+    Optional<Selecao> s = selecaoRepository.findById(id);
+    if (s.isEmpty()) {
+      throw new SelecaoException("Nao existe selecao com esse ID.");
+    }
+    return s.get().getJogadores().values().stream().map(JogadorMapper::jogadorToDto).toList();
   }
 
   @Transactional
@@ -464,10 +476,10 @@ public class JogoHandler implements IJogoHandler {
   }
 
   private boolean filtroEstatisticas(EstatisticaJogo estatisticas, String golosStr) {
-      if (golosStr.matches("\\d+")) {
-          int golos = Integer.parseInt(golosStr);
-          if (estatisticas.getGolos().size() != golos) return false;
-      }
-      return true;
+    if (golosStr.matches("\\d+")) {
+      int golos = Integer.parseInt(golosStr);
+      if (estatisticas.getGolos().size() != golos) return false;
+    }
+    return true;
   }
 }

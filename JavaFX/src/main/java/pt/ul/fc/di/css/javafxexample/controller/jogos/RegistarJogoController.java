@@ -3,8 +3,8 @@ package pt.ul.fc.di.css.javafxexample.controller.jogos;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,6 +14,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -25,6 +26,7 @@ import pt.ul.fc.di.css.javafxexample.api.ApiJogo;
 import pt.ul.fc.di.css.javafxexample.controller.Controller;
 import pt.ul.fc.di.css.javafxexample.controller.Util;
 import pt.ul.fc.di.css.javafxexample.dto.equipas.EquipaDto;
+import pt.ul.fc.di.css.javafxexample.dto.jogos.EstadoDeJogo;
 import pt.ul.fc.di.css.javafxexample.dto.jogos.JogoDto;
 import pt.ul.fc.di.css.javafxexample.dto.jogos.LocalDto;
 import pt.ul.fc.di.css.javafxexample.dto.jogos.MoradaDto;
@@ -36,114 +38,62 @@ import pt.ul.fc.di.css.javafxexample.dto.utilizadores.Posicao;
 public class RegistarJogoController extends Controller {
 
   @FXML private Button addArbitroListaBtn;
-
   @FXML private Text arbitroPrincipal;
-
   @FXML private CheckBox campeonatoToggle;
-
   @FXML private TextField capacidadeLocal;
-
   @FXML private TextField cidadeMorada;
-
   @FXML private TextField codigoPostalMorada;
-
   @FXML private Button criarJogoSubmitBtn;
-
   @FXML private DatePicker diaDoJogo;
-
   @FXML private Button disponibilidadeArbitroBtn;
-
   @FXML private Text disponibilidadeArbitros;
-
   @FXML private Text disponibilidadeJogs1;
-
   @FXML private Button disponibilidadeJogs1Btn;
-
   @FXML private Text disponibilidadeJogs2;
-
   @FXML private Button disponibilidadeJogs2Btn;
-
   @FXML private Text disponibilidadeLocal;
-
   @FXML private Button disponibilidadeLocalBtn;
-
   @FXML private TextField estadoMorada;
-
   @FXML private ComboBox<String> horaDoJogo;
-
   @FXML private Text infoArbitroSelecionado;
-
   @FXML private Button loadJogadoresEquipa1Btn;
-
   @FXML private Button loadJogadoresEquipa2Btn;
-
   @FXML private TextField localidadeMorada;
-
   @FXML private ComboBox<String> minutosDoJogo;
-
   @FXML private TextField nomeLocal;
-
   @FXML private TextField paisMorada;
-
   @FXML private Button passo1AvancarBtn;
-
   @FXML private Button passo2AvancarBtn;
-
   @FXML private Button passo2VoltarBtn;
-
   @FXML private Button passo3AvancarBtn;
-
   @FXML private Button passo3VoltarBtn;
-
   @FXML private Button passo4AvancarBtn;
-
   @FXML private Button passo4VoltarBtn;
-
   @FXML private Button passo5VoltarBtn;
-
   @FXML private ComboBox<JogadorDto> pickAlaD1;
-
   @FXML private ComboBox<JogadorDto> pickAlaD2;
-
   @FXML private ComboBox<JogadorDto> pickAlaE1;
-
   @FXML private ComboBox<JogadorDto> pickAlaE2;
-
   @FXML private ComboBox<JogadorDto> pickFixo1;
-
   @FXML private ComboBox<JogadorDto> pickFixo2;
-
   @FXML private ComboBox<JogadorDto> pickGuardaRedes1;
-
   @FXML private ComboBox<JogadorDto> pickGuardaRedes2;
-
   @FXML private ComboBox<JogadorDto> pickPivot1;
-
   @FXML private ComboBox<JogadorDto> pickPivot2;
-
   @FXML private ComboBox<Posicao> posicaoCapitao1;
-
   @FXML private ComboBox<Posicao> posicaoCapitao2;
-
   @FXML private TextField proprietarioLocal;
-
   @FXML private Button removeArbitroListaBtn;
-
   @FXML private TextField ruaMorada;
-
   @FXML private GridPane selecao1Posicoes;
-
   @FXML private GridPane selecao2Posicoes;
-
   @FXML private ComboBox<ArbitroDto> selecionarArbitro;
-
   @FXML private ComboBox<?> selecionarCampeonatoBtn;
-
   @FXML private ComboBox<EquipaDto> selecionarEquipa1Btn;
-
   @FXML private ComboBox<EquipaDto> selecionarEquipa2Btn;
-
   @FXML private TableView<ArbitroDto> tabelaArbitros;
+  @FXML private TableColumn<ArbitroDto, String> columnNome;
+  @FXML private TableColumn<ArbitroDto, String> columnCertificado;
 
   @FXML private TabPane tabPane;
 
@@ -152,7 +102,6 @@ public class RegistarJogoController extends Controller {
   JogoDto jogoDto;
   SelecaoDto selecao1Dto;
   SelecaoDto selecao2Dto;
-  List<ArbitroDto> arbitros;
   ArbitroDto currentArbitro;
   LocalDate dia;
   int horaInicio;
@@ -163,9 +112,14 @@ public class RegistarJogoController extends Controller {
     jogoDto = new JogoDto();
     selecao1Dto = new SelecaoDto();
     selecao2Dto = new SelecaoDto();
-    arbitros = new ArrayList<>();
 
     bootStaticComboBoxes();
+    columnNome.setCellValueFactory(
+        cellData -> new SimpleStringProperty(cellData.getValue().getUtilizador().getNome()));
+    columnCertificado.setCellValueFactory(
+        cellData ->
+            new SimpleStringProperty(
+                ((cellData.getValue().getCertificado().isExistsCertificado()) ? "Sim" : "Nao")));
     setDefaultLocal();
   }
 
@@ -245,7 +199,7 @@ public class RegistarJogoController extends Controller {
 
     ObservableList<Posicao> posicoes = FXCollections.observableArrayList(Posicao.values());
     posicaoCapitao1.setItems(posicoes);
-    posicaoCapitao1.setItems(posicoes);
+    posicaoCapitao2.setItems(posicoes);
   }
 
   private String arbitroDetails(ArbitroDto a) {
@@ -270,16 +224,33 @@ public class RegistarJogoController extends Controller {
   }
 
   @FXML
-  void addArbitroLista(ActionEvent event) {}
+  void addArbitroLista(ActionEvent event) {
+    currentArbitro = selecionarArbitro.getSelectionModel().getSelectedItem();
+    if (currentArbitro == null) {
+      return;
+    }
+    ObservableList<ArbitroDto> a = tabelaArbitros.getItems();
+    if (!a.contains(currentArbitro)) {
+      a.add(currentArbitro);
+    }
+    tabelaArbitros.setItems(a);
+    arbitroPrincipal.setText(tabelaArbitros.getItems().get(0).getUtilizador().getNome());
+  }
 
   @FXML
-  void criarJogoSubmit(ActionEvent event) {}
+  void criarJogoSubmit(ActionEvent event) {
+    jogoDto.setEstadoDeJogo(EstadoDeJogo.AGENDADO);
+    System.out.println(jogoDto);
+    try {
+      ApiJogo.createJogo(jogoDto);
+    } catch (Exception e) {
+      System.err.println(e.getMessage());
+    }
+    voltarAoMenu(event);
+  }
 
   @FXML
   void enableCampeonato(ActionEvent event) {}
-
-  @FXML
-  void loadArbitroSelecionado(ActionEvent event) {}
 
   @FXML
   void loadJogadoresEquipa1(ActionEvent event) {
@@ -320,15 +291,53 @@ public class RegistarJogoController extends Controller {
   }
 
   @FXML
-  void loadJogadoresEquipa2(ActionEvent event) {}
+  void loadJogadoresEquipa2(ActionEvent event) {
+    EquipaDto e = selecionarEquipa2Btn.getSelectionModel().getSelectedItem();
+    Set<JogadorDto> jogsDaEquipa = new HashSet<>();
+    try {
+      jogsDaEquipa = ApiEquipa.buscarJogadoresDeEquipa(e.getId());
+    } catch (Exception e1) {
+      System.err.println(e1.getMessage());
+    }
+    ObservableList<JogadorDto> listaJogsE2 = FXCollections.observableArrayList(jogsDaEquipa);
+    StringConverter<JogadorDto> converterJogadores =
+        new StringConverter<>() {
+          @Override
+          public String toString(JogadorDto e) {
+            return (e != null && e.getUtilizador().getNome() != null)
+                ? e.getUtilizador().getNome()
+                : "";
+          }
+
+          @Override
+          public JogadorDto fromString(String string) {
+            return null;
+          }
+        };
+    pickGuardaRedes2.setItems(listaJogsE2);
+    pickFixo2.setItems(listaJogsE2);
+    pickAlaD2.setItems(listaJogsE2);
+    pickAlaE2.setItems(listaJogsE2);
+    pickPivot2.setItems(listaJogsE2);
+    pickGuardaRedes2.setConverter(converterJogadores);
+    pickFixo2.setConverter(converterJogadores);
+    pickAlaD2.setConverter(converterJogadores);
+    pickAlaE2.setConverter(converterJogadores);
+    pickPivot2.setConverter(converterJogadores);
+
+    selecao2Posicoes.setDisable(false);
+  }
 
   @FXML
   void passo1Avancar(ActionEvent event) {
+    if (!createDiaEHora()) return;
+    if (!createLocal()) return;
     tabPane.getSelectionModel().selectNext();
   }
 
   @FXML
   void passo2Avancar(ActionEvent event) {
+    if (!createS1()) return;
     tabPane.getSelectionModel().selectNext();
   }
 
@@ -339,6 +348,7 @@ public class RegistarJogoController extends Controller {
 
   @FXML
   void passo3Avancar(ActionEvent event) {
+    if (!createS2()) return;
     tabPane.getSelectionModel().selectNext();
   }
 
@@ -349,6 +359,7 @@ public class RegistarJogoController extends Controller {
 
   @FXML
   void passo4Avancar(ActionEvent event) {
+    if (!createArbitros()) return;
     tabPane.getSelectionModel().selectNext();
   }
 
@@ -363,13 +374,22 @@ public class RegistarJogoController extends Controller {
   }
 
   @FXML
-  void removeArbitroLista(ActionEvent event) {}
+  void removeArbitroLista(ActionEvent event) {
+    int i = tabelaArbitros.getSelectionModel().getSelectedIndex();
+    if (i >= 0) {
+      tabelaArbitros.getItems().remove(i);
+      arbitroPrincipal.setText(
+          (tabelaArbitros.getItems().isEmpty())
+              ? "<desconhecido>"
+              : tabelaArbitros.getItems().get(0).getUtilizador().getNome());
+    }
+  }
 
   @FXML
   void verificarDisponibilidadeArbitro(ActionEvent event) {
-    dia = diaDoJogo.getValue();
-    jogoDto.setDiaEHora(dia.atTime(horaInicio, minutosInicio));
-    jogoDto.setEquipaDeArbitros(arbitros);
+
+    if (!createDiaEHora()) return;
+    if (!createArbitros()) return;
 
     boolean disponivel = false;
     try {
@@ -382,23 +402,12 @@ public class RegistarJogoController extends Controller {
 
   @FXML
   void verificarDisponibilidadeJogs1(ActionEvent event) {
-    dia = diaDoJogo.getValue();
-    jogoDto.setDiaEHora(dia.atTime(horaInicio, minutosInicio));
-
-    selecao1Dto.setEquipa(selecionarEquipa1Btn.getSelectionModel().getSelectedItem().getId());
-
-    selecao1Dto.setGuardaRedes(
-        pickGuardaRedes1.getSelectionModel().getSelectedItem().getUtilizador().getId());
-    selecao1Dto.setFixo(pickFixo1.getSelectionModel().getSelectedItem().getUtilizador().getId());
-    selecao1Dto.setAlaDireita(
-        pickAlaD1.getSelectionModel().getSelectedItem().getUtilizador().getId());
-    selecao1Dto.setAlaEsquerda(
-        pickAlaE1.getSelectionModel().getSelectedItem().getUtilizador().getId());
-    selecao1Dto.setPivot(pickPivot1.getSelectionModel().getSelectedItem().getUtilizador().getId());
-    selecao1Dto.setCapitao(
-        pickCapitao1().getSelectionModel().getSelectedItem().getUtilizador().getId());
-
-    jogoDto.setS1(selecao1Dto);
+    if (!createDiaEHora()) {
+      return;
+    }
+    if (!createS1()) {
+      return;
+    }
 
     boolean disponivel = false;
     try {
@@ -406,28 +415,17 @@ public class RegistarJogoController extends Controller {
     } catch (Exception e) {
       System.err.println(e.getMessage());
     }
-    disponibilidadeArbitros.setText(disponivel ? "OK" : "INDISPONIVEL");
+    disponibilidadeJogs1.setText(disponivel ? "OK" : "INDISPONIVEL");
   }
 
   @FXML
   void verificarDisponibilidadeJogs2(ActionEvent event) {
-    dia = diaDoJogo.getValue();
-    jogoDto.setDiaEHora(dia.atTime(horaInicio, minutosInicio));
-
-    selecao1Dto.setEquipa(selecionarEquipa2Btn.getSelectionModel().getSelectedItem().getId());
-
-    selecao1Dto.setGuardaRedes(
-        pickGuardaRedes2.getSelectionModel().getSelectedItem().getUtilizador().getId());
-    selecao1Dto.setFixo(pickFixo2.getSelectionModel().getSelectedItem().getUtilizador().getId());
-    selecao1Dto.setAlaDireita(
-        pickAlaD2.getSelectionModel().getSelectedItem().getUtilizador().getId());
-    selecao1Dto.setAlaEsquerda(
-        pickAlaE2.getSelectionModel().getSelectedItem().getUtilizador().getId());
-    selecao1Dto.setPivot(pickPivot2.getSelectionModel().getSelectedItem().getUtilizador().getId());
-    selecao1Dto.setCapitao(
-        pickCapitao2().getSelectionModel().getSelectedItem().getUtilizador().getId());
-
-    jogoDto.setS2(selecao1Dto);
+    if (!createDiaEHora()) {
+      return;
+    }
+    if (!createS2()) {
+      return;
+    }
 
     boolean disponivel = false;
     try {
@@ -435,7 +433,25 @@ public class RegistarJogoController extends Controller {
     } catch (Exception e) {
       System.err.println(e.getMessage());
     }
-    disponibilidadeArbitros.setText(disponivel ? "OK" : "INDISPONIVEL");
+    disponibilidadeJogs2.setText(disponivel ? "OK" : "INDISPONIVEL");
+  }
+
+  private boolean todosOsJogadores1Escolhidos() {
+    return pickGuardaRedes1.getSelectionModel().getSelectedItem() != null
+        && pickFixo1.getSelectionModel().getSelectedItem() != null
+        && pickAlaD1.getSelectionModel().getSelectedItem() != null
+        && pickAlaE1.getSelectionModel().getSelectedItem() != null
+        && pickPivot1.getSelectionModel().getSelectedItem() != null
+        && posicaoCapitao1.getSelectionModel().getSelectedItem() != null;
+  }
+
+  private boolean todosOsJogadores2Escolhidos() {
+    return pickGuardaRedes2.getSelectionModel().getSelectedItem() != null
+        && pickFixo2.getSelectionModel().getSelectedItem() != null
+        && pickAlaD2.getSelectionModel().getSelectedItem() != null
+        && pickAlaE2.getSelectionModel().getSelectedItem() != null
+        && pickPivot2.getSelectionModel().getSelectedItem() != null
+        && posicaoCapitao2.getSelectionModel().getSelectedItem() != null;
   }
 
   private ComboBox<JogadorDto> pickCapitao1() {
@@ -474,9 +490,33 @@ public class RegistarJogoController extends Controller {
 
   @FXML
   void verificarDisponibilidadeLocal(ActionEvent event) {
+
+    if (!createDiaEHora()) {
+      return;
+    }
+    if (!createLocal()) {
+      return;
+    }
+
+    boolean disponivel = false;
+    try {
+      disponivel = ApiJogo.localDisponivel(jogoDto);
+    } catch (Exception e) {
+      System.err.println(e.getMessage());
+    }
+    disponibilidadeLocal.setText(disponivel ? "OK" : "INDISPONIVEL");
+  }
+
+  boolean createDiaEHora() {
     dia = diaDoJogo.getValue();
+    if (dia == null) return false;
     jogoDto.setDiaEHora(dia.atTime(horaInicio, minutosInicio));
+    return true;
+  }
+
+  boolean createLocal() {
     String nome = nomeLocal.getText();
+    if (nome == null) return false;
     String prop = proprietarioLocal.getText();
     int capacidade = Integer.parseInt(capacidadeLocal.getText());
     String codigoPostal = codigoPostalMorada.getText();
@@ -494,14 +534,57 @@ public class RegistarJogoController extends Controller {
             capacidade,
             new MoradaDto(codigoPostal, rua, localidade, cidade, estado, pais));
     jogoDto.setLocalDto(local);
+    return true;
+  }
 
-    boolean disponivel = false;
-    try {
-      disponivel = ApiJogo.localDisponivel(jogoDto);
-    } catch (Exception e) {
-      System.err.println(e.getMessage());
+  boolean createS1() {
+    if (!todosOsJogadores1Escolhidos()) {
+      disponibilidadeJogs1.setText("Selecione todos os jogadores e a posição do capitão.");
+      return false;
     }
-    disponibilidadeLocal.setText(disponivel ? "OK" : "INDISPONIVEL");
+    selecao1Dto.setEquipa(selecionarEquipa1Btn.getSelectionModel().getSelectedItem().getId());
+
+    selecao1Dto.setGuardaRedes(
+        pickGuardaRedes1.getSelectionModel().getSelectedItem().getUtilizador().getId());
+    selecao1Dto.setFixo(pickFixo1.getSelectionModel().getSelectedItem().getUtilizador().getId());
+    selecao1Dto.setAlaDireita(
+        pickAlaD1.getSelectionModel().getSelectedItem().getUtilizador().getId());
+    selecao1Dto.setAlaEsquerda(
+        pickAlaE1.getSelectionModel().getSelectedItem().getUtilizador().getId());
+    selecao1Dto.setPivot(pickPivot1.getSelectionModel().getSelectedItem().getUtilizador().getId());
+    selecao1Dto.setCapitao(
+        pickCapitao1().getSelectionModel().getSelectedItem().getUtilizador().getId());
+
+    jogoDto.setS1(selecao1Dto);
+    return true;
+  }
+
+  boolean createS2() {
+    if (!todosOsJogadores2Escolhidos()) {
+      disponibilidadeJogs2.setText("Selecione todos os jogadores e a posição do capitão.");
+      return false;
+    }
+    selecao2Dto.setEquipa(selecionarEquipa2Btn.getSelectionModel().getSelectedItem().getId());
+
+    selecao2Dto.setGuardaRedes(
+        pickGuardaRedes2.getSelectionModel().getSelectedItem().getUtilizador().getId());
+    selecao2Dto.setFixo(pickFixo2.getSelectionModel().getSelectedItem().getUtilizador().getId());
+    selecao2Dto.setAlaDireita(
+        pickAlaD2.getSelectionModel().getSelectedItem().getUtilizador().getId());
+    selecao2Dto.setAlaEsquerda(
+        pickAlaE2.getSelectionModel().getSelectedItem().getUtilizador().getId());
+    selecao2Dto.setPivot(pickPivot2.getSelectionModel().getSelectedItem().getUtilizador().getId());
+    selecao2Dto.setCapitao(
+        pickCapitao2().getSelectionModel().getSelectedItem().getUtilizador().getId());
+
+    jogoDto.setS2(selecao2Dto);
+    return true;
+  }
+
+  boolean createArbitros() {
+    if (tabelaArbitros.getItems().size() < 1) return false;
+    jogoDto.setEquipaDeArbitros(new ArrayList<>(tabelaArbitros.getItems()));
+    return true;
   }
 
   @FXML

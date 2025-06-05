@@ -77,12 +77,12 @@
                         </ButtonBar>
                         <TableView fx:id="tabelaJogos" layoutX="7.0" layoutY="58.0" prefHeight="244.0" prefWidth="586.0">
                           <columns>
-                              <TableColumn prefWidth="46.0" text="Id" />
-                            <TableColumn prefWidth="73.0" text="Data" />
-                            <TableColumn prefWidth="151.0" text="Local" />
-                              <TableColumn prefWidth="117.0" text="Equipa 1" />
-                              <TableColumn prefWidth="115.0" text="Equipa 2" />
-                              <TableColumn prefWidth="77.0" text="Campeonato" />
+                              <TableColumn fx:id="jogoId" prefWidth="46.0" text="Id" />
+                            <TableColumn fx:id="jogoData" prefWidth="73.0" text="Data" />
+                            <TableColumn fx:id="jogoLocal" prefWidth="151.0" text="Local" />
+                              <TableColumn fx:id="jogoEquipa1" prefWidth="117.0" text="Equipa 1" />
+                              <TableColumn fx:id="jogoEquipa2" prefWidth="115.0" text="Equipa 2" />
+                              <TableColumn fx:id="jogoCampeonato" prefWidth="77.0" text="Campeonato" />
                           </columns>
                         </TableView>
                      </children>
@@ -93,18 +93,18 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tabelaArbitros" layoutX="32.0" layoutY="194.0" prefHeight="114.0" prefWidth="526.0">
+                        <TableView fx:id="tabelaCartoes" layoutX="32.0" layoutY="194.0" prefHeight="114.0" prefWidth="526.0">
                           <columns>
-                            <TableColumn prefWidth="159.0" text="Jogador" />
-                              <TableColumn prefWidth="93.0" text="Equipa" />
-                            <TableColumn prefWidth="67.0" text="Cor" />
-                              <TableColumn prefWidth="124.0" text="Árbitro" />
-                              <TableColumn prefWidth="82.0" text="Tempo" />
+                            <TableColumn fx:id="cartaoJogador" prefWidth="159.0" text="Jogador" />
+                              <TableColumn fx:id="cartaoEquipa" prefWidth="93.0" text="Equipa" />
+                            <TableColumn fx:id="cartaoCor" prefWidth="67.0" text="Cor" />
+                              <TableColumn fx:id="cartaoArbitro" prefWidth="124.0" text="Árbitro" />
+                              <TableColumn fx:id="cartaoTempo" prefWidth="82.0" text="Tempo" />
                           </columns>
                         </TableView>
-                        <ComboBox fx:id="selecionarArbitro" layoutX="32.0" layoutY="83.0" onAction="#loadArbitroSelecionado" prefHeight="25.0" prefWidth="155.0" promptText="Selecione um Árbitro" />
-                        <Button fx:id="addCartaoListaBtn" layoutX="387.0" layoutY="122.0" mnemonicParsing="false" onAction="#addCartaoLista" prefHeight="64.0" prefWidth="76.0" text="Adicionar à lista" textAlignment="CENTER" wrapText="true" />
-                        <Button fx:id="removeCartaoListaBtn" layoutX="480.0" layoutY="143.0" mnemonicParsing="false" onAction="#removeCartaoLista" prefHeight="43.0" prefWidth="78.0" text="Remover da Lista" wrapText="true" />
+                        <ComboBox fx:id="selecionarArbitro" layoutX="32.0" layoutY="83.0" prefHeight="25.0" prefWidth="155.0" promptText="Selecione um Árbitro" />
+                        <Button layoutX="387.0" layoutY="122.0" mnemonicParsing="false" onAction="#addCartaoLista" prefHeight="64.0" prefWidth="76.0" text="Adicionar à lista" textAlignment="CENTER" wrapText="true" />
+                        <Button layoutX="480.0" layoutY="143.0" mnemonicParsing="false" onAction="#removeCartaoLista" prefHeight="43.0" prefWidth="78.0" text="Remover da Lista" wrapText="true" />
                         <ButtonBar layoutY="331.0" prefHeight="40.0" prefWidth="322.0">
                            <buttons>
                               <Button fx:id="passo2VoltarBtn" mnemonicParsing="false" onAction="#passo2Voltar" text="Atrás" />
@@ -118,8 +118,8 @@
                         </Text>
                         <ComboBox fx:id="selecionarJogador" layoutX="200.0" layoutY="83.0" prefHeight="25.0" prefWidth="162.0" promptText="Selecione um Jogador" />
                         <ComboBox fx:id="selecionarCor" layoutX="35.0" layoutY="131.0" prefWidth="150.0" promptText="Cor do Cartão" />
-                        <ComboBox fx:id="selecionarHora" layoutX="200.0" layoutY="131.0" prefHeight="25.0" prefWidth="62.0" promptText="HH" />
-                        <ComboBox fx:id="selecionarMinuto" layoutX="264.0" layoutY="131.0" prefHeight="25.0" prefWidth="68.0" promptText="MM" />
+                        <ComboBox fx:id="selecionarHoraCartao" layoutX="200.0" layoutY="131.0" prefHeight="25.0" prefWidth="62.0" promptText="HH" />
+                        <ComboBox fx:id="selecionarMinutoCartao" layoutX="264.0" layoutY="131.0" prefHeight="25.0" prefWidth="68.0" promptText="MM" />
                      </children></AnchorPane>
                </content>
             </Tab>
@@ -127,19 +127,19 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tabelaArbitros1" layoutX="51.0" layoutY="198.0" prefHeight="114.0" prefWidth="498.0">
+                        <TableView fx:id="tabelaGolos" layoutX="51.0" layoutY="198.0" prefHeight="114.0" prefWidth="498.0">
                            <columns>
-                              <TableColumn prefWidth="231.0" text="Jogador" />
-                              <TableColumn prefWidth="162.0" text="Equipa" />
-                              <TableColumn prefWidth="106.0" text="Tempo" />
+                              <TableColumn fx:id="goloJogador" prefWidth="231.0" text="Jogador" />
+                              <TableColumn fx:id="goloEquipa" prefWidth="162.0" text="Equipa" />
+                              <TableColumn fx:id="goloTempo" prefWidth="106.0" text="Tempo" />
                            </columns>
                         </TableView>
-                        <Button fx:id="addCartaoListaBtn1" layoutX="387.0" layoutY="131.0" mnemonicParsing="false" onAction="#addCartaoLista" prefHeight="64.0" prefWidth="76.0" text="Adicionar à lista" textAlignment="CENTER" wrapText="true" />
-                        <Button fx:id="removeCartaoListaBtn1" layoutX="471.0" layoutY="154.0" mnemonicParsing="false" onAction="#removeCartaoLista" prefHeight="43.0" prefWidth="78.0" text="Remover da Lista" wrapText="true" />
+                        <Button layoutX="387.0" layoutY="131.0" mnemonicParsing="false" onAction="#addGoloLista" prefHeight="64.0" prefWidth="76.0" text="Adicionar à lista" textAlignment="CENTER" wrapText="true" />
+                        <Button layoutX="471.0" layoutY="154.0" mnemonicParsing="false" onAction="#removeGoloLista" prefHeight="43.0" prefWidth="78.0" text="Remover da Lista" wrapText="true" />
                         <ButtonBar layoutY="331.0" prefHeight="40.0" prefWidth="322.0">
                            <buttons>
-                              <Button fx:id="passo2VoltarBtn1" mnemonicParsing="false" onAction="#passo2Voltar" text="Atrás" />
-                              <Button fx:id="passo2AvancarBtn1" mnemonicParsing="false" onAction="#passo2Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo Passo" />
+                              <Button fx:id="passo3VoltarBtn" mnemonicParsing="false" onAction="#passo3Voltar" text="Atrás" />
+                              <Button fx:id="passo3AvancarBtn" mnemonicParsing="false" onAction="#passo3Avancar" prefHeight="25.0" prefWidth="132.0" text="Próximo Passo" />
                            </buttons>
                         </ButtonBar>
                         <Text layoutX="16.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Golos Marcados">
@@ -147,10 +147,10 @@
                               <Font name="Berlin Sans FB" size="22.0" />
                            </font>
                         </Text>
-                        <ComboBox fx:id="selecionarJogador1" layoutX="46.0" layoutY="84.0" prefHeight="25.0" prefWidth="162.0" promptText="Selecione um Jogador" />
-                        <ComboBox fx:id="selecionarHora1" layoutX="223.0" layoutY="131.0" prefHeight="25.0" prefWidth="62.0" promptText="HH" />
-                        <ComboBox fx:id="selecionarMinuto1" layoutX="293.0" layoutY="131.0" prefHeight="25.0" prefWidth="68.0" promptText="MM" />
-                        <ComboBox layoutX="46.0" layoutY="131.0" prefWidth="150.0" promptText="A favor da Equipa" />
+                        <ComboBox fx:id="selecionarHoraGolo" layoutX="223.0" layoutY="131.0" prefHeight="25.0" prefWidth="62.0" promptText="HH" />
+                        <ComboBox fx:id="selecionarMarcador" layoutX="46.0" layoutY="84.0" prefHeight="25.0" prefWidth="162.0" promptText="Selecione um Jogador" />
+                        <ComboBox fx:id="selecionarMinutoGolo" layoutX="293.0" layoutY="131.0" prefHeight="25.0" prefWidth="68.0" promptText="MM" />
+                        <ComboBox fx:id="selecionarEquipa" layoutX="46.0" layoutY="131.0" prefWidth="150.0" promptText="A favor da Equipa" />
                      </children>
                   </AnchorPane>
                </content>
@@ -166,7 +166,7 @@
                         </Text>
                         <Button fx:id="passo4VoltarBtn" layoutX="51.0" layoutY="174.0" minWidth="27.0" mnemonicParsing="false" onAction="#passo4Voltar" prefHeight="25.0" text="Atrás" />
                         <Button fx:id="resultadoJogoSubmitBtn" layoutX="176.0" layoutY="160.0" mnemonicParsing="false" onAction="#resultadoJogoSubmit" prefHeight="52.0" prefWidth="152.0" text="Submeter Resultado" />
-                        <Text fx:id="placarDIsplay" layoutX="51.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;Placar&gt;" wrappingWidth="216.93896484375">
+                        <Text fx:id="placarDisplay" layoutX="51.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;Placar&gt;" wrappingWidth="216.93896484375">
                            <font>
                               <Font size="25.0" />
                            </font>

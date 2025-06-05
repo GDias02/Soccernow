@@ -2,7 +2,6 @@ package pt.ul.fc.css.soccernow.mappers.jogos;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.dto.jogos.LocalDto;
 import pt.ul.fc.css.soccernow.dto.jogos.MoradaDto;
@@ -74,8 +73,6 @@ public class JogoMapper {
   public static Jogo createDtoToJogo(JogoDto jogodto, CampeonatoRepository cRep)
       throws CriarJogoException {
     if (jogodto == null) throw new CriarJogoException("JogoDto é null");
-    if (jogodto.getLocalDto() == null || !validarCriarLocalDto(jogodto.getLocalDto()))
-      throw new CriarJogoException("O novo jogo não tem o local definido");
 
     Jogo jogo;
     if (jogodto.getCampeonato() != null) {
