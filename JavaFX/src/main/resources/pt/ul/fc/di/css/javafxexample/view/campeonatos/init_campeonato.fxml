@@ -55,7 +55,7 @@
       <AnchorPane prefHeight="250.0" prefWidth="600.0">
          <children>
             <Button fx:id="buscarCampeonatoBtn" layoutX="33.0" layoutY="143.0" mnemonicParsing="false" onAction="#buscarCampeonatos" prefHeight="50.0" prefWidth="168.0" text="Verificar Campeonatos Existentes" textAlignment="CENTER" wrapText="true" />
-            <Button fx:id="cancelarCampeonatoBtn" layoutX="33.0" layoutY="210.0" mnemonicParsing="false" onAction="#cancelarCampeonato" prefHeight="50.0" prefWidth="168.0" text="Cancelar um Campeonato" />
+            <Button fx:id="cancelarCampeonatoBtn" layoutX="33.0" layoutY="210.0" mnemonicParsing="false" onAction="#cancelarCampeonato" prefHeight="50.0" prefWidth="168.0" text="Cancelar o jogo de um Campeonato" textAlignment="CENTER" wrapText="true" />
             <Button fx:id="registarCampeonatoBtn" layoutX="33.0" layoutY="77.0" mnemonicParsing="false" onAction="#registarCampeonato" prefHeight="50.0" prefWidth="168.0" text="Registar Novo Campeonato" />
             <Label layoutX="241.0" layoutY="65.0" mnemonicParsing="true" prefHeight="74.0" prefWidth="264.0" text="Registe aqui um novo campeonato" textAlignment="JUSTIFY" wrapText="true" />
             <Label layoutX="241.0" layoutY="139.0" mnemonicParsing="true" prefHeight="58.0" prefWidth="264.0" text="Aqui pode verificar todos os campeonatos no sistema. Pode também atualizar os seus dados, assim como remover determinados campeonatos." textAlignment="JUSTIFY" wrapText="true" />

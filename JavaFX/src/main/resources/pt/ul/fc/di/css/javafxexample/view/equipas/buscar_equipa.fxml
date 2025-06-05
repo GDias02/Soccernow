@@ -46,7 +46,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="input" layoutX="20.0" layoutY="147.0" prefHeight="25.0" prefWidth="306.0" />
+            <TextField fx:id="input" layoutX="20.0" layoutY="147.0" prefHeight="25.0" prefWidth="306.0" promptText="Mock search" />
             <MenuButton fx:id="tipoDePesquisa" layoutX="19.0" layoutY="122.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="306.0" text="Tipo de Pesquisa">
               <items>
                 <MenuItem mnemonicParsing="false" text="Nome" />
@@ -63,4 +63,3 @@
         </AnchorPane>
   </children>
 </VBox>
-

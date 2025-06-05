@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pt.ul.fc.css.soccernow.dto.campeonatos.CampeonatoDto;
 import pt.ul.fc.css.soccernow.dto.equipas.EquipaDto;
+import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.handlers.CampeonatoHandler;
 
 @RestController
@@ -81,5 +82,15 @@ public class CampeonatoController {
     List<CampeonatoDto> campeonatos = campeonatoHandler.search(search);
     if (search == null || campeonatos.isEmpty()) return ResponseEntity.noContent().build();
     return ResponseEntity.ok(campeonatos);
+  }
+
+  @GetMapping("/{id}/jogos")
+  @ApiOperation(
+    value = "Gets jogos from a given campeonato",
+    notes = "Gets a list of jogos from a given campeonato")
+  public ResponseEntity<List<JogoDto>> getJogadoresByCampeonatoId(@PathVariable("id") Long id){
+    List<JogoDto> jogos = campeonatoHandler.getJogadoresByCampeonatoId(id);
+    if (jogos == null) return ResponseEntity.notFound().build();
+    return ResponseEntity.ok(jogos);
   }
 }

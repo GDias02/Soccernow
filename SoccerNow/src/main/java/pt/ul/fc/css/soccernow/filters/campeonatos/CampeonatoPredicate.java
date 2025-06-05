@@ -66,6 +66,16 @@ public class CampeonatoPredicate extends AbstractPredicate<Campeonato> {
       };
     }
 
+    if ("estado".equals(criteria.getKey())) {
+      EstadoCampeonato estado = EstadoCampeonato.valueOf(criteria.getValue().toString().toUpperCase());
+      QCampeonato campeonato = QCampeonato.campeonato;
+      return switch (criteria.getOperation()){
+        case ":" -> campeonato.estado.eq(estado);
+        case "!" -> campeonato.estado.ne(estado);
+        default -> null;
+      };
+    }
+
     // CASO PADRÃO (campos normais)
     if (isNumeric(criteria.getValue().toString())) {
       NumberPath<Integer> path = entityPath.getNumber(criteria.getKey(), Integer.class);

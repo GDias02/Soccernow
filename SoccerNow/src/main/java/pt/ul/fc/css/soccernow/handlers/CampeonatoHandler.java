@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.css.soccernow.dto.campeonatos.CampeonatoDto;
+import pt.ul.fc.css.soccernow.dto.jogos.JogoDto;
 import pt.ul.fc.css.soccernow.entities.campeonatos.Campeonato;
 import pt.ul.fc.css.soccernow.filters.campeonatos.CampeonatoPredicate;
 import pt.ul.fc.css.soccernow.filters.campeonatos.CampeonatoPredicatesBuilder;
 import pt.ul.fc.css.soccernow.mappers.campeonatos.CampeonatoMapper;
+import pt.ul.fc.css.soccernow.mappers.jogos.JogoMapper;
 import pt.ul.fc.css.soccernow.repositories.CampeonatoRepository;
 import pt.ul.fc.css.soccernow.repositories.EquipaRepository;
 import pt.ul.fc.css.soccernow.repositories.JogoRepository;
@@ -137,5 +139,10 @@ public class CampeonatoHandler implements ICampeonatoHandler {
     campeonatoRepository.findAll(exp).forEach(campeonatos::add);
 
     return CampeonatoMapper.manyCampeonatosToDtos(campeonatos);
+  }
+
+  public List<JogoDto> getJogadoresByCampeonatoId (Long id) {
+    Campeonato campeonato = campeonatoRepository.findById(id).get();
+    return campeonato.getJogos().stream().map(JogoMapper::jogoToDto).toList();
   }
 }

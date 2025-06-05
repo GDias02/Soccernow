@@ -28,6 +28,7 @@ import pt.ul.fc.css.soccernow.entities.campeonatos.CampeonatoPontos;
 import pt.ul.fc.css.soccernow.entities.campeonatos.EstadoCampeonato;
 import pt.ul.fc.css.soccernow.entities.equipas.Equipa;
 import pt.ul.fc.css.soccernow.entities.jogos.EstadoDeJogo;
+import pt.ul.fc.css.soccernow.entities.jogos.Jogo;
 import pt.ul.fc.css.soccernow.entities.jogos.JogoCampeonato;
 import pt.ul.fc.css.soccernow.entities.jogos.Local;
 import pt.ul.fc.css.soccernow.entities.utilizadores.Arbitro;
@@ -37,6 +38,7 @@ import pt.ul.fc.css.soccernow.mappers.campeonatos.CampeonatoMapper;
 import pt.ul.fc.css.soccernow.mappers.equipas.EquipaMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.JogoMapper;
 import pt.ul.fc.css.soccernow.mappers.jogos.LocalMapper;
+import pt.ul.fc.css.soccernow.mappers.jogos.SelecaoMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.ArbitroPostMapper;
 import pt.ul.fc.css.soccernow.mappers.utilizadores.JogadorMapper;
 import pt.ul.fc.css.soccernow.repositories.ArbitroRepository;
@@ -403,6 +405,6 @@ public class InitHandler {
     List<JogoCampeonato> jogosCampeonato1 = new ArrayList<>();
     CampeonatoPontos campeonato1 = new CampeonatoPontos(1L,"UEFA", EstadoCampeonato.AGENDADO, new Date(), jogosCampeonato1, equipas);
     campeonatoRepository.save(campeonato1);
-    
+
   }
 }

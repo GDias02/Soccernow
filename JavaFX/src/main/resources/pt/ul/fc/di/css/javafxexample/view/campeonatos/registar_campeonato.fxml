@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
@@ -77,7 +78,7 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label layoutX="24.0" layoutY="73.0" style="-fx-font-weight: bold;" text="Data">
+                        <Label layoutX="24.0" layoutY="73.0" style="-fx-font-weight: bold;" text="Data de início">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -86,55 +87,42 @@
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="246.0" prefWidth="199.0">
                                  <children>
-                                    <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="398.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                      <items>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="165.0" prefWidth="199.0">
-                                             <children>
-                                                <ListView fx:id="equipasDisponiveis" layoutX="-15.0" layoutY="-23.0" prefHeight="191.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                             </children>
-                                          </AnchorPane>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="255.0" prefWidth="158.0">
-                                             <children>
-                                                <ListView fx:id="equipasSelecionadas" layoutX="14.0" layoutY="26.0" prefHeight="190.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                             </children>
-                                          </AnchorPane>
-                                      </items>
-                                    </SplitPane>
+                                    <ListView fx:id="listaEquipasDisponiveis" layoutX="50.0" layoutY="89.0" prefHeight="357.0" prefWidth="199.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button fx:id="adicionarEquipaBtn" layoutX="33.0" layoutY="365.0" mnemonicParsing="false" onAction="#adicionarEquipa" prefHeight="25.0" prefWidth="134.0" text="Adicionar Equipa" />
                                  </children>
                               </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="398.0" prefWidth="198.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                      <items>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                                             <children>
-                                                <ListView fx:id="jogosDisponiveis" layoutX="-8.0" prefHeight="200.0" prefWidth="200.0" />
-                                             </children>
-                                          </AnchorPane>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                                             <children>
-                                                <ListView fx:id="jogosSelecionados" layoutX="-30.0" layoutY="-4.0" prefHeight="191.0" prefWidth="192.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                             </children>
-                                          </AnchorPane>
-                                      </items>
-                                    </SplitPane>
+                                    <ListView fx:id="listaEquipasSelecionadas" layoutX="-1.0" layoutY="99.0" prefHeight="357.0" prefWidth="198.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button fx:id="removerEquipaBtn" layoutX="32.0" layoutY="365.0" mnemonicParsing="false" onAction="#removerEquipa" prefHeight="25.0" prefWidth="134.0" text="Remover Equipa" />
                                  </children>
                               </AnchorPane>
                           </items>
                         </SplitPane>
                         <TextField fx:id="inputNome" layoutX="17.0" layoutY="36.0" prefHeight="25.0" prefWidth="173.0" />
                         <DatePicker fx:id="datePicker" layoutX="17.0" layoutY="104.0" prefHeight="25.0" prefWidth="172.0" />
-                        <TextArea fx:id="messageArea" editable="false" layoutX="20.0" layoutY="158.0" prefHeight="277.0" prefWidth="166.0" wrapText="true" />
-                        <Label layoutX="215.0" layoutY="11.0" style="-fx-font-weight: bold;" text="Equipas">
+                        <TextArea fx:id="messageArea" editable="false" layoutX="20.0" layoutY="224.0" prefHeight="211.0" prefWidth="166.0" text="Aqui pode registar um campeonato novo. Pode escolher as equipas em cima que quer que façam parte do seu campeonato. Se as quiser remover, basta clicar em baixo na equipa pretendida.&#10;Quando terminar, basta clicar em confirmar." wrapText="true" />
+                        <Label layoutX="215.0" layoutY="11.0" style="-fx-font-weight: bold;" text="Equipas Disponíveis">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label layoutX="418.0" layoutY="11.0" style="-fx-font-weight: bold;" text="Jogos">
+                        <Label layoutX="418.0" layoutY="11.0" style="-fx-font-weight: bold;" text="Equipas Selecionadas">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
+                        <Label layoutX="24.0" layoutY="142.0" style="-fx-font-weight: bold;" text="Tipo de Campeonato">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <MenuButton fx:id="tipoDeCampeonato" layoutX="20.0" layoutY="179.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="167.0" text="Pontos">
+                          <items>
+                            <MenuItem fx:id="optionPontos" mnemonicParsing="false" onAction="#changeTipoPontos" text="Pontos" />
+                            <MenuItem fx:id="optionEliminatoria" mnemonicParsing="false" onAction="#changeTipoEliminatoria" text="Eliminatória" />
+                          </items>
+                        </MenuButton>
                      </children>
                   </AnchorPane>
                </center>
