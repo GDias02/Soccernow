@@ -21,10 +21,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 import pt.ul.fc.di.css.javafxexample.api.ApiArbitro;
+import pt.ul.fc.di.css.javafxexample.api.ApiCampeonato;
 import pt.ul.fc.di.css.javafxexample.api.ApiEquipa;
 import pt.ul.fc.di.css.javafxexample.api.ApiJogo;
 import pt.ul.fc.di.css.javafxexample.controller.Controller;
 import pt.ul.fc.di.css.javafxexample.controller.Util;
+import pt.ul.fc.di.css.javafxexample.dto.campeonatos.CampeonatoDto;
 import pt.ul.fc.di.css.javafxexample.dto.equipas.EquipaDto;
 import pt.ul.fc.di.css.javafxexample.dto.jogos.EstadoDeJogo;
 import pt.ul.fc.di.css.javafxexample.dto.jogos.JogoDto;
@@ -88,7 +90,7 @@ public class RegistarJogoController extends Controller {
   @FXML private GridPane selecao1Posicoes;
   @FXML private GridPane selecao2Posicoes;
   @FXML private ComboBox<ArbitroDto> selecionarArbitro;
-  @FXML private ComboBox<?> selecionarCampeonatoBtn;
+  @FXML private ComboBox<CampeonatoDto> selecionarCampeonatoBtn;
   @FXML private ComboBox<EquipaDto> selecionarEquipa1Btn;
   @FXML private ComboBox<EquipaDto> selecionarEquipa2Btn;
   @FXML private TableView<ArbitroDto> tabelaArbitros;
@@ -200,6 +202,34 @@ public class RegistarJogoController extends Controller {
     ObservableList<Posicao> posicoes = FXCollections.observableArrayList(Posicao.values());
     posicaoCapitao1.setItems(posicoes);
     posicaoCapitao2.setItems(posicoes);
+
+    ObservableList<CampeonatoDto> campeonatos = FXCollections.observableArrayList();
+    try {
+      campeonatos.addAll(ApiCampeonato.getCampeonatosAlteraveis());
+    } catch (Exception e1) {
+      System.err.println(e1.getMessage());
+    }
+    selecionarCampeonatoBtn.setItems(campeonatos);
+    StringConverter<CampeonatoDto> converterCampeonatos =
+        new StringConverter<>() {
+          @Override
+          public String toString(CampeonatoDto e) {
+            return (e != null && e.getNome() != null) ? e.getNome() : "";
+          }
+
+          @Override
+          public CampeonatoDto fromString(String string) {
+            return null;
+          }
+        };
+    selecionarCampeonatoBtn.setConverter(converterCampeonatos);
+    campeonatoToggle
+        .selectedProperty()
+        .addListener((obs, oldVal, newVal) -> disableCampeonatos(newVal));
+  }
+
+  private void disableCampeonatos(Boolean b) {
+    selecionarCampeonatoBtn.setDisable(!b);
   }
 
   private String arbitroDetails(ArbitroDto a) {
@@ -240,6 +270,10 @@ public class RegistarJogoController extends Controller {
   @FXML
   void criarJogoSubmit(ActionEvent event) {
     jogoDto.setEstadoDeJogo(EstadoDeJogo.AGENDADO);
+    if (campeonatoToggle.selectedProperty().getValue()) {
+      jogoDto.setCampeonato(selecionarCampeonatoBtn.getSelectionModel().getSelectedItem().getId());
+    }
+
     System.out.println(jogoDto);
     try {
       ApiJogo.createJogo(jogoDto);
