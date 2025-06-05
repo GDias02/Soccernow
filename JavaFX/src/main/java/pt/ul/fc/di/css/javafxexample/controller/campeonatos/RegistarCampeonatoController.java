@@ -96,8 +96,10 @@ public class RegistarCampeonatoController extends Controller {
         }
         
         List<Long> idsJogos = List.of();
-        List<Long> idsEquipas = List.of();
-        listaEquipasSelecionadas.getItems().stream().map(e->idsEquipas.add(e.getId()));
+        List<Long> idsEquipas = new ArrayList<>();
+        for (EquipaDto e : listaEquipasSelecionadas.getItems()){
+            idsEquipas.add(e.getId());
+        }
         Date date = Date.from(this.datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         String tipoCampeonato = removerAcentos(this.tipoDeCampeonato.getText()).toLowerCase();
         this.campeonatoDto = //Make the campeonato

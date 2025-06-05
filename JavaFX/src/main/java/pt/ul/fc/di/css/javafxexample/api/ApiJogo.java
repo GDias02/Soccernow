@@ -162,4 +162,22 @@ public class ApiJogo {
     }
     return mapper.readValue(response.body(), jogadorListReference);
   }
+
+  public static void cancelarJogo(JogoDto jogo, Long jogoId) throws Exception {
+    mapper.registerModule(new JavaTimeModule());
+    String json = mapper.writeValueAsString(jogo);
+
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(BASE_URL + "/cancel/"+ jogoId))
+            .header("Content-Type", "application/json")
+            .PUT(HttpRequest.BodyPublishers.ofString(json))
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() != 200 && response.statusCode() != 201) {
+      throw new RuntimeException("Failed to cancel jogo. HTTP code: " + response.statusCode());
+    }
+  }
 }

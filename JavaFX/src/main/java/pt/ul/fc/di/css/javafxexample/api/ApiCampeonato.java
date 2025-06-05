@@ -86,4 +86,52 @@ public class ApiCampeonato {
         String responseBody = response.body();
         return mapper.readValue(responseBody, mapper.getTypeFactory().constructCollectionType(List.class, JogoDto.class));
     }
+
+    public static CampeonatoDto buscarCampeonato(Long id) throws Exception{
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Failed to fetch Campeonatos. HTTP code: " + response.statusCode());
+        }
+
+        // Process the response body as needed
+        String responseBody = response.body();
+        return mapper.readValue(responseBody, CampeonatoDto.class);
+    }
+
+    public static void removerCampeonato(Long id) throws Exception{
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + id))
+                .header("Content-Type", "application/json")
+                .DELETE()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 204 && response.statusCode() != 200) {
+            throw new RuntimeException("Failed to delete Campeonato. HTTP code: " + response.statusCode());
+        }
+
+    }
+
+    public static void atualizarCampeonato(CampeonatoDto campeonatoDto) throws Exception {
+        String json =  mapper.writeValueAsString(campeonatoDto);
+        
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + campeonatoDto.getId()))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 204 && response.statusCode() != 200) {
+            throw new RuntimeException("Failed to atualizar Campeonato. HTTP code: " + response.statusCode());
+        }        
+    }
 }

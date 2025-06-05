@@ -47,8 +47,15 @@ public class CancelarJogoCampeonatoController extends Controller {
         var jogo = this.listaDeJogosDeUmCampeonato.getSelectionModel().getSelectedItem();
         if (jogo == null) 
             messageArea.setText("Por favor, selecione o jogo que quer cancelar");
-        jogo.setEstadoDeJogo(EstadoDeJogo.CANCELADO);
-        //TODO CANCELA JOGO ATRAVÉS DE APIAPIAPIAPAIAPIAPAIAPIAPIAPIAPAIPAIAPIAPIAPIAPAIPAIAPIAPAIPAIPAIPAIPIAIAIA
+
+        try {
+            //a api cancela o próprio jogo no backend
+            ApiJogo.cancelarJogo(jogo, jogo.getId());
+            messageArea.setText("O jogo foi cancelado com sucesso");
+        } catch (Exception e){
+            messageArea.setText("Houve um erro ao cancelar o jogo: " + e.getMessage());
+        }
+        
     }
 
     @FXML

@@ -9,7 +9,6 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitMenuButton?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -19,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="612.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.campeonatos.DetalhesCampeonatoController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="612.0" prefWidth="895.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ul.fc.di.css.javafxexample.controller.campeonatos.DetalhesCampeonatoController">
   <children>
     <MenuBar prefHeight="5.0" prefWidth="323.0" VBox.vgrow="NEVER">
       <menus>
@@ -43,9 +42,9 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="334.0" prefWidth="230.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="587.0" prefWidth="944.0" VBox.vgrow="ALWAYS">
          <children>
-            <BorderPane prefHeight="375.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <BorderPane prefHeight="587.0" prefWidth="870.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="0.0">
                <top>
                   <AnchorPane prefHeight="87.0" prefWidth="634.0" BorderPane.alignment="CENTER">
                      <children>
@@ -65,14 +64,14 @@
                <bottom>
                   <AnchorPane prefHeight="39.0" prefWidth="634.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="goBackButton" layoutX="36.0" layoutY="2.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="138.0" text="Voltar" />
-                        <Button fx:id="atualizarCampeonato" layoutX="452.0" layoutY="2.0" mnemonicParsing="false" onAction="#atualizarCampeonato" prefHeight="25.0" prefWidth="156.0" text="Atualizar Campeonato" />
-                        <Button fx:id="confirmarbutton1" layoutX="243.0" layoutY="2.0" mnemonicParsing="false" onAction="#removerCampeonato" prefHeight="25.0" prefWidth="149.0" text="Remover Campeonato" />
+                        <Button fx:id="goBackButton" layoutX="21.0" layoutY="2.0" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="172.0" text="Voltar" />
+                        <Button fx:id="atualizarCampeonato" layoutX="577.0" layoutY="2.0" mnemonicParsing="false" onAction="#atualizarCampeonato" prefHeight="25.0" prefWidth="275.0" text="Atualizar Campeonato" />
+                        <Button fx:id="confirmarbutton1" layoutX="243.0" layoutY="2.0" mnemonicParsing="false" onAction="#removerCampeonato" prefHeight="25.0" prefWidth="265.0" text="Remover Campeonato" />
                      </children>
                   </AnchorPane>
                </bottom>
                <left>
-                  <AnchorPane prefHeight="134.0" prefWidth="634.0" BorderPane.alignment="CENTER">
+                  <AnchorPane prefHeight="461.0" prefWidth="880.0" BorderPane.alignment="CENTER">
                      <children>
                         <Label layoutX="19.0" layoutY="2.0" style="-fx-font-weight: bold;" text="Nome">
                            <font>
@@ -84,63 +83,20 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <SplitPane dividerPositions="0.5" layoutX="215.0" layoutY="36.0" prefHeight="400.0" prefWidth="405.0">
-                          <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="246.0" prefWidth="199.0">
-                                 <children>
-                                    <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="398.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                      <items>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="165.0" prefWidth="199.0">
-                                             <children>
-                                                <ListView fx:id="equipasDisponiveis" layoutX="-15.0" layoutY="-23.0" prefHeight="191.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                             </children>
-                                          </AnchorPane>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="255.0" prefWidth="158.0">
-                                             <children>
-                                                <ListView fx:id="equipasSelecionadas" layoutX="14.0" layoutY="26.0" prefHeight="190.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                             </children>
-                                          </AnchorPane>
-                                      </items>
-                                    </SplitPane>
-                                 </children>
-                              </AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                 <children>
-                                    <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="398.0" prefWidth="198.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                      <items>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                                             <children>
-                                                <ListView fx:id="jogosDisponiveis" layoutX="-8.0" prefHeight="200.0" prefWidth="200.0" />
-                                             </children>
-                                          </AnchorPane>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                                             <children>
-                                                <ListView fx:id="jogosSelecionados" layoutX="-30.0" layoutY="-4.0" prefHeight="191.0" prefWidth="192.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                             </children>
-                                          </AnchorPane>
-                                      </items>
-                                    </SplitPane>
-                                 </children>
-                              </AnchorPane>
-                          </items>
-                        </SplitPane>
                         <TextField fx:id="inputNome" layoutX="17.0" layoutY="36.0" prefHeight="25.0" prefWidth="173.0" />
                         <DatePicker fx:id="datePicker" layoutX="17.0" layoutY="104.0" prefHeight="25.0" prefWidth="172.0" />
-                        <TextArea fx:id="messageArea" editable="false" layoutX="20.0" layoutY="284.0" prefHeight="151.0" prefWidth="170.0" wrapText="true" />
-                        <Label layoutX="215.0" layoutY="11.0" style="-fx-font-weight: bold;" text="Equipas">
+                        <TextArea fx:id="messageArea" editable="false" layoutX="20.0" layoutY="219.0" prefHeight="216.0" prefWidth="170.0" text="Aqui pode ver os detalhes do seu campeonato. Enquanto o estado do Campeonato estiver como agendado, pode alterar todos os dados do mesmo. Depois disso, não poderá alterar mais dado nenhum." wrapText="true" />
+                        <Label layoutX="208.0" layoutY="17.0" style="-fx-font-weight: bold;" text="Equipas Disponíveis">
                            <font>
-                              <Font size="16.0" />
+                              <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label layoutX="418.0" layoutY="11.0" style="-fx-font-weight: bold;" text="Jogos">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                        <SplitMenuButton fx:id="estadoCampeontao" layoutX="19.0" layoutY="180.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="171.0" text="Estado">
+                        <SplitMenuButton fx:id="estadoCampeontao" layoutX="19.0" layoutY="180.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="171.0" text="Agendado">
                           <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
-                            <MenuItem mnemonicParsing="false" text="Action 2" />
+                            <MenuItem mnemonicParsing="false" text="Agendado" />
+                            <MenuItem mnemonicParsing="false" text="A_Decorrer" />
+                              <MenuItem mnemonicParsing="false" text="Terminado" />
+                              <MenuItem mnemonicParsing="false" text="Cancelado" />
                           </items>
                         </SplitMenuButton>
                         <Label layoutX="24.0" layoutY="147.0" style="-fx-font-weight: bold;" text="Estado do Campeonato">
@@ -148,17 +104,29 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label layoutX="24.0" layoutY="218.0" style="-fx-font-weight: bold;" text="Tipo de Campeonato">
+                        <ListView fx:id="jogosDisponiveis" layoutX="547.0" layoutY="44.0" prefHeight="350.0" prefWidth="155.0" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="547.0" AnchorPane.rightAnchor="178.0" AnchorPane.topAnchor="44.0" />
+                        <ListView fx:id="equipasSelecionadas" layoutX="373.0" layoutY="45.0" prefHeight="349.0" prefWidth="154.0" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="373.0" AnchorPane.rightAnchor="353.0" AnchorPane.topAnchor="45.0" />
+                        <ListView fx:id="equipasDisponiveis" layoutX="208.0" layoutY="43.0" prefHeight="352.0" prefWidth="156.0" />
+                        <ListView fx:id="jogosSelecionados" layoutX="715.0" layoutY="44.0" prefHeight="351.0" prefWidth="157.0" />
+                        <Label layoutX="375.0" layoutY="17.0" style="-fx-font-weight: bold;" text="Equipas Selecionadas">
                            <font>
-                              <Font size="16.0" />
+                              <Font size="15.0" />
                            </font>
                         </Label>
-                        <SplitMenuButton fx:id="tipoCampeonato" layoutX="19.0" layoutY="243.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="171.0" text="Tipo">
-                           <items>
-                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                              <MenuItem mnemonicParsing="false" text="Action 2" />
-                           </items>
-                        </SplitMenuButton>
+                        <Label layoutX="547.0" layoutY="17.0" style="-fx-font-weight: bold;" text="Jogos Disponíveis">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="715.0" layoutY="17.0" style="-fx-font-weight: bold;" text="Jogos Selecionados">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="adicionarEquipa" layoutX="231.0" layoutY="403.0" mnemonicParsing="false" onAction="#adicionarEquipa" prefHeight="25.0" prefWidth="110.0" text="Adicionar Equipa" />
+                        <Button fx:id="removerEquipa" layoutX="395.0" layoutY="403.0" mnemonicParsing="false" onAction="#removerEquipa" prefHeight="25.0" prefWidth="110.0" text="Remover Equipa" />
+                        <Button fx:id="adicionarJogo" layoutX="570.0" layoutY="403.0" mnemonicParsing="false" onAction="#adicionarJogo" prefHeight="25.0" prefWidth="110.0" text="Adicionar Jogo" />
+                        <Button fx:id="removerJogo" layoutX="739.0" layoutY="403.0" mnemonicParsing="false" onAction="#removerJogo" prefHeight="25.0" prefWidth="110.0" text="Remover Jogo" />
                      </children>
                   </AnchorPane>
                </left>
